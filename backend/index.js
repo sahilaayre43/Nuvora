@@ -9,12 +9,14 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/products", require("./routes/productRoutes"));
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
