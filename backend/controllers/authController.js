@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 
-const generrateToken = (id) => {
+const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 }
 
@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
              _id: user._id,
                 name: user.name,
                 email: user.email,
-                token: generrateToken(user._id),
+                token: generateToken(user._id),
                 role: user.role,     
             });
         } else {
@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
-                token: generrateToken(user._id),
+                token: generateToken(user._id),
                 role: user.role,
             });
         } else {
@@ -73,5 +73,7 @@ const getUser = async (req, res) => {
         res.status(500).json({ message: 'Server error!' });
     }
 };
+
+
 
 module.exports = { registerUser, loginUser, getUser };
