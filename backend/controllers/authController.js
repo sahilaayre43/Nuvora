@@ -9,7 +9,7 @@ const generateToken = (id) => {
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
-    try { 
+    try {
         const existingUser = await User.findOne({ email });
         if( existingUser ) {
             return res.status(400).json({ message: 'User already exist!' });
@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
             await sendEmail(email, 'NUVORA - OTP for registration', message);
             res.status(200).json({
-             _id: user._id,
+                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 token: generateToken(user._id),
