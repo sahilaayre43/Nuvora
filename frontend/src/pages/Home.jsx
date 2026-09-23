@@ -16,6 +16,8 @@ import {
   Star,
   ShoppingCart,
 } from "lucide-react";
+import React, { useEffect, useState} from "react";
+import ProductCard from "../components/ProductCard";
 
 const categories = [
   {
@@ -133,7 +135,24 @@ const benefits = [
   },
 ];
 
-function Home() {
+const Home = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate fetching products
+    const fetchProducts = async () => {
+      setLoading(true);
+      // Replace this with your actual API call
+      const response = await fetch("/api/products");
+      const data = await response.json();
+      setProducts(data);
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#fafafa] text-[#17213d]">
 
