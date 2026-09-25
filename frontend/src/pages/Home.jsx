@@ -140,14 +140,18 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching products
     const fetchProducts = async () => {
-      setLoading(true);
-      // Replace this with your actual API call
+      try {
       const response = await fetch("/api/products");
       const data = await response.json();
-      setProducts(data);
-      setLoading(false);
+      setProducts(data.slice(0,4));
+      }
+       catch (error) {
+        console.error("Error fetching products:", error);
+      }
+       finally {
+        setLoading(false);
+      }
     };
 
     fetchProducts();

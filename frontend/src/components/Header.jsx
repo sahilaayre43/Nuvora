@@ -1,49 +1,55 @@
-import {
-  Search,
-  Heart,
-  ShoppingBag,
-  UserRound,
-  ChevronDown,
-} from "lucide-react";
+import { Search, Heart, ShoppingBag, UserRound, ChevronDown } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext.jsx";
+import { useSelector } from "react-redux";
 
-export default function Navbar() {
+const Navbar = () => {
+  const {user, logout} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  }
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center gap-8 px-6">
         {/* Logo */}
-        <a href="/" className="shrink-0">
+        <Link to="/" className="shrink-0">
           <span className="text-2xl font-black tracking-tight text-slate-950">
             NUVO<span className="text-violet-600">RA</span>
           </span>
-        </a>
+        </Link>
 
         {/* Navigation */}
         <nav className="hidden items-center gap-7 md:flex">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="text-sm font-semibold text-slate-950"
           >
             Home
-          </a>
+          </Link>
 
-          <a
-            href="/shop"
+          <Link
+            to="/product/:id"
             className="text-sm font-medium text-slate-600 transition hover:text-slate-950"
           >
             Shop
-          </a>
+          </Link>
 
           <button className="flex items-center gap-1 text-sm font-medium text-slate-600 transition hover:text-slate-950">
             Categories
             <ChevronDown size={15} />
           </button>
 
-          <a
-            href="/deals"
+          <Link
+            to="/signup"
             className="text-sm font-medium text-slate-600 transition hover:text-slate-950"
           >
             Deals
-          </a>
+          </Link>
         </nav>
 
         {/* Search */}
@@ -81,3 +87,5 @@ export default function Navbar() {
     </header>
   );
 }
+
+export default Navbar;
