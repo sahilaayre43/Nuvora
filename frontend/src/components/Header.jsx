@@ -71,13 +71,15 @@ const Navbar = () => {
             <Heart size={20} />
           </button>
 
-          <button className="relative rounded-full p-2.5 text-slate-700 transition hover:bg-violet-50 hover:text-violet-600">
+          <Link
+           to="/cart"  
+           className="relative rounded-full p-2.5 text-slate-700 transition hover:bg-violet-50 hover:text-violet-600">
             <ShoppingBag size={20} />
 
             <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
               2
             </span>
-          </button>
+          </Link>
 
           <button className="hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block">
             <UserRound size={20} />
