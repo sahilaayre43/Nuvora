@@ -7,6 +7,7 @@ import Signup from './pages/Signup'
 import Login from './pages/Login'
 import ProductDetails from './pages/ProductDetails'
 import Cart from './pages/Cart'
+import Profile from './pages/Profile'
 import './App.css'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart/>} />
+        <Route path="/profile" element={<Profile/>} />
       </Routes>
       <Footer />
     </Router>

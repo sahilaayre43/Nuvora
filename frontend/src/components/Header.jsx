@@ -8,6 +8,10 @@ const Navbar = () => {
   const {user, logout} = useContext(AuthContext);
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartItemCount = cartItems.reduce(
+    (count, item) => count + (Number(item.quantity) || 1),
+    0,
+  );
   
   const handleLogout = () => {
     logout();
@@ -77,13 +81,15 @@ const Navbar = () => {
             <ShoppingBag size={20} />
 
             <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
-              2
+              {cartItemCount}
             </span>
           </Link>
 
-          <button className="hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block">
+          <Link
+            to="/profile" 
+            className="hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block">
             <UserRound size={20} />
-          </button>
+          </Link>
         </div>
       </div>
     </header>

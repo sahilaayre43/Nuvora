@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Cart = () => {
   const dispatch = useDispatch()
-  const cartItems = useSelector((state) => state.cart.items)
+  const cartItems = useSelector((state) => state.cart.cartItems)
   const navigate = useNavigate()
 
   const handleRemove = (id) => {

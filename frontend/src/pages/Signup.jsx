@@ -11,7 +11,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/context/AuthContext.jsx";
 
-const Signup = () => {
+const Signup  = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
