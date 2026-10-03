@@ -1,17 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import { AuthContext } from '../components/context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
-import {
-  UserRound,
-  Mail,
-  ShieldCheck,
-  LogOut,
-  Package,
-  CalendarDays,
-  IndianRupee,
-  ArrowRight,
-  ShoppingBag,
-} from 'lucide-react'
+import {UserRound,Mail,ShieldCheck,LogOut,Package,CalendarDays,IndianRupee,ArrowRight,ShoppingBag} from 'lucide-react'
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext)
@@ -21,10 +11,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login')
-      return
-    }
 
     const fetchMyOrders = async () => {
       try {
@@ -68,7 +54,6 @@ const Profile = () => {
 
       <div className="mx-auto max-w-6xl">
 
-        {/* ================= HEADER ================= */}
         <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
 
           <div>
@@ -95,15 +80,14 @@ const Profile = () => {
 
         </div>
 
-        {/* ================= PROFILE CARD ================= */}
+    
         <div className="mb-8 overflow-hidden rounded-[28px] border border-[#eeeeF5] bg-white shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
 
-          {/* Purple top section */}
+  
           <div className="h-28 bg-gradient-to-r from-violet-600 via-violet-500 to-[#8b5cf6]" />
 
           <div className="px-6 pb-7 md:px-8">
 
-            {/* Avatar */}
             <div className="-mt-12 mb-5 flex h-24 w-24 items-center justify-center rounded-full border-[5px] border-white bg-[#f1eaff] text-violet-600 shadow-md">
               <UserRound size={38} />
             </div>
@@ -127,7 +111,6 @@ const Profile = () => {
 
             </div>
 
-            {/* Account information */}
             <div className="mt-7 grid gap-4 border-t border-[#eeeeF5] pt-6 md:grid-cols-2">
 
               <div className="flex items-center gap-4 rounded-2xl bg-[#fafafd] p-4">
@@ -166,7 +149,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* ================= ORDER SECTION ================= */}
         <div>
 
           <div className="mb-5 flex items-center justify-between">
@@ -188,7 +170,6 @@ const Profile = () => {
 
           </div>
 
-          {/* Loading */}
           {loading ? (
             <div className="rounded-[24px] border border-[#eeeeF5] bg-white py-16 text-center shadow-[0_8px_30px_rgba(40,30,80,0.04)]">
 
@@ -201,7 +182,7 @@ const Profile = () => {
             </div>
           ) : orders.length === 0 ? (
 
-            /* Empty Orders */
+  
             <div className="rounded-[24px] border border-[#eeeeF5] bg-white px-6 py-16 text-center shadow-[0_8px_30px_rgba(40,30,80,0.04)]">
 
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#f1eaff] text-violet-600">
@@ -228,7 +209,6 @@ const Profile = () => {
             </div>
           ) : (
 
-            /* Orders */
             <div className="space-y-4">
 
               {orders.map((order) => (
@@ -240,7 +220,6 @@ const Profile = () => {
 
                   <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
 
-                    {/* Order information */}
                     <div className="grid gap-5 sm:grid-cols-3">
 
                       <div className="flex items-center gap-3">
@@ -295,7 +274,6 @@ const Profile = () => {
 
                     </div>
 
-                    {/* Status */}
                     <div>
                       <span
                         className={`inline-flex rounded-full px-4 py-2 text-xs font-bold ${
