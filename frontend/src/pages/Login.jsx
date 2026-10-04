@@ -12,10 +12,10 @@ const Login = () => {
   const { login } = useContext(AuthContext)
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = fetch('/api/auth/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,10 +23,10 @@ const Login = () => {
         body: JSON.stringify({ email, password })
       });
 
-      const data = res.json();
+      const data = await res.json();
       if (res.ok) {
-        alert("Login successful!");
         login(data);
+        navigate('/profile');
       } else {
         setError(data.message || "An error occurred while logging in.");
       }
@@ -38,7 +38,6 @@ const Login = () => {
   return (
     <main className="min-h-screen bg-[#fafafd] px-4 py-8 text-[#17213d]">
 
-      {/* Background decoration */}
       <div className="pointer-events-none fixed left-[-150px] top-[20%] h-[350px] w-[350px] rounded-full bg-violet-200/30 blur-3xl" />
       <div className="pointer-events-none fixed right-[-150px] bottom-[10%] h-[350px] w-[350px] rounded-full bg-blue-200/25 blur-3xl" />
 
@@ -203,6 +202,8 @@ const Login = () => {
                   />
                   Remember me
                 </label>
+
+                {error && <p role="alert" className="text-sm font-medium text-red-600">{error}</p>}
 
                 {/* Login */}
                 <button

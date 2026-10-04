@@ -1,7 +1,6 @@
 const User = require("../models/User")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sendEmail = require("../utils/sendEmail");
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -18,23 +17,15 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const user = new User({ name, email, password: hashedPassword });
-        if( user ) {
-            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        await user.save();
 
-            const message = `welcome to NUVORA! thank you for registering. we are happy to have you on board.
-            Your OTP for registration is: ${otp}. Please enter this OTP to verify your account.`;
-
-            await sendEmail(email, 'NUVORA - OTP for registration', message);
-            res.status(200).json({
-                 _id: user._id,
-                name: user.name,
-                email: user.email,
-                token: generateToken(user._id),
-                role: user.role,     
-            });
-        } else {
-            res.status(400).json({ message: 'Invalid user data!' });
-        }
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            token: generateToken(user._id),
+            role: user.role,
+        });
     } 
     catch (error) {
         res.status(500).json({ message: 'Server error!' });

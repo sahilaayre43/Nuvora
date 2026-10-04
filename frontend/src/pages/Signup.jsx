@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Mail,
   LockKeyhole,
@@ -18,12 +18,17 @@ const Signup  = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
     try {
-      const res = fetch('/api/auth/register', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -31,13 +36,17 @@ const Signup  = () => {
         body: JSON.stringify({ name, email, password })
       });
 
-      const data = res.json();
-      if (res.ok) {
-        alert("Registration successful! Please check your Email use the code .");}
-        login(data);
-        navigate("/")
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Registration failed. Please try again.");
+      }
+
+      login(data);
+      navigate("/");
     } catch (error) {
-      setError("An error occurred while registering.");
+      setError(error.message || "Unable to register. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -233,13 +242,16 @@ const Signup  = () => {
                   </span>
                 </label>
 
+                {error && <p role="alert" className="text-sm font-medium text-red-600">{error}</p>}
+
                 {/* Create account */}
                 <button
                   type="submit"
-                  className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-full bg-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
+                  disabled={isSubmitting}
+                  className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-full bg-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Create Account
-                  <ArrowRight size={17} />
+                  {isSubmitting ? "Creating account..." : "Create Account"}
+                  {!isSubmitting && <ArrowRight size={17} />}
                 </button>
               </form>
 

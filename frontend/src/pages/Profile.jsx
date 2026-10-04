@@ -13,6 +13,12 @@ const Profile = () => {
   useEffect(() => {
 
     const fetchMyOrders = async () => {
+      if (!user?.token) {
+        setOrders([])
+        setLoading(false)
+        return
+      }
+
       try {
         const res = await fetch('/api/orders/myorders', {
           headers: {
@@ -47,14 +53,25 @@ const Profile = () => {
     navigate('/login')
   }
 
-  if (!user) return null
+  if (!user) {
+    return (
+      <main className="flex min-h-[70vh] flex-col items-center justify-center px-5 text-center text-[#17213d]">
+        <UserRound size={36} className="mb-4 text-violet-600" />
+        <h1 className="text-2xl font-extrabold">Sign in to view your profile</h1>
+        <p className="mt-2 text-sm text-[#7c8498]">Your account details and order history will appear here.</p>
+        <Link to="/login" className="mt-6 rounded-full bg-violet-600 px-6 py-3 text-sm font-bold text-white hover:bg-violet-700">
+          Sign in
+        </Link>
+      </main>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#fafafd] px-5 py-10 text-[#17213d] md:px-10">
 
       <div className="mx-auto max-w-6xl">
 
-        <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        {/*<div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
 
           <div>
             <p className="mb-2 text-sm font-semibold text-violet-600">
@@ -78,7 +95,7 @@ const Profile = () => {
             Logout
           </button>
 
-        </div>
+        </div>*/}
 
     
         <div className="mb-8 overflow-hidden rounded-[28px] border border-[#eeeeF5] bg-white shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
