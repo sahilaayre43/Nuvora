@@ -9,6 +9,10 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     try {
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'Authentication is not configured on the server.' });
+        }
+
         const existingUser = await User.findOne({ email });
         if( existingUser ) {
             return res.status(400).json({ message: 'User already exist!' });
@@ -17,17 +21,19 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const user = new User({ name, email, password: hashedPassword });
+        const token = generateToken(user._id);
         await user.save();
 
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            token: generateToken(user._id),
+            token,
             role: user.role,
         });
     } 
     catch (error) {
+        console.error('User registration failed:', error.message);
         res.status(500).json({ message: 'Server error!' });
     }
 }

@@ -43,16 +43,15 @@ const Navbar = () => {
             Shop
           </Link>
 
-          <button className="flex items-center gap-1 text-sm font-medium text-slate-600 transition hover:text-slate-950">
-            Categories
-            <ChevronDown size={15} />
-          </button>
+          <Link to="/admin" className="flex items-center gap-1 text-sm font-medium text-slate-600 transition hover:text-slate-950">
+            Admin
+          </Link>
 
           <Link
-            to="/signup"
+            to="/register"
             className="text-sm font-medium text-slate-600 transition hover:text-slate-950"
           >
-            Deals
+            Sign Up
           </Link>
         </nav>
 

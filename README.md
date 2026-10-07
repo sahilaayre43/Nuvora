@@ -141,6 +141,9 @@ VITE_API_URL=http://localhost:5000
 
 Never commit your ".env" files or API keys to GitHub.
 
+The backend accepts `MONGODB_URI` (recommended) or the legacy `MONGODB_URL`
+variable for the MongoDB connection string.
+
 ---
 
 ▶️ Running the Project

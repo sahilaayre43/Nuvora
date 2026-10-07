@@ -8,6 +8,8 @@ import Login from './pages/Login'
 import ProductDetails from './pages/ProductDetails'
 import Cart from './pages/Cart'
 import Profile from './pages/Profile'
+import AdminDashboard from './admin/AdminDashboard'
+import AddProduct from './admin/AddProduct'
 import './App.css'
 
 function App() {
@@ -17,11 +19,17 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/add-product" element={<AddProduct />} />
+        {/*<Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/users" element={<AdminUsers />} />*/}
       </Routes>
       <Footer />
     </Router>

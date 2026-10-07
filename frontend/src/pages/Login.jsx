@@ -26,7 +26,7 @@ const Login = () => {
       const data = await res.json();
       if (res.ok) {
         login(data);
-        navigate('/profile');
+        navigate('/');
       } else {
         setError(data.message || "An error occurred while logging in.");
       }

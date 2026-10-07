@@ -71,7 +71,7 @@ const Profile = () => {
 
       <div className="mx-auto max-w-6xl">
 
-        {/*<div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
 
           <div>
             <p className="mb-2 text-sm font-semibold text-violet-600">
@@ -95,7 +95,7 @@ const Profile = () => {
             Logout
           </button>
 
-        </div>*/}
+        </div>
 
     
         <div className="mb-8 overflow-hidden rounded-[28px] border border-[#eeeeF5] bg-white shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
