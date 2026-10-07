@@ -2,7 +2,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   ChevronRight,
-  Heart,
   Headphones,
   Armchair,
   Camera,
@@ -13,8 +12,6 @@ import {
   RotateCcw,
   Headset,
   Mail,
-  Star,
-  ShoppingCart,
 } from "lucide-react";
 import React, { useEffect, useState} from "react";
 import ProductCard from "../components/ProductCard";
@@ -57,53 +54,6 @@ const categories = [
   },
 ];
 
-const products = [
-  {
-    name: "Wireless Noise-Cancelling Headphones",
-    rating: "4.8",
-    reviews: "320",
-    price: "₹299.99",
-    oldPrice: "₹399.99",
-    discount: "-20%",
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
-    bg: "bg-violet-100",
-  },
-  {
-    name: "Minimalist Modern Chair",
-    rating: "4.7",
-    reviews: "180",
-    price: "₹150",
-    oldPrice: "₹175",
-    discount: "-15%",
-    image:
-      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=85",
-    bg: "bg-emerald-100",
-  },
-  {
-    name: "Professional DSLR Camera",
-    rating: "4.9",
-    reviews: "410",
-    price: "₹1199.99",
-    oldPrice: "₹1333.99",
-    discount: "-10%",
-    image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=700&q=85",
-    bg: "bg-amber-100",
-  },
-  {
-    name: "Classic White Sneakers",
-    rating: "4.6",
-    reviews: "220",
-    price: "₹85",
-    oldPrice: "₹100",
-    discount: "-15%",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
-    bg: "bg-rose-100",
-  },
-];
-
 const benefits = [
   {
     title: "Fast Delivery",
@@ -138,18 +88,27 @@ const benefits = [
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-      const response = await fetch("/api/products");
-      const data = await response.json();
-      setProducts(data.slice(0,4));
-      }
-       catch (error) {
+        const apiUrl = import.meta.env.VITE_API_URL || "";
+        const response = await fetch(`${apiUrl}/api/products`);
+
+        if (!response.ok) {
+          throw new Error(`Product request failed (${response.status}).`);
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          throw new Error("Product response was not a list.");
+        }
+        setProducts(data.slice(0, 4));
+      } catch (error) {
+        setProductsError(error.message);
         console.error("Error fetching products:", error);
-      }
-       finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -195,17 +154,17 @@ const Home = () => {
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <button className="flex items-center gap-3 rounded-full bg-[#6232e8] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf]">
+                <a href="#featured-products" className="flex items-center gap-3 rounded-full bg-[#6232e8] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf]">
                   Shop Now
                   <ArrowRight size={17} />
-                </button>
+                </a>
 
-                <button className="rounded-full border border-[#e0e1eb] bg-white/80 px-6 py-3 text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600">
+                <a href="#shop-by-category" className="rounded-full border border-[#e0e1eb] bg-white/80 px-6 py-3 text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600">
                   Explore Categories
-                </button>
+                </a>
               </div>
 
-              {/* Trust */}
+              {/* Trust 
               <div className="mt-8 flex items-center gap-3">
                 <div className="flex -space-x-2">
                   <div className="h-8 w-8 rounded-full border-2 border-white bg-[#c99b7c]" />
@@ -221,7 +180,7 @@ const Home = () => {
                   </span>{" "}
                   <span className="text-violet-500">♥</span>
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* RIGHT PRODUCT COMPOSITION */}
@@ -294,7 +253,7 @@ const Home = () => {
       </section>
 
       {/* ================= CATEGORY ================= */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5">
+      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-4 pt-5">
         <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-5 shadow-[0_8px_30px_rgba(30,30,60,0.03)]">
 
           <div className="mb-5 flex items-center justify-between">
@@ -342,7 +301,7 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5">
+      <section id="featured-products" className="mx-auto max-w-[1280px] px-4 pt-5">
         <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-6 shadow-[0_8px_30px_rgba(30,30,60,0.03)]">
 
           <div className="mb-5 flex items-center justify-between">
@@ -356,73 +315,19 @@ const Home = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {products.map((product) => (
-              <div key={product.name} className="group">
-
-                {/* Image */}
-                <div
-                  className={`relative flex h-[235px] items-center justify-center overflow-hidden rounded-2xl ${product.bg}`}
-                >
-                  <span className="absolute left-3 top-3 z-10 rounded-full bg-violet-500/80 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur">
-                    {product.discount}
-                  </span>
-
-                  <button className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#6d7487] backdrop-blur transition hover:bg-white hover:text-violet-600">
-                    <Heart size={16} />
-                  </button>
-
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="h-full w-full object-contain p-5 mix-blend-multiply transition duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                {/* Info */}
-                <div className="px-2 pt-3">
-
-                  <h3 className="min-h-[38px] text-[13px] font-extrabold leading-[18px] text-[#111827]">
-                    {product.name}
-                  </h3>
-
-                  <div className="mt-1.5 flex items-center gap-1 text-[11px]">
-                    <Star
-                      size={13}
-                      className="fill-amber-400 text-amber-400"
-                    />
-                    <span className="font-bold text-amber-500">
-                      {product.rating}
-                    </span>
-                    <span className="text-[#9ba1b1]">
-                      ({product.reviews})
-                    </span>
-                  </div>
-
-                  <div className="mt-2 flex items-center gap-2">
-                    <span className="text-[15px] font-extrabold text-violet-600">
-                      {product.price}
-                    </span>
-
-                    <span className="text-[11px] text-[#a5a9b5] line-through">
-                      {product.oldPrice}
-                    </span>
-                  </div>
-
-                  <div className="mt-3 flex gap-2">
-                    <button className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 text-[11px] font-bold text-violet-600 transition hover:bg-violet-600 hover:text-white">
-                      <ShoppingCart size={14} />
-                      Add to Cart
-                    </button>
-
-                    <button className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#e8e9ef] bg-white text-[#737b91] hover:border-violet-200 hover:text-violet-600">
-                      <Heart size={15} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {productsError ? (
+            <p role="alert" className="text-sm text-red-600">
+              Could not load products: {productsError} Try refreshing the page.
+            </p>
+          ) : loading ? (
+            <p className="text-sm text-gray-500">Loading products...</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {products.map((product) => (
+                <ProductCard key={product._id || product.id || product.name} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

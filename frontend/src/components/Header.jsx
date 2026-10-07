@@ -21,14 +21,14 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center gap-8 px-6">
         {/* Logo */}
-        <Link to="/" className="shrink-0">
+        <Link to="/" className="shrink-0 ml-6">
           <span className="text-2xl font-black tracking-tight text-slate-950">
             NUVO<span className="text-violet-600">RA</span>
           </span>
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-7 md:flex ml-170">
           <Link
             to="/"
             className="text-sm font-semibold text-slate-950"
@@ -55,7 +55,7 @@ const Navbar = () => {
           </Link>
         </nav>
 
-        {/* Search */}
+        {/* Search 
         <div className="ml-auto hidden w-full max-w-sm md:block">
           <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus-within:border-violet-400 focus-within:bg-white">
             <Search size={18} className="text-slate-400" />
@@ -66,13 +66,12 @@ const Navbar = () => {
               className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
             />
           </div>
-        </div>
+        </div> */}
 
-        {/* Actions */}
         <div className="flex items-center gap-2">
-          <button className="relative rounded-full p-2.5 text-slate-700 transition hover:bg-violet-50 hover:text-violet-600">
+           {/*<button className="relative rounded-full p-2.5 text-slate-700 transition hover:bg-violet-50 hover:text-violet-600">
             <Heart size={20} />
-          </button>
+          </button>  */}
 
           <Link
            to="/cart"  

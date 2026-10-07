@@ -35,6 +35,9 @@ const ProductDetails = () =>{
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    const galleryImages = product?.imageUrl || product?.image
+      ? [product.imageUrl || product.image]
+      : productImages;
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -58,7 +61,7 @@ const ProductDetails = () =>{
                 productId: product._id,
                 name: product.name,
                 price: product.price,
-                imageUrl: product.image,
+                imageUrl: product.imageUrl || product.image,
                 quantity: 1
             }));
             alert("Product added to cart!");
@@ -95,7 +98,7 @@ const ProductDetails = () =>{
                 onClick={() =>
                   setSelectedImage(
                     selectedImage === 0
-                      ? productImages.length - 1
+                      ? galleryImages.length - 1
                       : selectedImage - 1
                   )
                 }
@@ -106,8 +109,8 @@ const ProductDetails = () =>{
 
               {/* Product image */}
               <img
-                src={productImages[selectedImage]}
-                alt="Wireless Noise-Cancelling Headphones"
+                src={galleryImages[selectedImage]}
+                alt={product?.name || "Product"}
                 className="h-[460px] w-[85%] object-contain mix-blend-multiply"
               />
 
@@ -115,7 +118,7 @@ const ProductDetails = () =>{
               <button
                 onClick={() =>
                   setSelectedImage(
-                    selectedImage === productImages.length - 1
+                    selectedImage === galleryImages.length - 1
                       ? 0
                       : selectedImage + 1
                   )
@@ -129,7 +132,7 @@ const ProductDetails = () =>{
             {/* Thumbnails */}
             <div className="flex gap-4 border-t border-[#eeeeF5] p-5">
 
-              {productImages.map((image, index) => (
+              {galleryImages.map((image, index) => (
                 <button
                   key={image}
                   onClick={() => setSelectedImage(index)}
