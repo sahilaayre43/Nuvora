@@ -1,18 +1,4 @@
-import {
-  ArrowRight,
-  ArrowUpRight,
-  ChevronRight,
-  Headphones,
-  Armchair,
-  Camera,
-  Footprints,
-  Grid2X2,
-  Truck,
-  ShieldCheck,
-  RotateCcw,
-  Headset,
-  Mail,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronRight, Headphones, Armchair, Camera, Footprints, Grid2X2, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
 import React, { useEffect, useState} from "react";
 import ProductCard from "../components/ProductCard";
 
