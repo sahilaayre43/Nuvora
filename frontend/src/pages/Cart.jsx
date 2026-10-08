@@ -1,7 +1,8 @@
-import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { removeItem, addItem } from '../store/cartSlice'
+import { removeItem, setItemQuantity } from '../store/cartSlice'
 import { Link, useNavigate } from 'react-router-dom'
+
+const getItemId = (item) => item.productId ?? item.id ?? item._id
 
 const Cart = () => {
   const dispatch = useDispatch()
@@ -13,12 +14,13 @@ const Cart = () => {
   }
 
   const handleUpdateQuantity = (item, quantity) => {
+    const itemId = getItemId(item)
     if (quantity <= 0) {
-      dispatch(removeItem(item.productId))
+      dispatch(removeItem(itemId))
       return
     }
 
-    dispatch(addItem({ ...item, quantity }))
+    dispatch(setItemQuantity({ id: itemId, quantity }))
   }
 
  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -60,7 +62,7 @@ const Cart = () => {
             </p>
 
             <Link
-              to="/products"
+              to="/shop"
               className="mt-7 inline-flex rounded-full bg-violet-600 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
             >
               Go Shopping →
@@ -76,7 +78,7 @@ const Cart = () => {
 
               {cartItems.map((item) => (
                 <div
-                  key={item.productId}
+                  key={getItemId(item)}
                   className="flex flex-col gap-5 rounded-[24px] border border-[#eeeeF5] bg-white p-5 shadow-[0_8px_30px_rgba(40,30,80,0.04)] sm:flex-row sm:items-center"
                 >
 
@@ -118,7 +120,7 @@ const Cart = () => {
                           }
                           className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold transition hover:bg-[#f1eaff] hover:text-violet-600"
                         >
-                          −
+                          -
                         </button>
 
                         <span className="w-8 text-center text-sm font-bold">
@@ -205,7 +207,7 @@ const Cart = () => {
               </button>
 
               <Link
-                to="/products"
+                to="/shop"
                 className="mt-3 block text-center text-sm font-semibold text-[#737b90] transition hover:text-violet-600"
               >
                 ← Continue Shopping

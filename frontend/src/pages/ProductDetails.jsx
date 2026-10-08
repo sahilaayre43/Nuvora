@@ -1,352 +1,283 @@
-import React, {useEffect, useState} from "react";
-import { useParams,Link } from "react-router-dom";
-import {useDispatch} from "react-redux";
-import { addItem } from "../store/cartSlice.js";
-import {
-  Heart,
-  ShoppingCart,
-  UserRound,
-  Search,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  Minus,
-  Plus,
-  Zap,
-  BatteryMedium,
-  Headphones,
-  Truck,
-  Sparkles,
-} from "lucide-react";
-const productImages = [
-  "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900",
-  "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=900",
-  "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=900",
-  "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=900",
-];
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../store/cartSlice';
+import { AuthContext } from '../components/context/AuthContext';
+import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft } from 'lucide-react';
 
-const ProductDetails = () =>{
+const ProductDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const [selectedImage, setSelectedImage] = useState(0);
-    const [quantity, setQuantity] = useState(1);
-    const [selectedColor, setSelectedColor] = useState("black");
-    const {id} = useParams();
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const dispatch = useDispatch();
-    const galleryImages = product?.imageUrl || product?.image
-      ? [product.imageUrl || product.image]
-      : productImages;
+  const { user } = useContext(AuthContext);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const res = await fetch(`/api/products/${id}`);
-                const data = await res.json();
-                setProduct(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching product:", error);
-                setLoading(false);
-            }
-        };
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-        fetchProduct();
-    }, [id]);
-
-    const handleAddToCart = () => {
-        if (product) {
-            dispatch(addItem({
-                productId: product._id,
-                name: product.name,
-                price: product.price,
-                imageUrl: product.imageUrl || product.image,
-                quantity: 1
-            }));
-            alert("Product added to cart!");
-        }
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        const data = await res.json();
+        setProduct(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-   
+    fetchProduct();
+  }, [id]);
+
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!product || product.stock <= 0) return;
+
+    dispatch(
+      addItem({
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        qty: 1,
+      })
+    );
+
+    alert('Successfully added to your cart!');
+  };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f8f6ff]">
+        <p className="text-sm font-semibold text-purple-600">
+          Loading product...
+        </p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f8f6ff]">
+        <p className="font-semibold text-red-500">Product not found</p>
+
+        <Link
+          to="/shop"
+          className="mt-4 text-sm font-semibold text-purple-600"
+        >
+          Back to shop
+        </Link>
+      </div>
+    );
+  }
 
   return (
+    <div className="min-h-screen bg-[#f8f6ff] px-4 py-6 sm:px-6 lg:px-10">
 
-<div className="min-h-screen bg-[#fafafd] text-[#17213d] p-4">
-     <main className="mx-auto max-w-[1400px] px-7 pb-10">
+      <div className="mx-auto max-w-7xl">
 
-        <div className="grid gap-7 lg:grid-cols-2">
+        {/* Back */}
+        <Link
+          to="/shop"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition hover:text-purple-600"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Shop
+        </Link>
 
-          {/* ================= IMAGE GALLERY ================= */}
-          <section className="overflow-hidden rounded-[28px] border border-[#eeeeF5] bg-white shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
+        {/* Main Layout */}
+        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
 
-            {/* Main image */}
-            <div className="relative flex h-[560px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#f1eaff] via-[#f8f6ff] to-[#eeeaff]">
+          {/* ================= IMAGE ================= */}
+          <div className="relative min-h-[450px] overflow-hidden rounded-[28px] bg-[#e9ddff] sm:min-h-[560px]">
 
-              {/* Discount */}
-              <span className="absolute left-6 top-6 z-10 rounded-full bg-violet-600 px-5 py-2 text-sm font-bold text-white">
-                -20%
+            {/* Decorative background */}
+            <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-purple-300/30 blur-3xl" />
+
+            <div className="absolute -bottom-24 -right-20 h-80 w-80 rounded-full bg-violet-300/30 blur-3xl" />
+
+            {/* Category */}
+            <div className="absolute left-6 top-6 z-10">
+              <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-bold text-purple-700 shadow-sm backdrop-blur">
+                {product.category}
               </span>
-
-              {/* Wishlist */}
-              <button className="absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-md">
-                <Heart size={20} />
-              </button>
-
-              {/* Previous */}
-              <button
-                onClick={() =>
-                  setSelectedImage(
-                    selectedImage === 0
-                      ? galleryImages.length - 1
-                      : selectedImage - 1
-                  )
-                }
-                className="absolute left-5 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md hover:text-violet-600"
-              >
-                <ChevronLeft size={21} />
-              </button>
-
-              {/* Product image */}
-              <img
-                src={galleryImages[selectedImage]}
-                alt={product?.name || "Product"}
-                className="h-[460px] w-[85%] object-contain mix-blend-multiply"
-              />
-
-              {/* Next */}
-              <button
-                onClick={() =>
-                  setSelectedImage(
-                    selectedImage === galleryImages.length - 1
-                      ? 0
-                      : selectedImage + 1
-                  )
-                }
-                className="absolute right-5 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md hover:text-violet-600"
-              >
-                <ChevronRight size={21} />
-              </button>
             </div>
 
-            {/* Thumbnails */}
-            <div className="flex gap-4 border-t border-[#eeeeF5] p-5">
+            {/* Wishlist */}
+            <button
+              type="button"
+              className="absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-gray-500 shadow-sm backdrop-blur transition hover:text-purple-600"
+            >
+              <Heart className="h-5 w-5" />
+            </button>
 
-              {galleryImages.map((image, index) => (
-                <button
-                  key={image}
-                  onClick={() => setSelectedImage(index)}
-                  className={`h-[82px] w-[82px] overflow-hidden rounded-xl border-2 bg-[#f7f6fb] p-1 ${
-                    selectedImage === index
-                      ? "border-violet-600"
-                      : "border-transparent"
-                  }`}
-                >
-                  <img
-                    src={image}
-                    alt=""
-                    className="h-full w-full object-cover mix-blend-multiply"
-                  />
-                </button>
-              ))}
-
-              {/* Video */}
-              <button className="flex h-[82px] w-[82px] flex-col items-center justify-center gap-1 rounded-xl bg-[#f4f1fb] text-violet-600">
-                <span className="text-xl">▶</span>
-                <span className="text-xs font-semibold">Video</span>
-              </button>
-
-            </div>
-          </section>
-
-          {/* ================= PRODUCT INFO ================= */}
-          <section className="rounded-[28px] border border-[#eeeeF5] bg-white p-8 shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
-
-            {/* Badge */}
-            <div className="mb-5 flex w-fit items-center gap-2 rounded-full bg-[#f2edff] px-4 py-2 text-xs font-bold text-violet-600">
-              <Sparkles size={14} />
-              New Arrival
+            {/* Image */}
+            <div className="relative flex h-full min-h-[450px] items-center justify-center p-8 sm:min-h-[560px]">
+              {product.imageUrl ? (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="max-h-[480px] w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
+                />
+              ) : (
+                <span className="text-sm text-gray-400">
+                  Image unavailable
+                </span>
+              )}
             </div>
 
-            {/* Title */}
-            <h1 className="max-w-[600px] text-[38px] font-extrabold leading-[1.12] tracking-[-1.5px] text-[#101727]">
-              Wireless Noise-Cancelling Headphones
+            {/* Bottom image label */}
+            <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/70 p-4 backdrop-blur-md">
+              <p className="text-xs font-medium text-gray-500">
+                NUVORA COLLECTION
+              </p>
+
+              <p className="mt-1 text-sm font-bold text-[#171329]">
+                Premium quality. Designed for you.
+              </p>
+            </div>
+          </div>
+
+          {/* ================= DETAILS ================= */}
+          <div className="flex flex-col rounded-[28px] border border-purple-100 bg-white p-6 shadow-[0_10px_40px_rgba(80,50,150,0.07)] sm:p-8">
+
+            {/* Small heading */}
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-purple-600" />
+
+              <span className="text-xs font-bold uppercase tracking-[0.15em] text-purple-600">
+                NUVORA
+              </span>
+            </div>
+
+            {/* Name */}
+            <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[#171329] sm:text-4xl">
+              {product.name}
             </h1>
 
             {/* Rating */}
-            <div className="mt-5 flex items-center gap-3 text-sm">
+            <div className="mt-4 flex items-center gap-2">
 
-              <div className="flex items-center gap-1 text-[#f5aa00]">
-                <Star size={17} fill="currentColor" />
-                <span className="font-bold">4.8</span>
+              <div className="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1.5">
+                <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+
+                <span className="text-sm font-bold text-gray-700">
+                  {product.rating || 0}
+                </span>
               </div>
 
-              <span className="text-[#8990a3]">
-                (320 reviews)
-              </span>
-
-              <span className="h-4 w-px bg-[#dddde5]" />
-
-              <span className="text-[#8990a3]">
-                2K+ sold
+              <span className="text-sm text-gray-400">
+                {product.numReviews || 0} reviews
               </span>
 
             </div>
 
             {/* Price */}
-            <div className="mt-7 flex flex-wrap items-center gap-4">
+            <div className="mt-7 rounded-2xl bg-[#f6f1ff] p-5">
 
-              <span className="text-[32px] font-extrabold text-violet-600">
-                ₹299.99
-              </span>
+              <p className="text-xs font-medium text-gray-400">
+                Price
+              </p>
 
-              <span className="text-lg text-[#9da2b0] line-through">
-                ₹399.99
-              </span>
-
-              <span className="rounded-full bg-[#f3edff] px-4 py-2 text-xs font-bold text-violet-600">
-                You save ₹100.00 (20%)
-              </span>
+              <p className="mt-1 text-3xl font-extrabold text-[#6d35e8]">
+                ₹{Number(product.price).toLocaleString('en-IN')}
+              </p>
 
             </div>
 
             {/* Description */}
-            <p className="mt-6 max-w-[650px] text-sm leading-7 text-[#687188]">
-              Immerse yourself in pure sound with our advanced
-              noise-cancelling technology. Perfect for music,
-              calls, and everyday use.
-            </p>
-
-            {/* Features */}
-            <div className="mt-8 grid grid-cols-4 border-y border-[#eeeeF5] py-6">
-
-              <div className="flex flex-col items-center text-center">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#f1eaff] text-violet-600">
-                  <Headphones size={20} />
-                </div>
-
-                <span className="text-xs font-bold">
-                  Active Noise
-                </span>
-
-                <span className="text-xs font-bold">
-                  Cancellation
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center border-l border-[#eeeeF5] text-center">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#e7f8f3] text-emerald-500">
-                  <BatteryMedium size={20} />
-                </div>
-
-                <span className="text-xs font-bold">
-                  30H Battery
-                </span>
-
-                <span className="text-xs font-bold">
-                  Life
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center border-l border-[#eeeeF5] text-center">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#ffe9f1] text-pink-500">
-                  <Zap size={20} />
-                </div>
-
-                <span className="text-xs font-bold">
-                  Premium
-                </span>
-
-                <span className="text-xs font-bold">
-                  Sound
-                </span>
-              </div>
-
-              <div className="flex flex-col items-center border-l border-[#eeeeF5] text-center">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#fff3d8] text-amber-500">
-                  <Truck size={20} />
-                </div>
-
-                <span className="text-xs font-bold">
-                  Fast
-                </span>
-
-                <span className="text-xs font-bold">
-                  Charging
-                </span>
-              </div>
-
-            </div>
-
-            {/* Color */}
             <div className="mt-7">
 
-              <div className="flex items-center gap-2 text-sm">
-                <span className="font-bold">Color:</span>
-                <span className="text-[#697188]">
-                  {selectedColor === "black"
-                    ? "Midnight Black"
-                    : selectedColor === "cream"
-                    ? "Cream"
-                    : "Silver"}
-                </span>
-              </div>
+              <h2 className="text-sm font-bold text-[#171329]">
+                About this product
+              </h2>
 
-              
-            </div>
-
-            {/* Quantity + Cart */}
-            <div className="mt-8 flex items-end gap-5">
-
-              <div>
-                <p className="mb-3 text-sm font-bold">
-                  Quantity:
-                </p>
-
-                <div className="flex h-12 items-center rounded-full border border-[#e5e5ed]">
-
-                  <button
-                    onClick={() =>
-                      setQuantity(Math.max(1, quantity - 1))
-                    }
-                    className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#f5f2ff]"
-                  >
-                    <Minus size={16} />
-                  </button>
-
-                  <span className="w-8 text-center text-sm font-bold">
-                    {quantity}
-                  </span>
-
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#f5f2ff]"
-                  >
-                    <Plus size={16} />
-                  </button>
-
-                </div>
-              </div>
-
-              <button onClick={handleAddToCart} className="flex h-12 flex-1 items-center justify-center gap-3 rounded-full bg-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700">
-                <ShoppingCart size={18} />
-                Add to Cart
-              </button>
+              <p className="mt-3 text-sm leading-7 text-gray-500">
+                {product.description}
+              </p>
 
             </div>
 
-            {/* Buy now */}
-            <button className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-violet-200 bg-white text-sm font-bold text-violet-600 transition hover:bg-violet-50">
-              <Zap size={17} />
-              Buy Now
+            {/* Stock */}
+            <div className="mt-6 flex items-center gap-2">
+
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${
+                  product.stock > 0
+                    ? 'bg-emerald-500'
+                    : 'bg-red-500'
+                }`}
+              />
+
+              <span
+                className={`text-sm font-semibold ${
+                  product.stock > 0
+                    ? 'text-emerald-600'
+                    : 'text-red-500'
+                }`}
+              >
+                {product.stock > 0
+                  ? `${product.stock} units available`
+                  : 'Currently out of stock'}
+              </span>
+
+            </div>
+
+            {/* Cart */}
+            <button
+              onClick={handleAddToCart}
+              disabled={product.stock <= 0}
+              className="mt-7 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#6d35e8] text-sm font-bold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#5c27d6] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+            >
+              <ShoppingCart className="h-5 w-5" />
+
+              {!user
+                ? 'Login to Add to Cart'
+                : product.stock > 0
+                  ? 'Add to Cart'
+                  : 'Out of Stock'}
             </button>
 
-          </section>
+            {/* Benefits */}
+            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-[#fafaff]">
+
+              <div className="flex flex-col items-center px-2 py-4 text-center">
+                <Truck className="h-5 w-5 text-purple-600" />
+
+                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                  Fast Delivery
+                </p>
+              </div>
+
+              <div className="border-x border-gray-100 px-2 py-4 text-center">
+                <ShieldCheck className="mx-auto h-5 w-5 text-emerald-500" />
+
+                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                  Secure Payment
+                </p>
+              </div>
+
+              <div className="px-2 py-4 text-center">
+                <RotateCcw className="mx-auto h-5 w-5 text-amber-500" />
+
+                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                  Easy Returns
+                </p>
+              </div>
+
+            </div>
+
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
-}
+};
 
-
-export default ProductDetails
+export default ProductDetail;

@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
   const imageUrl = product.imageUrl || product.image;
   const productId = product._id || product.id;
+  const navigate = useNavigate();
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-purple-100 bg-[#f3edff] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-100/70">
@@ -30,15 +31,7 @@ const ProductCard = ({ product }) => {
         <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-purple-700 shadow-sm backdrop-blur-sm">
           -20%
         </span>
-
-        {/* Wishlist */}
-        <button
-          type="button"
-          onClick={(e) => e.preventDefault()}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-500 shadow-sm backdrop-blur-sm transition hover:text-purple-600"
-        >
-          <Heart className="h-4 w-4" />
-        </button>
+        
       </Link>
 
       {/* CONTENT */}
@@ -83,12 +76,12 @@ const ProductCard = ({ product }) => {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              // Add your existing cart logic here
+              navigate(`/product/${productId}`);
             }}
             className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full border border-purple-200 bg-white/70 text-xs font-semibold text-purple-600 transition hover:border-purple-300 hover:bg-white"
           >
             <ShoppingCart className="h-3.5 w-3.5" />
-            Add to Cart
+            View Details
           </button>
 
           {/* Wishlist */}
