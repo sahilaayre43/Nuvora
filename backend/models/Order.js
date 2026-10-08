@@ -17,6 +17,18 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  paymentMethod: {
+    type: String,
+    enum: ["COD", "RAZORPAY"],
+    required: true,
+    default: "COD"
+  },
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid"],
+    required: true,
+    default: "pending"
+  },
   address: {
     fullName: { type: String, required: true },
     street: { type: String, required: true },

@@ -1,22 +1,27 @@
-const nodeMailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-const sendEmail = async (to, subject, text) => {
-    try {
-        const transporter = nodeMailer.createTransport({
-            service: 'Gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to,
-            subject,
-            text
-        });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        throw new Error('Failed to send email');
-    }
+const sendEmail = async ({ email, subject, message }) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS, // App Password mapping
+      },
+    });
+
+    const mailOptions = {
+      from: `"NUVORA Support" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: subject,
+      html: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Email successfully sent to ${email}`);
+  } catch (error) {
+    console.error(`Failed to send email to ${email}: ${error.message}`);
+  }
 };
+
+module.exports = sendEmail;
