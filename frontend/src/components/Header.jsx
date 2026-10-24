@@ -93,7 +93,7 @@ const Navbar = () => {
           {user && (
             <Link
               to="/profile"
-              className="hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block"
+              className="ml-3 hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block"
             >
               <UserRound size={20} />
             </Link>
