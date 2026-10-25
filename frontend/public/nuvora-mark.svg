@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 300" fill="none">
+  <defs>
+    <linearGradient id="bag" x1="42" y1="150" x2="250" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B2BEF"/>
+      <stop offset=".52" stop-color="#573FE8"/>
+      <stop offset="1" stop-color="#06B6E9"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="56" y1="114" x2="102" y2="244" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D77AF3" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#6424C5" stop-opacity=".85"/>
+    </linearGradient>
+  </defs>
+  <path d="M94 84V55a54 54 0 0 1 108 0v29" stroke="#27157D" stroke-linecap="round" stroke-width="12"/>
+  <circle cx="94" cy="84" r="11" fill="#27157D" stroke="white" stroke-width="5"/>
+  <circle cx="202" cy="84" r="11" fill="#27157D" stroke="white" stroke-width="5"/>
+  <path d="M43 99a13 13 0 0 1 13-13h39l112 136V86h30a13 13 0 0 1 13 13v138a13 13 0 0 1-13 13h-30L87 110v140H56a13 13 0 0 1-13-13V99Z" fill="url(#bag)"/>
+  <path d="M87 111v139H56a13 13 0 0 1-13-13v-80c0-13 16-19 25-10l19 20Z" fill="url(#fold)"/>
+  <path d="m87 250 53-48v48H87Z" fill="#32116F" fill-opacity=".85"/>
+  <path d="m95 86 112 136v28h-30L87 110V86h8Z" fill="#20116D" fill-opacity=".22"/>
+</svg>

@@ -19,15 +19,24 @@ const AdminProducts = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you strictly sure you want to delete this?')) {
-      const res = await fetch(`/api/products/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      try {
+        const res = await fetch(`/api/products/${id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
 
-      if (res.ok) {
-        setProducts(products.filter((p) => p._id !== id));
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.message || 'Unable to delete product.');
+        }
+
+        setProducts((currentProducts) =>
+          currentProducts.filter((product) => product._id !== id)
+        );
+      } catch (error) {
+        window.alert(error.message || 'Unable to delete product.');
       }
     }
   };

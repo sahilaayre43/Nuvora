@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight, ChevronRight, Headphones, Armchair, Camera, Footprints, Grid2X2, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
 import React, { useEffect, useState} from "react";
 import ProductCard from "../components/ProductCard";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -140,12 +141,12 @@ const Home = () => {
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <a href="#featured-products" className="flex items-center gap-3 rounded-full bg-[#6232e8] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf]">
+                <Link to="/shop" className="flex items-center gap-3 rounded-full bg-[#6232e8] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf]">
                   Shop Now
                   <ArrowRight size={17} />
-                </a>
+                </Link>
 
-                <a href="#shop-by-category" className="rounded-full border border-[#e0e1eb] bg-white/80 px-6 py-3 text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600">
+                <a href="#featured-products" className="rounded-full border border-[#e0e1eb] bg-white/80 px-6 py-3 text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600">
                   Explore Categories
                 </a>
               </div>
@@ -212,7 +213,7 @@ const Home = () => {
               <div className="absolute bottom-[5px] left-[17%] h-[80px] w-[72%] rounded-[50%] bg-white/90 shadow-[0_-10px_40px_rgba(110,70,230,0.12)]" />
 
               {/* Free delivery */}
-              <div className="absolute right-5 top-8 z-50 w-[150px] rounded-2xl border border-white/70 bg-white/75 p-4 shadow-lg shadow-violet-200/30 backdrop-blur">
+              <div className="absolute right-5 top-8 z-40 w-[150px] rounded-2xl border border-white/70 bg-white/75 p-4 shadow-lg shadow-violet-200/30 backdrop-blur">
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
                     <Truck size={16} />
