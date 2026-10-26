@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../store/cartSlice';
@@ -31,6 +31,14 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
+  const getCartItem = () => ({
+    productId: product._id,
+    name: product.name,
+    price: product.price,
+    imageUrl: product.imageUrl,
+    qty: 1,
+  });
+
   const handleAddToCart = () => {
     if (!user) {
       navigate('/login');
@@ -39,17 +47,20 @@ const ProductDetail = () => {
 
     if (!product || product.stock <= 0) return;
 
-    dispatch(
-      addItem({
-        productId: product._id,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        qty: 1,
-      })
-    );
+    dispatch(addItem(getCartItem()));
 
     alert('Successfully added to your cart!');
+  };
+
+  const handleBuyNow = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!product || product.stock <= 0) return;
+
+    navigate('/checkout', { state: { buyNow: getCartItem() } });
   };
 
   if (loading) {
@@ -229,20 +240,29 @@ const ProductDetail = () => {
 
             </div>
 
-            {/* Cart */}
-            <button
-              onClick={handleAddToCart}
-              disabled={product.stock <= 0}
-              className="mt-7 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#6d35e8] text-sm font-bold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#5c27d6] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
-            >
-              <ShoppingCart className="h-5 w-5" />
+            {/* Purchase actions */}
+            <div className="mt-7 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleBuyNow}
+                disabled={product.stock <= 0}
+                className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-[#6d35e8] px-5 text-sm font-bold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#5c27d6] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+              >
+                {!user ? 'Login to Buy' : product.stock > 0 ? 'Buy Now' : 'Out of Stock'}
+              </button>
 
-              {!user
-                ? 'Login to Add to Cart'
-                : product.stock > 0
-                  ? 'Add to Cart'
-                  : 'Out of Stock'}
-            </button>
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={product.stock <= 0}
+                aria-label="Add to cart"
+                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-purple-200 bg-white px-4 text-sm font-semibold text-purple-700 transition hover:border-purple-300 hover:bg-purple-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                <span className="hidden sm:inline">Add to Cart</span>
+                <span className="sm:hidden">Add</span>
+              </button>
+            </div>
 
             {/* Benefits */}
             <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-[#fafaff]">

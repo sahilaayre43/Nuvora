@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../components/context/AuthContext';
 import { clearCart } from '../store/cartSlice';
 
@@ -8,7 +8,10 @@ const Checkout = () => {
   const { user } = useContext(AuthContext);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+  const buyNowItem = location.state?.buyNow;
+  const checkoutItems = buyNowItem ? [buyNowItem] : cartItems;
 
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,7 +25,7 @@ const Checkout = () => {
     country: ''
   });
 
-  const totalPrice = cartItems.reduce(
+  const totalPrice = checkoutItems.reduce(
     (total, item) => total + Number(item.price) * Number(item.qty ?? item.quantity ?? 1),
     0
   );
@@ -35,7 +38,7 @@ const Checkout = () => {
         Authorization: `Bearer ${user.token}`
       },
       body: JSON.stringify({
-        items: cartItems,
+        items: checkoutItems,
         address,
         paymentMethod: paymentMethod === 'cod' ? 'COD' : 'RAZORPAY',
         ...(paymentId ? { paymentId } : {})
@@ -47,7 +50,9 @@ const Checkout = () => {
       throw new Error(data.message || 'Unable to place your order.');
     }
 
-    dispatch(clearCart());
+    if (!buyNowItem) {
+      dispatch(clearCart());
+    }
     navigate('/ordersuccess', {
       state: {
         orderId: data._id,
@@ -115,7 +120,7 @@ const Checkout = () => {
       navigate('/login');
       return;
     }
-    if (cartItems.length === 0) {
+    if (checkoutItems.length === 0) {
       setErrorMessage('Your cart is empty.');
       return;
     }
@@ -145,7 +150,7 @@ const Checkout = () => {
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-8 text-3xl font-bold text-[#171329]">Checkout</h2>
 
-        {cartItems.length === 0 ? (
+        {checkoutItems.length === 0 ? (
           <div className="rounded-3xl border border-purple-100 bg-white p-8 text-center shadow-sm">
             <p className="font-semibold text-[#171329]">Your cart is empty.</p>
             <button
@@ -231,7 +236,7 @@ const Checkout = () => {
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>Items</span>
                   <span>
-                    {cartItems.reduce(
+                    {checkoutItems.reduce(
                       (count, item) => count + Number(item.qty ?? item.quantity ?? 1),
                       0
                     )}

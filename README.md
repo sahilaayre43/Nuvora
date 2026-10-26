@@ -4,7 +4,7 @@ A modern full-stack e-commerce web application built with the MERN stack. Nuvora
 
 🚀 Features
 
-User Features I have created 
+User Features 
 
 - User registration and login
 - Secure authentication using JWT
