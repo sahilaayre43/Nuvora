@@ -1,5 +1,5 @@
 import { ShoppingBag, UserRound } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext.jsx";
 import { useSelector } from "react-redux";
@@ -9,8 +9,10 @@ const navLinkClass =
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+  const { pathname } = useLocation();
 
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const isShopRoute = pathname === "/shop" || pathname.startsWith("/product/");
 
   const cartItemCount = cartItems.reduce(
     (count, item) => count + (Number(item.quantity) || 1),
@@ -44,46 +46,60 @@ const Navbar = () => {
         <nav className="ml-auto hidden items-center gap-2 md:flex">
 
           {/* Always visible */}
-          <Link
+          <NavLink
             to="/"
-            className={`${navLinkClass} font-semibold`}
+            className={({ isActive }) =>
+              `${navLinkClass} font-semibold ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+            }
           >
             Home
-          </Link>
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/shop"
-            className={`${navLinkClass} font-medium`}
+            className={({ isActive }) =>
+              `${navLinkClass} font-medium ${
+                isActive || isShopRoute ? "text-violet-700 after:w-1/2" : ""
+              }`
+            }
           >
             Shop
-          </Link>
+          </NavLink>
 
           {/* Admin - only visible to admin */}
           {user?.role === "admin" && (
-            <Link
+            <NavLink
               to="/admin"
-              className={`${navLinkClass} font-medium`}
+              className={({ isActive }) =>
+                `${navLinkClass} font-medium ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+              }
             >
               Admin
-            </Link>
+            </NavLink>
           )}
 
           {/* Login + Signup - only visible when logged out */}
           {!user && (
             <>
-              <Link
+              <NavLink
                 to="/login"
-                className={`${navLinkClass} font-medium`}
+                className={({ isActive }) =>
+                  `${navLinkClass} font-medium ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+                }
               >
                 Login
-              </Link>
+              </NavLink>
 
-              <Link
+              <NavLink
                 to="/register"
-                className="rounded-full bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-violet-700 hover:shadow-md hover:shadow-violet-300/60"
+                className={({ isActive }) =>
+                  `rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-violet-700 hover:shadow-md hover:shadow-violet-300/60 ${
+                    isActive ? "bg-violet-700 shadow-md shadow-violet-300/60" : "bg-violet-600"
+                  }`
+                }
               >
                 Sign Up
-              </Link>
+              </NavLink>
             </>
           )}
 
@@ -93,25 +109,37 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
 
           {/* Cart */}
-          <Link
+          <NavLink
             to="/cart"
-            className="relative rounded-full p-2.5 text-slate-700 transition hover:bg-violet-50 hover:text-violet-600"
+            className={({ isActive }) =>
+              `relative rounded-full p-2.5 transition ${
+                isActive
+                  ? "bg-violet-50 text-violet-600"
+                  : "text-slate-700 hover:bg-violet-50 hover:text-violet-600"
+              }`
+            }
           >
             <ShoppingBag size={20} />
 
             <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
               {cartItemCount}
             </span>
-          </Link>
+          </NavLink>
 
           {/* Profile - only when logged in */}
           {user && (
-            <Link
+            <NavLink
               to="/profile"
-              className="ml-3 hidden rounded-full bg-slate-100 p-2.5 text-slate-700 transition hover:bg-violet-100 hover:text-violet-600 sm:block"
+              className={({ isActive }) =>
+                `ml-3 hidden rounded-full p-2.5 transition sm:block ${
+                  isActive
+                    ? "bg-violet-100 text-violet-600"
+                    : "bg-slate-100 text-slate-700 hover:bg-violet-100 hover:text-violet-600"
+                }`
+              }
             >
               <UserRound size={20} />
-            </Link>
+            </NavLink>
           )}
 
         </div>
