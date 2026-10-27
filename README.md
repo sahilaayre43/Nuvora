@@ -117,7 +117,7 @@ npm install
 
 🔐 Environment Variables
 
-Create a ".env" file inside the "backend" directory.
+Create a `.env` file inside the `backend` directory.
 
 PORT=5000
 
@@ -135,9 +135,9 @@ RAZORPAY_KEY_SECRET=your_razorpay_secret
 EMAIL_USER=your_email
 EMAIL_PASSWORD=your_email_password
 
-Create a ".env" file inside the "frontend" directory if required:
+Optionally create a `.env` file inside `frontend` to point the Vite API proxy at a different backend URL:
 
-VITE_API_URL=http://localhost:5000
+VITE_API_PROXY_TARGET=http://127.0.0.1:5000
 
 Never commit your ".env" files or API keys to GitHub.
 
@@ -148,17 +148,13 @@ variable for the MongoDB connection string.
 
 ▶️ Running the Project
 
-Start the backend
+From the project root, start both services together:
 
-cd backend
+```bash
 npm run dev
+```
 
-Start the frontend
-
-Open another terminal:
-
-cd frontend
-npm run dev
+The backend waits for MongoDB before listening on port 5000. If MongoDB is unavailable or its URI is missing, startup exits with a clear error instead of leaving the frontend running against a dead API. The combined development command stops both services if either one exits.
 
 The application will then be available at the local development URL shown by Vite.
 

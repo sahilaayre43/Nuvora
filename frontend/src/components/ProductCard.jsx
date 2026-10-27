@@ -46,15 +46,19 @@ const ProductCard = ({ product }) => {
 
         {/* Rating */}
         <div className="mt-2 flex items-center gap-1.5">
-          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-
-          <span className="text-xs font-semibold text-gray-600">
-            4.8
-          </span>
-
-          <span className="text-xs text-gray-400">
-            (320)
-          </span>
+          {product.numReviews > 0 ? (
+            <>
+              <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <span className="text-xs font-semibold text-gray-600">
+                {Number(product.rating).toFixed(1)}
+              </span>
+              <span className="text-xs text-gray-400">
+                ({product.numReviews})
+              </span>
+            </>
+          ) : (
+            <span className="text-xs text-gray-400">No ratings yet</span>
+          )}
         </div>
 
         {/* Price */}

@@ -14,6 +14,11 @@ const ProductDetail = () => {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showRatingForm, setShowRatingForm] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
+  const [ratingError, setRatingError] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -61,6 +66,54 @@ const ProductDetail = () => {
     if (!product || product.stock <= 0) return;
 
     navigate('/checkout', { state: { buyNow: getCartItem() } });
+  };
+
+  const userReview = product?.reviews?.find(
+    (review) => String(review.userId) === String(user?._id)
+  );
+
+  const handleOpenRatingForm = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    setSelectedRating(userReview?.rating || 0);
+    setReviewComment(userReview?.comment || '');
+    setRatingError('');
+    setShowRatingForm((open) => !open);
+  };
+
+  const handleSubmitRating = async (event) => {
+    event.preventDefault();
+    if (!selectedRating) {
+      setRatingError('Choose a star rating before submitting.');
+      return;
+    }
+
+    setSubmittingRating(true);
+    setRatingError('');
+    try {
+      const response = await fetch(`/api/products/${id}/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ rating: selectedRating, comment: reviewComment }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Could not save your rating.');
+      }
+
+      setProduct((current) => ({ ...current, ...data }));
+      setShowRatingForm(false);
+    } catch (error) {
+      setRatingError(error.message || 'Could not save your rating.');
+    } finally {
+      setSubmittingRating(false);
+    }
   };
 
   if (loading) {
@@ -187,7 +240,60 @@ const ProductDetail = () => {
                 {product.numReviews || 0} reviews
               </span>
 
+              <button
+                type="button"
+                onClick={handleOpenRatingForm}
+                aria-expanded={showRatingForm}
+                className="ml-2 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-700 hover:text-purple-900"
+              >
+                <Star className="h-4 w-4" />
+                {userReview ? 'Update your rating' : 'Rate this product'}
+              </button>
+
             </div>
+
+            {showRatingForm && (
+              <form onSubmit={handleSubmitRating} className="mt-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4">
+                <p className="text-sm font-semibold text-gray-700">Choose your rating</p>
+                <div className="mt-2 flex items-center gap-1" role="group" aria-label="Choose a rating from 1 to 5 stars">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setSelectedRating(star)}
+                      aria-label={`${star} star${star === 1 ? '' : 's'}`}
+                      aria-pressed={selectedRating === star}
+                      className="rounded p-1 text-amber-500 transition hover:scale-110 focus-visible:outline-2 focus-visible:outline-amber-600"
+                    >
+                      <Star className={`h-7 w-7 ${star <= selectedRating ? 'fill-amber-400' : ''}`} />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-sm text-gray-600">
+                    {selectedRating ? `${selectedRating} out of 5` : 'Select stars'}
+                  </span>
+                </div>
+                <label className="mt-3 block text-xs font-medium text-gray-600" htmlFor="review-comment">
+                  Comment (optional)
+                </label>
+                <textarea
+                  id="review-comment"
+                  rows="2"
+                  maxLength="500"
+                  value={reviewComment}
+                  onChange={(event) => setReviewComment(event.target.value)}
+                  className="mt-1 w-full resize-y rounded-lg border border-gray-200 bg-white p-2 text-sm outline-none focus:border-amber-400"
+                  placeholder="Share a few words about this product"
+                />
+                {ratingError && <p role="alert" className="mt-2 text-sm text-red-600">{ratingError}</p>}
+                <button
+                  type="submit"
+                  disabled={submittingRating}
+                  className="mt-3 rounded-lg bg-purple-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {submittingRating ? 'Saving...' : userReview ? 'Update rating' : 'Submit rating'}
+                </button>
+              </form>
+            )}
 
             {/* Price */}
             <div className="mt-7 rounded-2xl bg-[#f6f1ff] p-5">
@@ -295,6 +401,35 @@ const ProductDetail = () => {
 
           </div>
         </div>
+
+        <section className="mt-8 rounded-2xl border border-purple-100 bg-white p-6 sm:p-8" aria-labelledby="reviews-heading">
+          <div className="flex items-center justify-between gap-4">
+            <h2 id="reviews-heading" className="text-xl font-bold text-[#171329]">Customer reviews</h2>
+            <span className="text-sm text-gray-500">{product.numReviews || 0} total</span>
+          </div>
+          {product.reviews?.length ? (
+            <div className="mt-5 divide-y divide-gray-100">
+              {product.reviews.map((review) => (
+                <article key={review._id} className="py-4 first:pt-0 last:pb-0">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-gray-800">{review.name}</p>
+                    <time className="text-xs text-gray-400" dateTime={review.createdAt}>
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </time>
+                  </div>
+                  <div className="mt-1 flex items-center gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className={`h-4 w-4 text-amber-400 ${star <= review.rating ? 'fill-amber-400' : ''}`} />
+                    ))}
+                  </div>
+                  {review.comment && <p className="mt-2 text-sm leading-6 text-gray-600">{review.comment}</p>}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-gray-500">No reviews yet. Be the first to rate this product.</p>
+          )}
+        </section>
       </div>
     </div>
   );
