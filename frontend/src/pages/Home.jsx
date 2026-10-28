@@ -1,45 +1,34 @@
 import { ArrowRight, ArrowUpRight, ChevronRight, Headphones, Armchair, Camera, Footprints, Grid2X2, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
-import React, { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 
-const categories = [
-  {
-    name: "Audio",
+const categoryDesigns = {
+  audio: {
     subtitle: "Headphones & more",
     icon: Headphones,
     bg: "bg-violet-100",
     color: "text-violet-600",
   },
-  {
-    name: "Furniture",
-    subtitle: "Smart & Modern",
+  furniture: {
+    subtitle: "Smart & modern",
     icon: Armchair,
     bg: "bg-emerald-100",
     color: "text-emerald-500",
   },
-  {
-    name: "Cameras",
+  cameras: {
     subtitle: "Capture moments",
     icon: Camera,
     bg: "bg-amber-100",
     color: "text-amber-500",
   },
-  {
-    name: "Footwear",
+  footwear: {
     subtitle: "Step in style",
     icon: Footprints,
     bg: "bg-rose-100",
     color: "text-rose-500",
   },
-  {
-    name: "More",
-    subtitle: "Explore all",
-    icon: Grid2X2,
-    bg: "bg-blue-100",
-    color: "text-blue-500",
-  },
-];
+};
 
 const benefits = [
   {
@@ -76,6 +65,10 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [productsError, setProductsError] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoriesError, setCategoriesError] = useState("");
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -102,6 +95,48 @@ const Home = () => {
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    const fetchCategories = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || "";
+        const response = await fetch(`${apiUrl}/api/categories`);
+        if (!response.ok) {
+          throw new Error(`Category request failed (${response.status}).`);
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          throw new Error("Category response was not a list.");
+        }
+
+        if (isCurrent) {
+          setCategories(data.filter((category) => category?.name));
+        }
+      } catch (error) {
+        if (isCurrent) {
+          setCategoriesError(error.message);
+        }
+        console.error("Error fetching categories:", error);
+      } finally {
+        if (isCurrent) {
+          setCategoriesLoading(false);
+        }
+      }
+    };
+
+    fetchCategories();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
+
+  const visibleCategories = showAllCategories
+    ? categories
+    : categories.slice(0, 5);
 
   return (
     <main className="min-h-screen bg-[#fafafa] text-[#17213d]">
@@ -248,42 +283,68 @@ const Home = () => {
               Shop by Category
             </h2>
 
-            <button className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600">
-              View all
-              <ArrowUpRight size={15} />
-            </button>
+            {categories.length > 5 && (
+              <button
+                type="button"
+                onClick={() => setShowAllCategories((visible) => !visible)}
+                aria-expanded={showAllCategories}
+                className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600"
+              >
+                {showAllCategories ? "Show less" : "View all"}
+                <ArrowUpRight size={15} />
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-            {categories.map((category) => {
-              const Icon = category.icon;
+          {categoriesError ? (
+            <p role="alert" className="text-sm text-red-600">
+              Could not load categories: {categoriesError}
+            </p>
+          ) : categoriesLoading ? (
+            <p className="text-sm text-gray-500">Loading categories...</p>
+          ) : categories.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              Categories will appear here as products are added.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+              {visibleCategories.map((category) => {
+                const design = categoryDesigns[category.name.toLowerCase()] || {
+                  subtitle: `${category.productCount} ${category.productCount === 1 ? "product" : "products"}`,
+                  icon: Grid2X2,
+                  bg: "bg-blue-100",
+                  color: "text-blue-500",
+                };
+                const Icon = design.icon;
 
-              return (
-                <button
-                  key={category.name}
-                  className="group flex items-center gap-3 rounded-full border border-[#f0f0f5] bg-white px-3 py-2.5 text-left shadow-[0_5px_18px_rgba(30,30,60,0.04)] transition hover:-translate-y-0.5 hover:border-violet-200"
-                >
-                  <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${category.bg} ${category.color}`}
+                return (
+                  <Link
+                    key={category.name}
+                    to={`/shop?category=${encodeURIComponent(category.name)}`}
+                    className="group flex items-center gap-3 rounded-full border border-[#f0f0f5] bg-white px-3 py-2.5 text-left shadow-[0_5px_18px_rgba(30,30,60,0.04)] transition hover:-translate-y-0.5 hover:border-violet-200"
                   >
-                    <Icon size={20} />
-                  </div>
+                    <div
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${design.bg} ${design.color}`}
+                    >
+                      <Icon size={20} />
+                    </div>
 
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold">{category.name}</p>
-                    <p className="truncate text-[10px] text-[#8990a3]">
-                      {category.subtitle}
-                    </p>
-                  </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold">{category.name}</p>
+                      <p className="truncate text-[10px] text-[#8990a3]">
+                        {design.subtitle}
+                      </p>
+                    </div>
 
-                  <ChevronRight
-                    size={15}
-                    className="text-[#a1a7b7] transition group-hover:translate-x-0.5 group-hover:text-violet-500"
-                  />
-                </button>
-              );
-            })}
-          </div>
+                    <ChevronRight
+                      size={15}
+                      className="text-[#a1a7b7] transition group-hover:translate-x-0.5 group-hover:text-violet-500"
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -296,10 +357,13 @@ const Home = () => {
               Featured Products
             </h2>
 
-            <button className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600">
+            <Link
+              to="/shop"
+              className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600"
+            >
               View all
               <ArrowUpRight size={15} />
-            </button>
+            </Link>
           </div>
 
           {productsError ? (

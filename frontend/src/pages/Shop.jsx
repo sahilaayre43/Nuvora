@@ -1,29 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get('category')?.trim() || '';
 
   useEffect(() => {
+    let isCurrent = true;
+
     const fetchProducts = async () => {
       try {
         const res = await fetch('/api/products');
         const data = await res.json();
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
+        if (!res.ok) {
+          throw new Error(data?.message || 'Unable to load products.');
+        }
+        if (!Array.isArray(data)) {
+          throw new Error('The server returned an invalid products response.');
+        }
+        if (isCurrent) {
+          setProducts(data);
+        }
+      } catch (fetchError) {
+        if (isCurrent) {
+          setError(fetchError.message || 'Unable to load products.');
+        }
       } finally {
-        setLoading(false);
+        if (isCurrent) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProducts();
+
+    return () => {
+      isCurrent = false;
+    };
   }, []);
 
-  const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+  const categoryProducts = products.filter((product) =>
+    !category || product.category?.trim().toLowerCase() === category.toLowerCase()
+  );
+  const filteredProducts = categoryProducts.filter((product) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -34,34 +60,48 @@ const Shop = () => {
         {/* Page Header */}
         <div className="mb-8">
 
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-3 py-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-purple-600" />
+          {category && (
+            <Link
+              to="/shop"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-white px-4 py-2 text-sm font-semibold text-purple-700 transition hover:border-purple-300 hover:bg-purple-50"
+            >
+              <ArrowLeft size={16} />
+              Back to all products
+            </Link>
+          )}
 
-            <span className="text-xs font-semibold uppercase tracking-wide text-purple-600">
-              NUVORA SHOP
-            </span>
-          </div>
+          {!category && (
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-3 py-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-purple-600" />
+
+              <span className="text-xs font-semibold uppercase tracking-wide text-purple-600">
+                NUVORA SHOP
+              </span>
+            </div>
+          )}
 
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
 
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-[#171329] sm:text-4xl">
-                Everything You Want.
+                {category || 'Everything You Want.'}
               </h1>
 
               <p className="mt-2 text-sm text-gray-500 sm:text-base">
-                Explore our collection of premium products.
+                {category
+                  ? `Explore products in ${category}.`
+                  : 'Explore our collection of premium products.'}
               </p>
             </div>
 
             {/* Product Count */}
             <div className="w-fit rounded-2xl border border-gray-100 bg-white px-5 py-3 shadow-sm">
               <p className="text-xs text-gray-400">
-                Available Products
+                {category ? 'Products in category' : 'Available Products'}
               </p>
 
               <p className="mt-0.5 text-lg font-bold text-[#171329]">
-                {products.length}
+                {category ? categoryProducts.length : products.length}
               </p>
             </div>
 
@@ -100,18 +140,24 @@ const Shop = () => {
           </div>
 
           {/* Search Result Info */}
-          {search && !loading && (
+          {(search || category) && !loading && (
             <div className="mt-3 px-1">
               <p className="text-xs text-gray-500">
                 Showing{' '}
                 <span className="font-semibold text-purple-600">
                   {filteredProducts.length}
                 </span>{' '}
-                result
+                product
                 {filteredProducts.length !== 1 ? 's' : ''} for{' '}
-                <span className="font-semibold text-gray-700">
-                  "{search}"
-                </span>
+                {search && (
+                  <span className="font-semibold text-gray-700">
+                    "{search}"
+                  </span>
+                )}
+                {search && category && ' in '}
+                {category && (
+                  <span className="font-semibold text-gray-700">{category}</span>
+                )}
               </p>
             </div>
           )}
@@ -123,7 +169,7 @@ const Shop = () => {
 
           <div>
             <h2 className="text-xl font-bold text-[#171329]">
-              {search ? 'Search Results' : 'All Products'}
+              {search ? 'Search Results' : category ? `${category} Products` : 'All Products'}
             </h2>
 
             <p className="mt-1 text-xs text-gray-400">
@@ -136,7 +182,11 @@ const Shop = () => {
         </div>
 
         {/* Loading */}
-        {loading ? (
+        {error ? (
+          <div role="alert" className="rounded-3xl border border-red-100 bg-red-50 px-6 py-12 text-center text-sm text-red-700">
+            Could not load products: {error}
+          </div>
+        ) : loading ? (
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
@@ -199,16 +249,31 @@ const Shop = () => {
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
-              We couldn't find any products matching "{search}".
-              Try searching for something else.
+              {category
+                ? `There are no products in ${category}${search ? ` matching "${search}"` : ''}.`
+                : search
+                  ? `We couldn't find any products matching "${search}". Try searching for something else.`
+                  : 'There are no products available right now.'}
             </p>
 
-            <button
-              onClick={() => setSearch('')}
-              className="mt-5 rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition hover:bg-[#5c27d6]"
-            >
-              Clear Search
-            </button>
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              {search && (
+                <button
+                  onClick={() => setSearch('')}
+                  className="rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition hover:bg-[#5c27d6]"
+                >
+                  Clear Search
+                </button>
+              )}
+              {category && (
+                <Link
+                  to="/shop"
+                  className="rounded-full border border-purple-200 bg-white px-5 py-2.5 text-sm font-semibold text-purple-700 transition hover:bg-purple-50"
+                >
+                  Browse all products
+                </Link>
+              )}
+            </div>
 
           </div>
 

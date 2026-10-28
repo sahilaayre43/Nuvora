@@ -1,6 +1,29 @@
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 const Review = require("../models/Review");
 const cloudinary = require("../config/cloudinary");
+
+const findCategoryName = async (value) => {
+    if (typeof value !== "string" || !value.trim() || value.trim().length > 60) {
+        return null;
+    }
+
+    const name = value.trim();
+    const category = await Category.findOne({ nameKey: name.toLowerCase() });
+    if (category) {
+        return category.name;
+    }
+
+    const existingProduct = await Product.findOne({
+        $expr: {
+            $eq: [
+                { $toLower: { $trim: { input: { $ifNull: ["$category", ""] } } } },
+                name.toLowerCase(),
+            ],
+        },
+    }).select("category").lean();
+    return existingProduct?.category?.trim() || null;
+};
 
 const getRatingStats = (reviews) => ({
     rating: reviews.length
@@ -86,6 +109,11 @@ const createProduct = async (req, res) => {
     }
 
     try {
+        const categoryName = await findCategoryName(category);
+        if (!categoryName) {
+            return res.status(400).json({ message: 'Select an existing product category.' });
+        }
+
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: 'nuvora/products',
         });
@@ -95,7 +123,7 @@ const createProduct = async (req, res) => {
             description,
             price,
             stock,
-            category,
+            category: categoryName,
             imageUrl: result.secure_url,
         });
 
@@ -116,11 +144,16 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
+        const categoryName = category ? await findCategoryName(category) : product.category;
+        if (!categoryName) {
+            return res.status(400).json({ message: 'Select an existing product category.' });
+        }
+
         product.name = name || product.name;
         product.description = description || product.description;
         product.price = price || product.price;
         product.stock = stock || product.stock;
-        product.category = category || product.category;
+        product.category = categoryName;
 
         if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path, {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { Link } from 'react-router-dom';
 import { Package, Plus, Pencil, Trash2, IndianRupee, Tag, Boxes } from 'lucide-react';
@@ -6,6 +6,26 @@ import { Package, Plus, Pencil, Trash2, IndianRupee, Tag, Boxes } from 'lucide-r
 const AdminProducts = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const groupedProducts = Array.from(products.reduce((groups, product) => {
+    const categoryName = product.category?.trim() || 'Uncategorized';
+    const categoryKey = categoryName.toLowerCase();
+    const existingGroup = groups.get(categoryKey);
+
+    if (existingGroup) {
+      existingGroup.products.push(product);
+    } else {
+      groups.set(categoryKey, { key: categoryKey, name: categoryName, products: [product] });
+    }
+
+    return groups;
+  }, new Map()).values())
+    .map((group) => ({
+      ...group,
+      products: group.products.sort((first, second) =>
+        first.name.localeCompare(second.name)
+      ),
+    }))
+    .sort((first, second) => first.name.localeCompare(second.name));
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -87,7 +107,7 @@ const AdminProducts = () => {
 
             <div>
               <h2 className="text-lg font-bold text-[#171329]">
-                All Products
+                Products by Category
               </h2>
 
               <p className="mt-1 text-sm text-gray-500">
@@ -107,7 +127,7 @@ const AdminProducts = () => {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px]">
+            <table className="w-full min-w-[800px]">
 
               {/* Table Header */}
               <thead>
@@ -123,10 +143,6 @@ const AdminProducts = () => {
 
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                     Price
-                  </th>
-
-                  <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                    Category
                   </th>
 
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -146,7 +162,7 @@ const AdminProducts = () => {
                 {products.length === 0 ? (
 
                   <tr>
-                    <td colSpan="6" className="px-6 py-16 text-center">
+                    <td colSpan="5" className="px-6 py-16 text-center">
 
                       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
                         <Package className="h-6 w-6 text-purple-500" />
@@ -173,7 +189,25 @@ const AdminProducts = () => {
 
                 ) : (
 
-                  products.map((product) => (
+                  groupedProducts.flatMap((group) => [
+                    <tr key={`category-${group.key}`} className="bg-[#f8f6ff]">
+                      <td colSpan="5" className="border-y border-purple-100 px-6 py-3.5">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex min-w-0 items-center gap-2.5">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-purple-600 shadow-sm">
+                              <Tag className="h-4 w-4" />
+                            </div>
+                            <h3 className="truncate text-sm font-bold text-[#171329]">
+                              {group.name}
+                            </h3>
+                          </div>
+                          <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm">
+                            {group.products.length} {group.products.length === 1 ? 'product' : 'products'}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>,
+                    ...group.products.map((product) => (
 
                     <tr
                       key={product._id}
@@ -217,22 +251,7 @@ const AdminProducts = () => {
 
                         <div className="flex items-center gap-1 font-semibold text-[#171329]">
                           <IndianRupee className="h-4 w-4 text-purple-600" />
-                          {product.price.toFixed(2)}
-                        </div>
-
-                      </td>
-
-                      {/* Category */}
-                      <td className="px-6 py-5">
-
-                        <div className="flex w-fit items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-3 py-1.5">
-
-                          <Tag className="h-3.5 w-3.5 text-purple-500" />
-
-                          <span className="text-xs font-semibold text-purple-600">
-                            {product.category}
-                          </span>
-
+                          {Number(product.price || 0).toFixed(2)}
                         </div>
 
                       </td>
@@ -309,7 +328,8 @@ const AdminProducts = () => {
 
                     </tr>
 
-                  ))
+                    )),
+                  ])
 
                 )}
 

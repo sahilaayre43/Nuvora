@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
   const { user } = useContext(AuthContext);
@@ -16,6 +16,39 @@ const AddProduct = () => {
 
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoriesError, setCategoriesError] = useState('');
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        const data = await res.json();
+        if (!res.ok || !Array.isArray(data)) {
+          throw new Error(data?.message || 'Unable to load categories.');
+        }
+        if (isCurrent) {
+          setCategories(data.filter((category) => category?.name));
+        }
+      } catch (error) {
+        if (isCurrent) {
+          setCategoriesError(error.message || 'Unable to load categories.');
+        }
+      } finally {
+        if (isCurrent) {
+          setCategoriesLoading(false);
+        }
+      }
+    };
+
+    fetchCategories();
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   if (!user || user.role !== 'admin') {
     navigate('/');
@@ -173,10 +206,10 @@ const AddProduct = () => {
                 Category
               </label>
 
-              <input
-                type="text"
-                placeholder="e.g. Audio, Furniture, Cameras"
+              <select
                 required
+                value={formData.category}
+                disabled={categoriesLoading || categories.length === 0}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -184,7 +217,25 @@ const AddProduct = () => {
                   })
                 }
                 className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
-              />
+              >
+                <option value="">
+                  {categoriesLoading ? 'Loading categories...' : 'Select a category'}
+                </option>
+                {categories.map((category) => (
+                  <option key={category.name} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              {categoriesError ? (
+                <p role="alert" className="mt-2 text-sm text-red-600">
+                  {categoriesError}
+                </p>
+              ) : categories.length === 0 && !categoriesLoading ? (
+                <p className="mt-2 text-sm text-gray-500">
+                  No categories yet. <Link className="font-semibold text-violet-600 hover:underline" to="/admin/categories">Create one</Link> before adding a product.
+                </p>
+              ) : null}
             </div>
 
             {/* Image Upload */}

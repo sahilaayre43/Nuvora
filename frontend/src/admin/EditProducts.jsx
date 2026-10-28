@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -25,23 +25,69 @@ const EditProduct = () => {
 
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [categoriesError, setCategoriesError] = useState('');
+  const [productError, setProductError] = useState('');
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      const res = await fetch(`/api/products/${id}`);
-      const data = await res.json();
+    let isCurrent = true;
 
-      setFormData({
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        category: data.category,
-        stock: data.stock,
-      });
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Unable to load this product.');
+        }
+
+        if (isCurrent) {
+          setFormData({
+            name: data.name,
+            description: data.description,
+            price: data.price,
+            category: data.category,
+            stock: data.stock,
+          });
+        }
+      } catch (error) {
+        if (isCurrent) {
+          setProductError(error.message || 'Unable to load this product.');
+        }
+      }
     };
 
     fetchProduct();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [id]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        const data = await res.json();
+        if (!res.ok || !Array.isArray(data)) {
+          throw new Error(data?.message || 'Unable to load categories.');
+        }
+        if (isCurrent) {
+          setCategories(data.filter((category) => category?.name));
+        }
+      } catch (error) {
+        if (isCurrent) {
+          setCategoriesError(error.message || 'Unable to load categories.');
+        }
+      }
+    };
+
+    fetchCategories();
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -204,15 +250,33 @@ const EditProduct = () => {
                       Category
                     </label>
 
-                    <input
-                      type="text"
+                    <select
                       name="category"
-                      placeholder="e.g. Audio"
                       required
                       value={formData.category}
                       onChange={handleChange}
                       className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
-                    />
+                    >
+                      {!formData.category && <option value="">Select a category</option>}
+                      {!categories.some((category) => category.name === formData.category) && formData.category && (
+                        <option value={formData.category}>{formData.category}</option>
+                      )}
+                      {categories.map((category) => (
+                        <option key={category.name} value={category.name}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    {categoriesError && (
+                      <p role="alert" className="mt-2 text-sm text-red-600">
+                        {categoriesError}
+                      </p>
+                    )}
+                    {productError && (
+                      <p role="alert" className="mt-2 text-sm text-red-600">
+                        {productError}
+                      </p>
+                    )}
                   </div>
 
                 </div>

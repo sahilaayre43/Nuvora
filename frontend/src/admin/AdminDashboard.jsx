@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../components/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
   Plus,
   ArrowUpRight,
   ClipboardList,
+  FolderKanban,
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -301,6 +302,22 @@ const AdminDashboard = () => {
                   size={18}
                   className="text-slate-400 transition group-hover:text-blue-600"
                 />
+              </button>
+
+              <button
+                onClick={() => navigate("/admin/categories")}
+                className="group flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-violet-200 hover:bg-violet-50"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+                    <FolderKanban size={18} className="text-violet-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">Manage Categories</p>
+                    <p className="text-xs text-slate-500">Add and organize shop categories</p>
+                  </div>
+                </div>
+                <ArrowUpRight size={18} className="text-slate-400 transition group-hover:text-violet-600" />
               </button>
 
               <button
