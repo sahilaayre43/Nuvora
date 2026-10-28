@@ -1,56 +1,107 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { Package, UserRound, CalendarDays, IndianRupee, ChevronDown, ShoppingBag } from 'lucide-react';
 
 const AdminOrders = () => {
   const { user } = useContext(AuthContext);
-  const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [updatingOrderIds, setUpdatingOrderIds] = useState([]);
 
   useEffect(() => {
+    let isCurrent = true;
+
     const fetchOrders = async () => {
-      const res = await fetch('/api/orders', {
-        headers: {
+      setLoading(true);
+      setError('');
+
+      if (!user?.token) {
+        setOrders([]);
+        setError('Please sign in as an administrator to view orders.');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/orders', {
+          headers: {
           Authorization: `Bearer ${user.token}`,
         },
-      });
+        });
 
-      const data = await res.json();
-      setOrders(Array.isArray(data) ? data : []);
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || 'Unable to fetch orders.');
+        }
+        if (!Array.isArray(data)) {
+          throw new Error('The server returned an invalid orders response.');
+        }
+        if (isCurrent) {
+          setOrders(data);
+        }
+      } catch (err) {
+        if (isCurrent) {
+          setError(err.message || 'Unable to fetch orders.');
+        }
+      } finally {
+        if (isCurrent) {
+          setLoading(false);
+        }
+      }
     };
 
     fetchOrders();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [user]);
 
   const updateStatus = async (id, status) => {
-    const res = await fetch(`/api/orders/${id}/status`, {
-      method: 'PUT',
-      headers: {
+    setError('');
+    setUpdatingOrderIds((ids) => [...ids, id]);
+
+    try {
+      const res = await fetch(`/api/orders/${id}/status`, {
+        method: 'PUT',
+        headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({ status }),
-    });
+        },
+        body: JSON.stringify({ status }),
+      });
 
-    if (res.ok) {
-      setOrders(
-        orders.map((order) =>
-          order._id === id ? { ...order, status } : order
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Unable to update order status.');
+      }
+
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          order._id === id ? { ...order, status: data.status || status } : order
         )
       );
+    } catch (err) {
+      setError(err.message || 'Unable to update order status.');
+    } finally {
+      setUpdatingOrderIds((ids) => ids.filter((orderId) => orderId !== id));
     }
   };
 
   const getStatusStyle = (status) => {
-    switch (status) {
-      case 'Delivered':
-        return 'bg-emerald-50 text-emerald-600 border-emerald-100';
-
-      case 'Shipped':
-        return 'bg-blue-50 text-blue-600 border-blue-100';
-
-      case 'Pending':
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+        return 'border-emerald-200 bg-emerald-50 text-emerald-700';
+      case 'shipped':
+        return 'border-blue-200 bg-blue-50 text-blue-700';
+      case 'processing':
+        return 'border-violet-200 bg-violet-50 text-violet-700';
+      case 'cancelled':
+        return 'border-gray-200 bg-gray-50 text-gray-600';
+      case 'pending':
       default:
-        return 'bg-amber-50 text-amber-600 border-amber-100';
+        return 'border-amber-200 bg-amber-50 text-amber-700';
     }
   };
 
@@ -115,6 +166,15 @@ const AdminOrders = () => {
             </div>
           </div>
 
+          {error && orders.length > 0 && (
+            <p
+              role="alert"
+              className="mx-5 mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700 sm:mx-7"
+            >
+              {error}
+            </p>
+          )}
+
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
@@ -147,7 +207,7 @@ const AdminOrders = () => {
               {/* Table Body */}
               <tbody className="divide-y divide-gray-100">
 
-                {orders.length === 0 ? (
+                {loading || orders.length === 0 ? (
                   <tr>
                     <td
                       colSpan="5"
@@ -158,11 +218,13 @@ const AdminOrders = () => {
                       </div>
 
                       <h3 className="mt-4 text-base font-semibold text-[#171329]">
-                        No orders found
+                        {loading ? 'Loading orders...' : error ? 'Could not load orders' : 'No orders found'}
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        Orders will appear here when customers place them.
+                        {error || (loading
+                          ? 'Fetching customer orders.'
+                          : 'Orders will appear here when customers place them.')}
                       </p>
                     </td>
                   </tr>
@@ -201,7 +263,7 @@ const AdminOrders = () => {
 
                           <div>
                             <p className="font-medium text-[#171329]">
-                              {order.userId?.name || 'Deleted User'}
+                              {order.user?.name || 'Deleted User'}
                             </p>
 
                             <p className="text-xs text-gray-400">
@@ -216,7 +278,7 @@ const AdminOrders = () => {
                         <div className="flex items-center gap-1 font-semibold text-[#171329]">
                           <IndianRupee className="h-4 w-4 text-purple-600" />
 
-                          {order.totalAmount.toFixed(2)}
+                          {Number(order.totalAmount || 0).toFixed(2)}
                         </div>
                       </td>
 
@@ -239,15 +301,6 @@ const AdminOrders = () => {
                       <td className="px-6 py-5">
                         <div className="relative w-fit">
 
-                          {/* Status Badge */}
-                          <div
-                            className={`pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border px-3 py-1 text-xs font-semibold ${getStatusStyle(
-                              order.status
-                            )}`}
-                          >
-                            {order.status}
-                          </div>
-
                           <select
                             value={order.status}
                             onChange={(e) =>
@@ -256,14 +309,20 @@ const AdminOrders = () => {
                                 e.target.value
                               )
                             }
-                            className="h-9 w-[130px] cursor-pointer appearance-none rounded-full border border-gray-200 bg-white pl-3 pr-8 text-xs font-medium text-transparent outline-none transition-all hover:border-purple-300 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                            aria-label={`Update status for order ${order._id}`}
+                            disabled={updatingOrderIds.includes(order._id)}
+                            className={`h-10 w-[145px] cursor-pointer appearance-none rounded-full border pl-3 pr-9 text-xs font-semibold outline-none transition-all hover:shadow-sm focus:ring-4 focus:ring-purple-100 disabled:cursor-wait disabled:opacity-60 ${getStatusStyle(
+                              order.status
+                            )}`}
                           >
-                            <option value="Pending">Pending</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
                           </select>
 
-                          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+                          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-current" />
                         </div>
                       </td>
 

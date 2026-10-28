@@ -1,7 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { AuthContext } from '../components/context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import {UserRound,Mail,ShieldCheck,LogOut,Package,CalendarDays,IndianRupee,ArrowRight,ShoppingBag} from 'lucide-react'
+
+const getOrderStatusLabel = (status = '') =>
+  status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext)
@@ -294,14 +297,14 @@ const Profile = () => {
                     <div>
                       <span
                         className={`inline-flex rounded-full px-4 py-2 text-xs font-bold ${
-                          order.status === 'Delivered'
+                          order.status?.toLowerCase() === 'delivered'
                             ? 'bg-emerald-50 text-emerald-600'
-                            : order.status === 'Shipped'
+                            : order.status?.toLowerCase() === 'shipped'
                             ? 'bg-blue-50 text-blue-600'
                             : 'bg-amber-50 text-amber-600'
                         }`}
                       >
-                        {order.status}
+                        {getOrderStatusLabel(order.status)}
                       </span>
                     </div>
 
