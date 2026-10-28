@@ -1,34 +1,8 @@
-import { ArrowRight, ArrowUpRight, ChevronRight, Headphones, Armchair, Camera, Footprints, Grid2X2, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronRight, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
-
-const categoryDesigns = {
-  audio: {
-    subtitle: "Headphones & more",
-    icon: Headphones,
-    bg: "bg-violet-100",
-    color: "text-violet-600",
-  },
-  furniture: {
-    subtitle: "Smart & modern",
-    icon: Armchair,
-    bg: "bg-emerald-100",
-    color: "text-emerald-500",
-  },
-  cameras: {
-    subtitle: "Capture moments",
-    icon: Camera,
-    bg: "bg-amber-100",
-    color: "text-amber-500",
-  },
-  footwear: {
-    subtitle: "Step in style",
-    icon: Footprints,
-    bg: "bg-rose-100",
-    color: "text-rose-500",
-  },
-};
+import { getCategoryDesign } from "../lib/categoryDesign";
 
 const benefits = [
   {
@@ -309,13 +283,16 @@ const Home = () => {
           ) : (
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
               {visibleCategories.map((category) => {
-                const design = categoryDesigns[category.name.toLowerCase()] || {
-                  subtitle: `${category.productCount} ${category.productCount === 1 ? "product" : "products"}`,
-                  icon: Grid2X2,
-                  bg: "bg-blue-100",
-                  color: "text-blue-500",
-                };
+                const design = getCategoryDesign(category.name);
                 const Icon = design.icon;
+                const subtitleByCategory = {
+                  audio: "Headphones & more",
+                  furniture: "Smart & modern",
+                  cameras: "Capture moments",
+                  footwear: "Step in style",
+                };
+                const subtitle = subtitleByCategory[category.name.toLowerCase()] ||
+                  `${category.productCount} ${category.productCount === 1 ? "product" : "products"}`;
 
                 return (
                   <Link
@@ -332,7 +309,7 @@ const Home = () => {
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold">{category.name}</p>
                       <p className="truncate text-[10px] text-[#8990a3]">
-                        {design.subtitle}
+                        {subtitle}
                       </p>
                     </div>
 

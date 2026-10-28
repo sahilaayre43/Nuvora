@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
-import { Link } from 'react-router-dom';
-import { Package, Plus, Pencil, Trash2, IndianRupee, Tag, Boxes } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Boxes, ChevronRight, IndianRupee, Package, Pencil, Plus, Trash2 } from 'lucide-react';
+import { getCategoryDesign } from '../lib/categoryDesign';
 
 const AdminProducts = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
   const groupedProducts = Array.from(products.reduce((groups, product) => {
     const categoryName = product.category?.trim() || 'Uncategorized';
     const categoryKey = categoryName.toLowerCase();
@@ -26,6 +28,11 @@ const AdminProducts = () => {
       ),
     }))
     .sort((first, second) => first.name.localeCompare(second.name));
+  const selectedCategory = searchParams.get('category');
+  const selectedGroup = groupedProducts.find(
+    (group) => group.key === selectedCategory?.trim().toLowerCase()
+  );
+  const visibleProducts = selectedGroup?.products || [];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -106,13 +113,27 @@ const AdminProducts = () => {
           <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
 
             <div>
-              <h2 className="text-lg font-bold text-[#171329]">
-                Products by Category
-              </h2>
+              <div>
+                {selectedGroup && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchParams({})}
+                    className="mb-2 inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 transition hover:text-purple-800"
+                  >
+                    <ArrowLeft size={14} />
+                    All categories
+                  </button>
+                )}
+                <h2 className="text-lg font-bold text-[#171329]">
+                  {selectedGroup ? selectedGroup.name : 'Products by Category'}
+                </h2>
 
-              <p className="mt-1 text-sm text-gray-500">
-                Manage your product catalog and inventory
-              </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {selectedGroup
+                    ? `Manage products in ${selectedGroup.name}`
+                    : 'Choose a category to manage its products'}
+                </p>
+              </div>
             </div>
 
             <div className="flex w-fit items-center gap-2 rounded-full bg-purple-50 px-4 py-2">
@@ -125,9 +146,66 @@ const AdminProducts = () => {
 
           </div>
 
-          {/* Table */}
+          {!selectedGroup ? (
+            groupedProducts.length === 0 ? (
+              <div className="px-6 py-16 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
+                  <Package className="h-6 w-6 text-purple-500" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-[#171329]">
+                  No products found
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Add your first product to get started.
+                </p>
+                <Link
+                  to="/admin/add-product"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#5c27d6]"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Product
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:p-7">
+                {groupedProducts.map((group) => {
+                  const design = getCategoryDesign(group.name);
+                  const Icon = design.icon;
+
+                  return (
+                    <button
+                      key={group.key}
+                      type="button"
+                      onClick={() => setSearchParams({ category: group.name })}
+                      className="group rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-purple-200 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-purple-100"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${design.bg} ${design.color} transition group-hover:scale-105`}>
+                          <Icon size={21} />
+                        </div>
+                        <ChevronRight className="mt-1 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-purple-600" size={18} />
+                      </div>
+                      <h3 className="mt-5 truncate text-base font-bold text-[#171329]">
+                        {group.name}
+                      </h3>
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-sm text-gray-500">
+                          {group.products.length} {group.products.length === 1 ? 'product' : 'products'}
+                        </span>
+                        <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700">
+                          {group.products.reduce((total, product) => total + (Number(product.stock) || 0), 0)} in stock
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )
+          ) : (
+          <>
+          {/* Products in selected category */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
+            <table className="w-full min-w-[760px]">
 
               {/* Table Header */}
               <thead>
@@ -159,7 +237,7 @@ const AdminProducts = () => {
               {/* Table Body */}
               <tbody className="divide-y divide-gray-100">
 
-                {products.length === 0 ? (
+                {visibleProducts.length === 0 ? (
 
                   <tr>
                     <td colSpan="5" className="px-6 py-16 text-center">
@@ -188,26 +266,7 @@ const AdminProducts = () => {
                   </tr>
 
                 ) : (
-
-                  groupedProducts.flatMap((group) => [
-                    <tr key={`category-${group.key}`} className="bg-[#f8f6ff]">
-                      <td colSpan="5" className="border-y border-purple-100 px-6 py-3.5">
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex min-w-0 items-center gap-2.5">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-purple-600 shadow-sm">
-                              <Tag className="h-4 w-4" />
-                            </div>
-                            <h3 className="truncate text-sm font-bold text-[#171329]">
-                              {group.name}
-                            </h3>
-                          </div>
-                          <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm">
-                            {group.products.length} {group.products.length === 1 ? 'product' : 'products'}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>,
-                    ...group.products.map((product) => (
+                  visibleProducts.map((product) => (
 
                     <tr
                       key={product._id}
@@ -328,9 +387,7 @@ const AdminProducts = () => {
 
                     </tr>
 
-                    )),
-                  ])
-
+                  ))
                 )}
 
               </tbody>
@@ -339,18 +396,20 @@ const AdminProducts = () => {
           </div>
 
           {/* Footer */}
-          {products.length > 0 && (
+          {visibleProducts.length > 0 && (
             <div className="border-t border-gray-100 bg-[#fcfbff] px-6 py-4">
 
               <p className="text-xs text-gray-400">
                 Showing{' '}
                 <span className="font-semibold text-gray-600">
-                  {products.length}
+                  {visibleProducts.length}
                 </span>{' '}
-                product{products.length !== 1 ? 's' : ''}
+                product{visibleProducts.length !== 1 ? 's' : ''} in {selectedGroup.name}
               </p>
 
             </div>
+          )}
+          </>
           )}
 
         </div>
