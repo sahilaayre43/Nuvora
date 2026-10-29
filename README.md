@@ -113,6 +113,10 @@ npm install
 cd ../backend
 npm install
 
+### Frontend deployment on Render
+
+Configure the static site with `frontend` as its root directory, `npm install --include=dev && npm run build` as its build command, and `dist` as its publish directory. The frontend `.npmrc` also ensures build-time dependencies are installed when `NODE_ENV=production`.
+
 ---
 
 🔐 Environment Variables
