@@ -16,10 +16,6 @@ app.use(cors(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Backend is running!");
-});
-
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
@@ -28,9 +24,10 @@ app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use('/api/analytics', require("./routes/analyticsRoutes"))
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
-  app.use("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+  const frontendDist = path.resolve(__dirname, "../frontend/dist");
+  app.use(express.static(frontendDist));
+  app.get("/{*splat}", (req, res) => {
+    res.sendFile(path.join(frontendDist, "index.html"));
   });
 } else {
   app.get("/", (req, res) => {
