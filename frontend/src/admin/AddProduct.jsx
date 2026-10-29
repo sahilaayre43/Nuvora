@@ -1,6 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { Check, PackagePlus } from 'lucide-react';
+import { getCategoryDesign } from '../lib/categoryDesign';
 
 const AddProduct = () => {
   const { user } = useContext(AuthContext);
@@ -51,7 +53,7 @@ const AddProduct = () => {
   }, []);
 
   if (!user || user.role !== 'admin') {
-    navigate('/');
+    navigate('/admin/products');
     return null;
   }
 
@@ -80,7 +82,7 @@ const AddProduct = () => {
 
       if (res.ok) {
         alert('Product created successfully with Cloudinary Image URL!');
-        navigate('/');
+        navigate('/admin/products');
       } else {
         alert(responseData.message || 'Error creating product');
       }
@@ -100,7 +102,7 @@ const AddProduct = () => {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-purple-200 shadow-sm">
-            <span className="text-2xl">✦</span>
+            <PackagePlus className="h-7 w-7 text-violet-600" aria-hidden="true" />
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -201,32 +203,65 @@ const AddProduct = () => {
             </div>
 
             {/* Category */}
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-800">
+            <fieldset>
+              <legend className="mb-2 text-sm font-semibold text-gray-800">
                 Category
-              </label>
+              </legend>
 
-              <select
-                required
-                value={formData.category}
-                disabled={categoriesLoading || categories.length === 0}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    category: e.target.value
-                  })
-                }
-                className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
-              >
-                <option value="">
-                  {categoriesLoading ? 'Loading categories...' : 'Select a category'}
-                </option>
-                {categories.map((category) => (
-                  <option key={category.name} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+              {categoriesLoading ? (
+                <p className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                  Loading categories...
+                </p>
+              ) : categories.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {categories.map((category) => {
+                    const design = getCategoryDesign(category.name);
+                    const Icon = design.icon;
+                    const isSelected = formData.category === category.name;
+
+                    return (
+                      <label key={category.name} className="cursor-pointer">
+                        <input
+                          type="radio"
+                          name="category"
+                          value={category.name}
+                          checked={isSelected}
+                          required
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              category: e.target.value
+                            })
+                          }
+                          className="peer sr-only"
+                        />
+                        <span
+                          className={`relative flex min-h-20 items-center gap-3 rounded-2xl border p-3 transition ${
+                            isSelected
+                              ? 'border-violet-400 bg-violet-50 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-violet-200 hover:bg-violet-50/50'
+                          } peer-focus-visible:ring-4 peer-focus-visible:ring-violet-100`}
+                        >
+                          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${design.bg} ${design.color}`}>
+                            <Icon size={19} />
+                          </span>
+                          <span className="min-w-0 text-sm font-semibold text-gray-800">
+                            {category.name}
+                          </span>
+                          {isSelected && (
+                            <Check
+                              size={16}
+                              aria-hidden="true"
+                              className="ml-auto shrink-0 text-violet-600"
+                            />
+                          )}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : null}
+
               {categoriesError ? (
                 <p role="alert" className="mt-2 text-sm text-red-600">
                   {categoriesError}
@@ -236,7 +271,7 @@ const AddProduct = () => {
                   No categories yet. <Link className="font-semibold text-violet-600 hover:underline" to="/admin/categories">Create one</Link> before adding a product.
                 </p>
               ) : null}
-            </div>
+            </fieldset>
 
             {/* Image Upload */}
             <div>

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
-import { Package, UserRound, CalendarDays, IndianRupee, ChevronDown, ShoppingBag } from 'lucide-react';
+import { Package, UserRound, CalendarDays, IndianRupee, ChevronDown, ShoppingBag, MapPin } from 'lucide-react';
 
 const AdminOrders = () => {
   const { user } = useContext(AuthContext);
@@ -177,7 +177,7 @@ const AdminOrders = () => {
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
+            <table className="w-full min-w-[1000px]">
 
               {/* Table Head */}
               <thead>
@@ -188,6 +188,10 @@ const AdminOrders = () => {
 
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                     Customer
+                  </th>
+
+                  <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Delivery Address
                   </th>
 
                   <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -210,7 +214,7 @@ const AdminOrders = () => {
                 {loading || orders.length === 0 ? (
                   <tr>
                     <td
-                      colSpan="5"
+                      colSpan="6"
                       className="px-6 py-16 text-center"
                     >
                       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
@@ -267,10 +271,51 @@ const AdminOrders = () => {
                             </p>
 
                             <p className="text-xs text-gray-400">
-                              Customer
+                              {order.user?.email || 'Customer'}
                             </p>
                           </div>
                         </div>
+                      </td>
+
+                      {/* Delivery address */}
+                      <td className="px-6 py-5">
+                        {order.address ? (
+                          <div className="flex items-start gap-2 text-sm text-gray-600">
+                            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                            <div>
+                              <p className="font-medium text-[#171329]">
+                                {order.address.fullName}
+                              </p>
+                              {order.address.phone ? (
+                                <a
+                                  href={`tel:${order.address.phone}`}
+                                  className="text-purple-600 hover:underline"
+                                >
+                                  {order.address.phone}
+                                </a>
+                              ) : (
+                                <p className="text-xs text-gray-400">
+                                  No mobile number on this order
+                                </p>
+                              )}
+                              <p>{order.address.street}</p>
+                              <p>
+                                {[
+                                  order.address.city,
+                                  order.address.state,
+                                  order.address.postalCode,
+                                  order.address.country,
+                                ]
+                                  .filter(Boolean)
+                                  .join(', ')}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-400">
+                            No address on this order
+                          </p>
+                        )}
                       </td>
 
                       {/* Total */}

@@ -58,7 +58,7 @@ const Home = () => {
         if (!Array.isArray(data)) {
           throw new Error("Product response was not a list.");
         }
-        setProducts(data.slice(0, 4));
+        setProducts(data.slice(0, 8));
       } catch (error) {
         setProductsError(error.message);
         console.error("Error fetching products:", error);

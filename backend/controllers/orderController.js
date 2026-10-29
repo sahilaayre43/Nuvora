@@ -11,12 +11,18 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ message: "Your cart is empty." });
         }
 
-        const requiredAddressFields = ["fullName", "street", "city", "state", "postalCode", "country"];
+        const requiredAddressFields = ["fullName", "phone", "street", "city", "state", "postalCode", "country"];
         const isAddressValid = address && requiredAddressFields.every(
             (field) => typeof address[field] === "string" && address[field].trim()
         );
         if (!isAddressValid) {
-            return res.status(400).json({ message: "Please provide a complete shipping address, including state." });
+            return res.status(400).json({ message: "Please provide a complete shipping address and mobile number." });
+        }
+
+        const phone = address.phone.trim();
+        const phoneDigits = phone.replace(/\D/g, "");
+        if (!/^\+?[0-9\s()-]{8,20}$/.test(phone) || phoneDigits.length < 8 || phoneDigits.length > 15) {
+            return res.status(400).json({ message: "Please provide a valid mobile number with 8 to 15 digits." });
         }
 
         if (!["COD", "RAZORPAY"].includes(paymentMethod)) {
@@ -74,7 +80,7 @@ const createOrder = async (req, res) => {
         await sendEmail({
             email: req.user.email,
             subject: "Your NUVORA order is confirmed",
-            message: `Dear ${req.user.name},<br><br>Thank you for your order! Your order has been successfully placed.<br><br>Order ID: ${savedOrder._id}<br>Total amount: INR ${savedOrder.totalAmount}<br>Payment method: ${savedOrder.paymentMethod}<br>Shipping address: ${requiredAddressFields.map((field) => savedOrder.address[field]).join(", ")}<br><br>We will notify you once your order is shipped.<br><br>NUVORA Team`
+            message: `Dear ${req.user.name},<br><br>Thank you for your order! Your order has been successfully placed.<br><br>Order ID: ${savedOrder._id}<br>Total amount: INR ${savedOrder.totalAmount}<br>Payment method: ${savedOrder.paymentMethod}<br>Shipping address: ${requiredAddressFields.filter((field) => field !== "phone").map((field) => savedOrder.address[field]).join(", ")}<br>Mobile number: ${savedOrder.address.phone}<br><br>We will notify you once your order is shipped.<br><br>NUVORA Team`
         });
 
         return res.status(201).json(savedOrder);

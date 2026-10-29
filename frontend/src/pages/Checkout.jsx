@@ -18,6 +18,7 @@ const Checkout = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [address, setAddress] = useState({
     fullName: '',
+    phone: '',
     street: '',
     city: '',
     state: '',
@@ -179,6 +180,18 @@ const Checkout = () => {
                   required
                   value={address.fullName}
                   onChange={updateAddress('fullName')}
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                />
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  pattern="[+]?[0-9\s()-]{8,20}"
+                  title="Enter a valid phone number with 8 to 15 digits."
+                  required
+                  value={address.phone}
+                  onChange={updateAddress('phone')}
                   className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
                 />
                 <input
