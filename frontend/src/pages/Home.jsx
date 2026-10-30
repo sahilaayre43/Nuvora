@@ -1,8 +1,45 @@
-import { ArrowRight, ArrowUpRight, ChevronRight, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
-import { getCategoryDesign } from "../lib/categoryDesign";
+
+const categoryImages = [
+  {
+    matches: ["beauty", "cosmetic", "skincare"],
+    src: "/categories/beauty-products.jpg",
+  },
+  {
+    matches: ["electronic", "device", "phone", "tech", "gadget", "camera"],
+    src: "/categories/electronic-devices.jpg",
+  },
+  {
+    matches: ["watch", "clock"],
+    src: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    matches: ["fashion", "clothing", "apparel", "footwear", "shoe"],
+    src: "/categories/fashion-products.jpg",
+  },
+  {
+    matches: ["decor", "decoration", "home"],
+    src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80",
+  },
+];
+
+const getCategoryImage = (categoryName, products) => {
+  const normalizedName = categoryName.toLowerCase();
+  const matchingImage = categoryImages.find(({ matches }) =>
+    matches.some((match) => normalizedName.includes(match))
+  );
+  if (matchingImage) return matchingImage.src;
+
+  const matchingProduct = products.find(
+    (product) =>
+      product.category?.toLowerCase() === normalizedName &&
+      (product.imageUrl || product.image)
+  );
+  return matchingProduct?.imageUrl || matchingProduct?.image || null;
+};
 
 const benefits = [
   {
@@ -58,7 +95,7 @@ const Home = () => {
         if (!Array.isArray(data)) {
           throw new Error("Product response was not a list.");
         }
-        setProducts(data.slice(0, 8));
+        setProducts(data);
       } catch (error) {
         setProductsError(error.message);
         console.error("Error fetching products:", error);
@@ -87,7 +124,11 @@ const Home = () => {
         }
 
         if (isCurrent) {
-          setCategories(data.filter((category) => category?.name));
+          const validCategories = data.filter((category) => category?.name);
+          if (!validCategories.some((category) => /decor/i.test(category.name))) {
+            validCategories.push({ name: "Decor" });
+          }
+          setCategories(validCategories);
         }
       } catch (error) {
         if (isCurrent) {
@@ -249,80 +290,86 @@ const Home = () => {
       </section>
 
       {/* ================= CATEGORY ================= */}
-      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-4 pt-5">
-        <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-5 shadow-[0_8px_30px_rgba(30,30,60,0.03)]">
-
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-[15px] font-extrabold text-[#101727]">
-              Shop by Category
-            </h2>
-
-            {categories.length > 5 && (
-              <button
-                type="button"
-                onClick={() => setShowAllCategories((visible) => !visible)}
-                aria-expanded={showAllCategories}
-                className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600"
-              >
-                {showAllCategories ? "Show less" : "View all"}
-                <ArrowUpRight size={15} />
-              </button>
-            )}
-          </div>
-
-          {categoriesError ? (
+      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-4 pt-8">
+        {categoriesError ? (
+          <div className="rounded-2xl border border-red-100 bg-white px-5 py-4">
             <p role="alert" className="text-sm text-red-600">
               Could not load categories: {categoriesError}
             </p>
-          ) : categoriesLoading ? (
+          </div>
+        ) : categoriesLoading ? (
+          <div className="rounded-2xl border border-[#eeeeF5] bg-white px-5 py-4">
             <p className="text-sm text-gray-500">Loading categories...</p>
-          ) : categories.length === 0 ? (
+          </div>
+        ) : categories.length === 0 ? (
+          <div className="rounded-2xl border border-[#eeeeF5] bg-white px-5 py-4">
             <p className="text-sm text-gray-500">
               Categories will appear here as products are added.
             </p>
-          ) : (
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+          </div>
+        ) : (
+          <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-4 py-5 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:px-6 sm:py-6">
+            <div className="mb-5 flex items-end justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-extrabold text-[#101727] sm:text-xl">
+                  Shop by Category
+                </h2>
+              </div>
+              {categories.length > 5 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllCategories((visible) => !visible)}
+                  aria-expanded={showAllCategories}
+                  className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600"
+                >
+                  {showAllCategories ? "Show less" : "View all"}
+                  <ArrowUpRight size={15} />
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
               {visibleCategories.map((category) => {
-                const design = getCategoryDesign(category.name);
-                const Icon = design.icon;
-                const subtitleByCategory = {
-                  audio: "Headphones & more",
-                  furniture: "Smart & modern",
-                  cameras: "Capture moments",
-                  footwear: "Step in style",
-                };
-                const subtitle = subtitleByCategory[category.name.toLowerCase()] ||
-                  `${category.productCount} ${category.productCount === 1 ? "product" : "products"}`;
+                const image = getCategoryImage(category.name, products);
 
                 return (
                   <Link
                     key={category.name}
                     to={`/shop?category=${encodeURIComponent(category.name)}`}
-                    className="group flex items-center gap-3 rounded-full border border-[#f0f0f5] bg-white px-3 py-2.5 text-left shadow-[0_5px_18px_rgba(30,30,60,0.04)] transition hover:-translate-y-0.5 hover:border-violet-200"
+                    className="group flex min-w-0 flex-col items-center rounded-2xl p-1 text-center transition-colors hover:bg-[#fcfaff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-4 sm:p-2"
                   >
                     <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${design.bg} ${design.color}`}
+                      className="h-[100px] w-full overflow-hidden rounded-t-[999px] rounded-b-xl bg-gradient-to-b from-[#fbe5f0] via-[#f5e5f7] to-[#ead9f5] shadow-[0_6px_18px_rgba(75,45,95,0.07)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_12px_24px_rgba(75,45,95,0.12)] sm:h-[140px] lg:h-[190px]"
                     >
-                      <Icon size={20} />
+                      {image ? (
+                        <img
+                          src={image}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                      ) : (
+                        <div
+                          aria-hidden="true"
+                          className="h-full w-full bg-[radial-gradient(ellipse_at_50%_70%,rgba(255,255,255,0.85),transparent_58%)]"
+                        />
+                      )}
                     </div>
 
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold">{category.name}</p>
-                      <p className="truncate text-[10px] text-[#8990a3]">
-                        {subtitle}
-                      </p>
+                    <div className="mt-3 flex flex-col items-center gap-2">
+                      <span className="text-xs font-semibold text-[#222839] sm:text-sm">
+                        {category.name}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="h-[2px] w-10 bg-violet-500 transition-all group-hover:w-14"
+                      />
                     </div>
-
-                    <ChevronRight
-                      size={15}
-                      className="text-[#a1a7b7] transition group-hover:translate-x-0.5 group-hover:text-violet-500"
-                    />
                   </Link>
                 );
               })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
@@ -351,7 +398,7 @@ const Home = () => {
             <p className="text-sm text-gray-500">Loading products...</p>
           ) : (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((product) => (
+              {products.slice(0, 8).map((product) => (
                 <ProductCard key={product._id || product.id || product.name} product={product} />
               ))}
             </div>
