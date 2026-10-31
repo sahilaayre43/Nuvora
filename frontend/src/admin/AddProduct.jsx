@@ -21,6 +21,8 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [categoriesError, setCategoriesError] = useState('');
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     let isCurrent = true;
@@ -59,7 +61,12 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!image) return alert('Please select an image');
+    setSubmitError('');
+    setSubmitSuccess(false);
+    if (!image) {
+      setSubmitError('Please select an image.');
+      return;
+    }
 
     setLoading(true);
 
@@ -81,13 +88,13 @@ const AddProduct = () => {
       const responseData = await res.json();
 
       if (res.ok) {
-        alert('Product created successfully with Cloudinary Image URL!');
-        navigate('/admin/products');
+        setSubmitSuccess(true);
       } else {
-        alert(responseData.message || 'Error creating product');
+        setSubmitError(responseData.message || 'Error creating product.');
       }
     } catch (error) {
       console.error(error);
+      setSubmitError(error.message || 'Unable to create product. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -118,6 +125,34 @@ const AddProduct = () => {
         <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_10px_40px_rgba(80,50,150,0.07)] sm:p-8">
 
           <form onSubmit={handleSubmit} className="space-y-6">
+
+            {submitSuccess && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex items-center justify-between gap-3 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+              >
+                <span className="flex items-center gap-2 font-medium">
+                  <Check className="h-4 w-4 shrink-0" />
+                  Product created successfully.
+                </span>
+                <Link
+                  to="/admin/products"
+                  className="shrink-0 font-bold text-emerald-800 underline-offset-2 hover:underline"
+                >
+                  View products
+                </Link>
+              </div>
+            )}
+
+            {submitError && (
+              <p
+                role="alert"
+                className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700"
+              >
+                {submitError}
+              </p>
+            )}
 
             {/* Product Name */}
             <div>

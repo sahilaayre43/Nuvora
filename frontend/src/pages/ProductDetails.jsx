@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../store/cartSlice';
 import { toggleFavorite } from '../store/favoritesSlice';
 import { AuthContext } from '../components/context/AuthContext';
-import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft, Check } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,6 +21,17 @@ const ProductDetail = () => {
   const [reviewComment, setReviewComment] = useState('');
   const [ratingError, setRatingError] = useState('');
   const [submittingRating, setSubmittingRating] = useState(false);
+  const [cartConfirmation, setCartConfirmation] = useState(false);
+
+  useEffect(() => {
+    if (!cartConfirmation) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      setCartConfirmation(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [cartConfirmation]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -55,8 +66,7 @@ const ProductDetail = () => {
     if (!product || product.stock <= 0) return;
 
     dispatch(addItem(getCartItem()));
-
-    alert('Successfully added to your cart!');
+    setCartConfirmation(true);
   };
 
   const handleBuyNow = () => {
@@ -357,6 +367,25 @@ const ProductDetail = () => {
             </div>
 
             {/* Purchase actions */}
+            {cartConfirmation && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+              >
+                <span className="flex items-center gap-2 font-medium">
+                  <Check className="h-4 w-4 shrink-0" />
+                  Added to your cart
+                </span>
+                <Link
+                  to="/cart"
+                  className="shrink-0 font-bold text-emerald-800 underline-offset-2 hover:underline"
+                >
+                  View cart
+                </Link>
+              </div>
+            )}
+
             <div className="mt-7 flex items-center gap-3">
               <button
                 type="button"
