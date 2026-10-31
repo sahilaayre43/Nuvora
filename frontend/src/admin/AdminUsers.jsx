@@ -65,7 +65,7 @@ const AdminUsers = () => {
 
   return (
     <div className="min-h-screen bg-[#fafaff] px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1200px]">
 
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

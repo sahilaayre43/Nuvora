@@ -213,7 +213,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-[#f8f6ff] px-4 py-6 sm:px-6 lg:px-10">
 
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1200px]">
 
         {/* Back */}
         <Link
@@ -261,7 +261,7 @@ const ProductDetail = () => {
                 <img
                   src={selectedImageUrl || productImageUrls[0]}
                   alt={product.name}
-                  className="max-h-[360px] w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 sm:max-h-[440px]"
+                  className="max-h-[360px] w-full scale-110 object-contain drop-shadow-2xl transition-transform duration-300 sm:max-h-[440px] sm:scale-125"
                 />
               ) : (
                 <span className="text-sm text-gray-400">
@@ -559,7 +559,7 @@ const ProductDetail = () => {
                 View category
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
               {relatedProducts.map((relatedProduct) => (
                 <ProductCard
                   key={relatedProduct._id || relatedProduct.id}

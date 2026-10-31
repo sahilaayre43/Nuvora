@@ -8,7 +8,7 @@ const Favorites = () => {
 
   return (
     <main className="min-h-screen bg-[#fafaff] px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-rose-50 text-rose-600">
             <Heart className="h-5 w-5 fill-current" />
@@ -24,7 +24,7 @@ const Favorites = () => {
         </div>
 
         {favoriteItems.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {favoriteItems.map((product) => (
               <ProductCard
                 key={product._id || product.id}

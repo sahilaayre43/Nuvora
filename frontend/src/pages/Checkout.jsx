@@ -148,7 +148,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f6ff] px-4 py-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1200px]">
         <h2 className="mb-8 text-3xl font-bold text-[#171329]">Checkout</h2>
 
         {checkoutItems.length === 0 ? (

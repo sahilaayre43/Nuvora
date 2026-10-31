@@ -5,7 +5,7 @@ import {
 export default function Footer() {
   return (
     <footer className="mt-20 border-t border-slate-200 bg-slate-950 text-white">
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-2">

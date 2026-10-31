@@ -154,7 +154,7 @@ const Home = () => {
   return (
     <main className="min-h-screen bg-[#fafafa] text-[#17213d]">
 
-      <section className="mx-auto max-w-[1536px] px-2 pt-3 sm:px-4 sm:pt-5 lg:px-8">
+      <section className="mx-auto max-w-[1200px] px-2 pt-3 sm:px-4 sm:pt-5 lg:px-8">
         <form
           role="search"
           onSubmit={(event) => {
@@ -183,7 +183,7 @@ const Home = () => {
       </section>
 
       {/* ================= HERO ================= */}
-      <section className="mx-auto max-w-[1536px] px-2 pt-3 sm:px-4 sm:pt-4 lg:px-8">
+      <section className="mx-auto max-w-[1200px] px-2 pt-3 sm:px-4 sm:pt-4 lg:px-8">
         <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f8f8ff] via-[#f4f0ff] to-[#e8e3ff] sm:rounded-[28px] lg:min-h-[430px]">
 
           {/* Decorative glow */}
@@ -325,7 +325,7 @@ const Home = () => {
       </section>
 
       {/* ================= CATEGORY ================= */}
-      <section id="shop-by-category" className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-8 lg:px-8">
+      <section id="shop-by-category" className="mx-auto max-w-[1200px] px-2 pt-4 sm:px-4 sm:pt-8 lg:px-8">
         {categoriesError ? (
           <div className="rounded-2xl border border-red-100 bg-white px-5 py-4">
             <p role="alert" className="text-sm text-red-600">
@@ -413,7 +413,7 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
-      <section id="featured-products" className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
+      <section id="featured-products" className="mx-auto max-w-[1200px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="rounded-[24px] border border-[#eeeeF5] bg-white px-2 py-4 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:rounded-[28px] sm:px-6 sm:py-6">
 
           <div className="mb-4 flex items-center justify-between sm:mb-5">
@@ -437,7 +437,7 @@ const Home = () => {
           ) : loading ? (
             <p className="text-sm text-gray-500">Loading products...</p>
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
               {products.slice(0, 15).map((product) => (
                 <ProductCard key={product._id || product.id || product.name} product={product} />
               ))}
@@ -447,7 +447,7 @@ const Home = () => {
       </section>
 
       {/* ================= BENEFITS ================= */}
-      <section className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
+      <section className="mx-auto max-w-[1200px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#eeeeF5] bg-white sm:rounded-[28px] lg:grid-cols-4">
 
           {benefits.map((benefit, index) => {
@@ -485,7 +485,7 @@ const Home = () => {
       </section>
 
       {/*
-      <section className="mx-auto max-w-[1536px] px-2 pb-5 pt-4 sm:px-4 sm:pt-5 lg:px-8">
+      <section className="mx-auto max-w-[1200px] px-2 pb-5 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f0eaff] via-[#eee9ff] to-[#e8f0ff] px-4 py-5 sm:rounded-[28px] sm:px-8 sm:py-6">
 
           <div className="absolute right-5 top-[-30px] text-7xl font-thin text-violet-400/50">

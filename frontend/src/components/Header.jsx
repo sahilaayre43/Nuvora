@@ -126,7 +126,7 @@ const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-2 px-3 sm:h-[76px] sm:gap-5 sm:px-6 md:gap-3 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 px-3 sm:h-[76px] sm:gap-5 sm:px-6 md:gap-3 lg:px-8">
 
         {/* Logo */}
         <Link to="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2">

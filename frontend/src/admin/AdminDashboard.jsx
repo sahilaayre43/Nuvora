@@ -99,7 +99,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f8fc] px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1200px]">
 
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

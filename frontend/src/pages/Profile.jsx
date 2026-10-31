@@ -72,7 +72,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-[#fafafd] px-5 py-10 text-[#17213d] md:px-10">
 
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1200px]">
 
         <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
 
