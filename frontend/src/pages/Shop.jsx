@@ -7,9 +7,19 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get('search') || '';
   const category = searchParams.get('category')?.trim() || '';
+
+  const setSearch = (value) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (value.trim()) {
+      nextParams.set('search', value);
+    } else {
+      nextParams.delete('search');
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   useEffect(() => {
     let isCurrent = true;
@@ -49,7 +59,7 @@ const Shop = () => {
     !category || product.category?.trim().toLowerCase() === category.toLowerCase()
   );
   const filteredProducts = categoryProducts.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
+    product.name.toLowerCase().includes(search.trim().toLowerCase())
   );
 
   return (
@@ -177,7 +187,7 @@ const Shop = () => {
           </div>
         ) : loading ? (
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
 
             {[1, 2, 3, 4].map((item) => (
               <div
@@ -199,7 +209,7 @@ const Shop = () => {
         ) : filteredProducts.length > 0 ? (
 
           /* Product Grid */
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
 
             {filteredProducts.map((product) => (
               <ProductCard

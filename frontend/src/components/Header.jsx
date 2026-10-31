@@ -2,22 +2,58 @@ import {
   Heart,
   House,
   LayoutDashboard,
+  Search,
   ShoppingBag,
   Tags,
   UserRound,
   X,
 } from "lucide-react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext.jsx";
 import { useSelector } from "react-redux";
 
 const navLinkClass =
-  "relative inline-flex px-2 py-2 text-sm text-slate-800 transition-colors duration-200 after:absolute after:bottom-1 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-violet-600 after:transition-[width] after:duration-200 hover:text-violet-700 hover:after:w-1/2 focus-visible:text-violet-700 focus-visible:outline-none focus-visible:after:w-1/2";
+  "relative inline-flex px-1.5 py-2 text-sm text-slate-700 transition-colors duration-200 after:absolute after:bottom-1 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-violet-600 after:transition-[width] after:duration-200 hover:text-violet-700 hover:after:w-1/2 focus-visible:text-violet-700 focus-visible:outline-none focus-visible:after:w-1/2";
+
+const DesktopSearch = ({ initialQuery }) => {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    navigate(query ? `/shop?search=${encodeURIComponent(query)}` : "/shop");
+  };
+
+  return (
+    <form
+      role="search"
+      onSubmit={handleSubmit}
+      className="ml-4 mr-8 hidden h-11 min-w-0 max-w-[420px] flex-1 items-center rounded-xl border border-slate-200 bg-white px-1.5 transition focus-within:border-violet-300 focus-within:ring-4 focus-within:ring-violet-50 lg:max-w-[420px] xl:max-w-[560px] lg:flex"
+    >
+      <Search className="ml-3 h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
+      <input
+        type="search"
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.target.value)}
+        placeholder="Search products..."
+        aria-label="Search products"
+        className="min-w-0 flex-1 bg-transparent px-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+      />
+      <button
+        type="submit"
+        className="flex h-8 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-4 text-xs font-bold text-white transition hover:bg-violet-700"
+      >
+        Search
+      </button>
+    </form>
+  );
+};
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
-  const { pathname } = useLocation();
+  const { pathname, search: locationSearch } = useLocation();
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
@@ -90,12 +126,12 @@ const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-3 sm:h-20 sm:gap-8 sm:px-6 md:gap-3">
+      <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-2 px-3 sm:h-[76px] sm:gap-5 sm:px-6 md:gap-3 lg:px-8">
 
         {/* Logo */}
-        <Link to="/" className="flex shrink-0 items-center gap-1.5 sm:ml-6 sm:gap-2">
-          <img src="/nuvora-mark.svg" alt="" className="h-8 w-7 object-contain sm:h-11 sm:w-10" />
-          <span className="flex items-center gap-[0.12em] text-base font-black tracking-[0.08em] text-slate-950 max-[360px]:hidden sm:text-xl">
+        <Link to="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <img src="/nuvora-mark.svg" alt="" className="h-8 w-7 object-contain sm:h-10 sm:w-9" />
+          <span className="flex items-center gap-[0.12em] text-base font-black tracking-[0.08em] text-slate-950 max-[360px]:hidden sm:text-lg">
             <span className="relative inline-block">
               N
               <span className="absolute right-0 top-[2px] h-2 w-2 bg-violet-600 [clip-path:polygon(0_0,100%_0,100%_100%)]" />
@@ -111,8 +147,13 @@ const Navbar = () => {
           </span>
         </Link>
 
+        <DesktopSearch
+          key={`${pathname}${locationSearch}`}
+          initialQuery={new URLSearchParams(locationSearch).get("search") || ""}
+        />
+
         {/* Navigation */}
-        <nav className="ml-auto hidden items-center gap-2 md:flex">
+        <nav className="hidden shrink-0 items-center gap-3 border-l border-slate-200 pl-6 md:ml-auto md:flex lg:ml-auto lg:gap-4 lg:pl-7">
 
           {/* Always visible */}
           <NavLink
@@ -175,7 +216,7 @@ const Navbar = () => {
         </nav>
 
         {/* Right side */}
-        <div className="ml-auto flex items-center gap-2 md:ml-0">
+        <div className="ml-auto flex items-center gap-2 md:ml-3 lg:ml-4">
 
           {!user && (
             <div className="flex items-center gap-1 md:hidden">
@@ -203,12 +244,12 @@ const Navbar = () => {
           )}
 
           {user && (
-            <div className="ml-4 flex shrink-0 items-center gap-1 md:ml-0 md:gap-2">
+            <div className="ml-4 flex shrink-0 items-center gap-1 md:ml-0 md:gap-2 lg:gap-3">
               <NavLink
                 to="/cart"
                 aria-label="Cart"
                 className={({ isActive }) =>
-                  `relative inline-flex rounded-full p-2.5 transition ${
+                  `relative inline-flex items-center justify-center rounded-full p-2.5 transition md:min-w-[52px] md:flex-col md:gap-0.5 md:px-2 md:py-1 md:text-slate-600 ${
                     isActive
                       ? "bg-violet-50 text-violet-600"
                       : "text-slate-700 hover:bg-violet-50 hover:text-violet-600"
@@ -216,6 +257,7 @@ const Navbar = () => {
                 }
               >
                 <ShoppingBag size={20} />
+                <span className="hidden text-[10px] font-medium leading-3 md:inline">Cart</span>
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
                   {cartItemCount}
                 </span>
@@ -226,7 +268,7 @@ const Navbar = () => {
                 aria-label={`Liked products${favoriteItems.length ? `, ${favoriteItems.length} saved` : ''}`}
                 title="Liked products"
                 className={({ isActive }) =>
-                  `relative inline-flex rounded-full p-2.5 transition ${
+                  `relative inline-flex items-center justify-center rounded-full p-2.5 transition md:min-w-[52px] md:flex-col md:gap-0.5 md:px-2 md:py-1 md:text-slate-600 ${
                     isActive
                       ? "bg-rose-50 text-rose-600"
                       : "text-slate-700 hover:bg-rose-50 hover:text-rose-600"
@@ -234,6 +276,7 @@ const Navbar = () => {
                 }
               >
                 <Heart size={20} />
+                <span className="hidden text-[10px] font-medium leading-3 md:inline">Liked</span>
                 {favoriteItems.length > 0 && (
                   <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">
                     {favoriteItems.length}
@@ -245,7 +288,7 @@ const Navbar = () => {
                 to="/profile"
                 aria-label="Profile"
                 className={({ isActive }) =>
-                  `hidden rounded-full p-2.5 transition md:inline-flex ${
+                  `hidden min-w-[52px] items-center justify-center rounded-full p-2.5 transition md:flex md:flex-col md:gap-0.5 md:px-2 md:py-1 ${
                     isActive
                       ? "bg-violet-100 text-violet-600"
                       : "bg-slate-100 text-slate-700 hover:bg-violet-100 hover:text-violet-600"
@@ -253,6 +296,7 @@ const Navbar = () => {
                 }
               >
                 <UserRound size={20} />
+                <span className="text-[10px] font-medium leading-3">Profile</span>
               </NavLink>
             </div>
           )}

@@ -24,7 +24,7 @@ const Favorites = () => {
         </div>
 
         {favoriteItems.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
             {favoriteItems.map((product) => (
               <ProductCard
                 key={product._id || product.id}

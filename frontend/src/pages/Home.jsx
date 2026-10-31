@@ -1,7 +1,7 @@
-import { ArrowRight, ArrowUpRight, Truck, ShieldCheck, RotateCcw, Headset, Mail } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Search, Truck, ShieldCheck, RotateCcw, Headset } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const categoryImages = [
   {
@@ -73,7 +73,9 @@ const benefits = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [productsError, setProductsError] = useState("");
   const [categories, setCategories] = useState([]);
@@ -152,8 +154,36 @@ const Home = () => {
   return (
     <main className="min-h-screen bg-[#fafafa] text-[#17213d]">
 
+      <section className="mx-auto max-w-[1536px] px-2 pt-3 sm:px-4 sm:pt-5 lg:px-8">
+        <form
+          role="search"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const query = searchQuery.trim();
+            navigate(query ? `/shop?search=${encodeURIComponent(query)}` : "/shop");
+          }}
+          className="mx-auto flex h-12 w-full max-w-2xl items-center rounded-full border border-[#eeeeF5] bg-white p-1.5 shadow-sm lg:hidden"
+        >
+          <Search className="ml-3 h-5 w-5 shrink-0 text-[#8990a3]" aria-hidden="true" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Search products..."
+            aria-label="Search products"
+            className="min-w-0 flex-1 bg-transparent px-3 text-sm text-[#202942] outline-none placeholder:text-[#8990a3]"
+          />
+          <button
+            type="submit"
+            className="flex h-9 shrink-0 items-center justify-center rounded-full bg-[#6232e8] px-4 text-xs font-bold text-white transition hover:bg-[#5125cf] sm:px-5 sm:text-sm"
+          >
+            Search
+          </button>
+        </form>
+      </section>
+
       {/* ================= HERO ================= */}
-      <section className="mx-auto max-w-[1280px] px-2 pt-2 sm:px-4 sm:pt-5">
+      <section className="mx-auto max-w-[1536px] px-2 pt-3 sm:px-4 sm:pt-4 lg:px-8">
         <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f8f8ff] via-[#f4f0ff] to-[#e8e3ff] sm:rounded-[28px] lg:min-h-[430px]">
 
           {/* Decorative glow */}
@@ -295,7 +325,7 @@ const Home = () => {
       </section>
 
       {/* ================= CATEGORY ================= */}
-      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-8">
+      <section id="shop-by-category" className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-8 lg:px-8">
         {categoriesError ? (
           <div className="rounded-2xl border border-red-100 bg-white px-5 py-4">
             <p role="alert" className="text-sm text-red-600">
@@ -383,7 +413,7 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
-      <section id="featured-products" className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-5">
+      <section id="featured-products" className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="rounded-[24px] border border-[#eeeeF5] bg-white px-2 py-4 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:rounded-[28px] sm:px-6 sm:py-6">
 
           <div className="mb-4 flex items-center justify-between sm:mb-5">
@@ -407,8 +437,8 @@ const Home = () => {
           ) : loading ? (
             <p className="text-sm text-gray-500">Loading products...</p>
           ) : (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-              {products.slice(0, 8).map((product) => (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5">
+              {products.slice(0, 15).map((product) => (
                 <ProductCard key={product._id || product.id || product.name} product={product} />
               ))}
             </div>
@@ -417,7 +447,7 @@ const Home = () => {
       </section>
 
       {/* ================= BENEFITS ================= */}
-      <section className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-5">
+      <section className="mx-auto max-w-[1536px] px-2 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#eeeeF5] bg-white sm:rounded-[28px] lg:grid-cols-4">
 
           {benefits.map((benefit, index) => {
@@ -454,8 +484,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= NEWSLETTER ================= */}
-      <section className="mx-auto max-w-[1280px] px-2 pb-5 pt-4 sm:px-4 sm:pt-5">
+      {/*
+      <section className="mx-auto max-w-[1536px] px-2 pb-5 pt-4 sm:px-4 sm:pt-5 lg:px-8">
         <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f0eaff] via-[#eee9ff] to-[#e8f0ff] px-4 py-5 sm:rounded-[28px] sm:px-8 sm:py-6">
 
           <div className="absolute right-5 top-[-30px] text-7xl font-thin text-violet-400/50">
@@ -493,7 +523,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section>  */}
 
     </main>
   );
