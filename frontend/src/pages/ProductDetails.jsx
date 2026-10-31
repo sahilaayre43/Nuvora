@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../store/cartSlice';
+import { toggleFavorite } from '../store/favoritesSlice';
 import { AuthContext } from '../components/context/AuthContext';
 import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft } from 'lucide-react';
 
@@ -9,6 +10,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const favoriteItems = useSelector((state) => state.favorites.items);
 
   const { user } = useContext(AuthContext);
 
@@ -70,6 +72,9 @@ const ProductDetail = () => {
 
   const userReview = product?.reviews?.find(
     (review) => String(review.userId) === String(user?._id)
+  );
+  const isFavorite = favoriteItems.some(
+    (item) => String(item._id || item.id) === String(product?._id || product?.id)
   );
 
   const handleOpenRatingForm = () => {
@@ -176,9 +181,14 @@ const ProductDetail = () => {
             {/* Wishlist */}
             <button
               type="button"
-              className="absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-gray-500 shadow-sm backdrop-blur transition hover:text-purple-600"
+              aria-label={isFavorite ? 'Remove product from likes' : 'Like product'}
+              aria-pressed={isFavorite}
+              onClick={() => dispatch(toggleFavorite(product))}
+              className={`absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-sm backdrop-blur transition hover:text-purple-600 ${
+                isFavorite ? 'text-rose-600' : 'text-gray-500'
+              }`}
             >
-              <Heart className="h-5 w-5" />
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
             </button>
 
             {/* Image */}

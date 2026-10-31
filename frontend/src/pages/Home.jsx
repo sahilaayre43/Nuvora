@@ -149,56 +149,61 @@ const Home = () => {
     };
   }, []);
 
-  const visibleCategories = showAllCategories
-    ? categories
-    : categories.slice(0, 5);
-
   return (
     <main className="min-h-screen bg-[#fafafa] text-[#17213d]">
 
       {/* ================= HERO ================= */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5">
-        <div className="relative min-h-[430px] overflow-hidden rounded-[28px] bg-gradient-to-r from-[#f8f8ff] via-[#f4f0ff] to-[#e8e3ff]">
+      <section className="mx-auto max-w-[1280px] px-2 pt-2 sm:px-4 sm:pt-5">
+        <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f8f8ff] via-[#f4f0ff] to-[#e8e3ff] sm:rounded-[28px] lg:min-h-[430px]">
 
           {/* Decorative glow */}
           <div className="absolute -right-20 -top-28 h-[380px] w-[380px] rounded-full bg-violet-300/30 blur-3xl" />
           <div className="absolute bottom-[-100px] right-[100px] h-[300px] w-[300px] rounded-full bg-blue-300/20 blur-3xl" />
 
-          <div className="relative grid h-full min-h-[430px] grid-cols-1 lg:grid-cols-[46%_54%]">
+          <div className="relative grid h-full grid-cols-1 lg:min-h-[430px] lg:grid-cols-[46%_54%]">
 
             {/* LEFT */}
-            <div className="flex flex-col justify-center px-8 py-12 sm:px-12 lg:px-10 xl:px-12">
-
-              {/* Badge */}
-              <div className="mb-5 flex w-fit items-center gap-2 rounded-full border border-violet-200 bg-white/70 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-[#35227e]">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-violet-100 text-violet-600">
-                  ✦
-                </span>
-                New Collection
-              </div>
-
-              <h1 className="max-w-[530px] text-[42px] font-extrabold leading-[1.05] tracking-[-1.8px] text-[#080b12] sm:text-[50px]">
+            <div className="flex flex-col justify-center px-4 py-6 sm:px-12 sm:py-12 lg:px-10 xl:px-12">
+              <h1 className="max-w-[530px] text-4xl font-extrabold leading-[1.04] tracking-[-1.4px] text-[#080b12] sm:text-[50px] sm:tracking-[-1.8px]">
                 Everything You Want.
                 <span className="block text-[#6338e8]">
                   One Place.
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-[420px] text-[15px] leading-6 text-[#66708a]">
-                Premium products. Top brands. Great prices.
-                <br />
-                Made for the way you shop today.
+              <p className="mt-3 max-w-[420px] text-sm leading-6 text-[#66708a] sm:mt-5 sm:text-[15px]">
+                Premium products. Top brands. Great prices. Made for the way
+                you shop today.
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link to="/shop" className="flex items-center gap-3 rounded-full bg-[#6232e8] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf]">
+              <div className="mt-4 flex flex-col items-stretch gap-2.5 min-[400px]:flex-row min-[400px]:items-stretch sm:mt-7 sm:gap-3">
+                <Link to="/shop" className="flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-[#6232e8] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-300/40 transition hover:bg-[#5125cf] min-[400px]:flex-1 sm:w-auto sm:flex-none sm:px-6">
                   Shop Now
                   <ArrowRight size={17} />
                 </Link>
 
-                <a href="#featured-products" className="rounded-full border border-[#e0e1eb] bg-white/80 px-6 py-3 text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600">
+                <a href="#shop-by-category" className="flex min-h-12 w-full items-center justify-center rounded-full border border-[#e0e1eb] bg-white/80 px-5 py-3 text-center text-sm font-bold text-[#202942] transition hover:border-violet-300 hover:text-violet-600 min-[400px]:flex-1 sm:w-auto sm:flex-none sm:px-6">
                   Explore Categories
                 </a>
+              </div>
+
+              <div aria-hidden="true" className="relative mt-3 h-[115px] overflow-hidden sm:hidden">
+                <div className="absolute inset-x-4 bottom-0 h-20 rounded-[50%] bg-white/70 shadow-[0_-8px_30px_rgba(110,70,230,0.12)]" />
+                <img
+                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=85"
+                  alt=""
+                  className="absolute bottom-1 left-[2%] z-10 h-[100px] w-[44%] rounded-2xl object-contain shadow-lg shadow-violet-900/10 mix-blend-multiply"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=85"
+                  alt=""
+                  className="absolute bottom-0 left-[34%] z-20 h-[88px] w-[38%] rounded-2xl object-contain shadow-lg shadow-violet-900/10 mix-blend-multiply"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85"
+                  alt=""
+                  className="absolute bottom-0 right-0 z-10 h-[92px] w-[42%] rotate-[-5deg] rounded-2xl object-contain shadow-lg shadow-violet-900/10 mix-blend-multiply"
+                />
               </div>
 
               {/* Trust 
@@ -290,7 +295,7 @@ const Home = () => {
       </section>
 
       {/* ================= CATEGORY ================= */}
-      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-4 pt-8">
+      <section id="shop-by-category" className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-8">
         {categoriesError ? (
           <div className="rounded-2xl border border-red-100 bg-white px-5 py-4">
             <p role="alert" className="text-sm text-red-600">
@@ -308,8 +313,8 @@ const Home = () => {
             </p>
           </div>
         ) : (
-          <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-4 py-5 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:px-6 sm:py-6">
-            <div className="mb-5 flex items-end justify-between gap-4">
+          <div className="rounded-[24px] border border-[#eeeeF5] bg-white px-3 py-4 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:rounded-[28px] sm:px-6 sm:py-6">
+            <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
               <div>
                 <h2 className="text-lg font-extrabold text-[#101727] sm:text-xl">
                   Shop by Category
@@ -320,25 +325,30 @@ const Home = () => {
                   type="button"
                   onClick={() => setShowAllCategories((visible) => !visible)}
                   aria-expanded={showAllCategories}
-                  className="flex items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600"
+                  className="hidden items-center gap-1 text-xs font-bold text-[#29334f] hover:text-violet-600 sm:flex"
                 >
                   {showAllCategories ? "Show less" : "View all"}
                   <ArrowUpRight size={15} />
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-5 lg:gap-x-6">
-              {visibleCategories.map((category) => {
+            <div
+              aria-label="Scroll to browse categories"
+              className="-mx-3 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-x-5 sm:gap-y-6 sm:overflow-visible sm:px-0 sm:pb-0 sm:snap-none lg:grid-cols-5 lg:gap-x-6"
+            >
+              {categories.map((category, index) => {
                 const image = getCategoryImage(category.name, products);
 
                 return (
                   <Link
                     key={category.name}
                     to={`/shop?category=${encodeURIComponent(category.name)}`}
-                    className="group flex min-w-0 flex-col items-center rounded-2xl p-1 text-center transition-colors hover:bg-[#fcfaff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-4 sm:p-2"
+                    className={`group flex w-[43%] min-w-[128px] max-w-[190px] shrink-0 snap-start flex-col items-center rounded-2xl p-1 text-center transition-colors hover:bg-[#fcfaff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-4 sm:w-auto sm:min-w-0 sm:max-w-none sm:shrink sm:snap-none sm:p-2 ${
+                      !showAllCategories && index >= 5 ? "sm:hidden" : ""
+                    }`}
                   >
                     <div
-                      className="h-[100px] w-full overflow-hidden rounded-t-[999px] rounded-b-xl bg-gradient-to-b from-[#fbe5f0] via-[#f5e5f7] to-[#ead9f5] shadow-[0_6px_18px_rgba(75,45,95,0.07)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_12px_24px_rgba(75,45,95,0.12)] sm:h-[140px] lg:h-[190px]"
+                      className="h-[120px] w-full overflow-hidden rounded-t-[999px] rounded-b-xl bg-gradient-to-b from-[#fbe5f0] via-[#f5e5f7] to-[#ead9f5] shadow-[0_6px_18px_rgba(75,45,95,0.07)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_12px_24px_rgba(75,45,95,0.12)] sm:h-[140px] lg:h-[190px]"
                     >
                       {image ? (
                         <img
@@ -373,11 +383,11 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
-      <section id="featured-products" className="mx-auto max-w-[1280px] px-4 pt-5">
-        <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-6 shadow-[0_8px_30px_rgba(30,30,60,0.03)]">
+      <section id="featured-products" className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-5">
+        <div className="rounded-[24px] border border-[#eeeeF5] bg-white px-2 py-4 shadow-[0_8px_30px_rgba(30,30,60,0.03)] sm:rounded-[28px] sm:px-6 sm:py-6">
 
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-[15px] font-extrabold text-[#101727]">
+          <div className="mb-4 flex items-center justify-between sm:mb-5">
+            <h2 className="text-base font-extrabold text-[#101727] sm:text-lg">
               Featured Products
             </h2>
 
@@ -397,7 +407,7 @@ const Home = () => {
           ) : loading ? (
             <p className="text-sm text-gray-500">Loading products...</p>
           ) : (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
               {products.slice(0, 8).map((product) => (
                 <ProductCard key={product._id || product.id || product.name} product={product} />
               ))}
@@ -407,8 +417,8 @@ const Home = () => {
       </section>
 
       {/* ================= BENEFITS ================= */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5">
-        <div className="grid grid-cols-1 overflow-hidden rounded-[28px] border border-[#eeeeF5] bg-white sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mx-auto max-w-[1280px] px-2 pt-4 sm:px-4 sm:pt-5">
+        <div className="grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#eeeeF5] bg-white sm:rounded-[28px] lg:grid-cols-4">
 
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
@@ -416,10 +426,12 @@ const Home = () => {
             return (
               <div
                 key={benefit.title}
-                className={`flex items-center gap-4 px-7 py-6 ${
-                  index !== benefits.length - 1
-                    ? "border-b border-[#eeeeF5] lg:border-b-0 lg:border-r"
-                    : ""
+                className={`flex flex-col items-center gap-2 px-2 py-4 text-center sm:flex-row sm:gap-4 sm:px-7 sm:py-6 sm:text-left ${
+                  index < 2 ? "border-b border-[#eeeeF5] lg:border-b-0" : ""
+                } ${
+                  index % 2 === 0 ? "border-r border-[#eeeeF5] lg:border-r" : ""
+                } ${
+                  index === 1 ? "lg:border-r" : ""
                 }`}
               >
                 <div
@@ -443,22 +455,22 @@ const Home = () => {
       </section>
 
       {/* ================= NEWSLETTER ================= */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5">
-        <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-r from-[#f0eaff] via-[#eee9ff] to-[#e8f0ff] px-8 py-6">
+      <section className="mx-auto max-w-[1280px] px-2 pb-5 pt-4 sm:px-4 sm:pt-5">
+        <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-r from-[#f0eaff] via-[#eee9ff] to-[#e8f0ff] px-4 py-5 sm:rounded-[28px] sm:px-8 sm:py-6">
 
           <div className="absolute right-5 top-[-30px] text-7xl font-thin text-violet-400/50">
             〰
           </div>
 
-          <div className="relative flex flex-col items-center justify-between gap-5 lg:flex-row">
+          <div className="relative flex flex-col items-stretch justify-between gap-5 sm:items-center lg:flex-row">
 
-            <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/80 text-violet-600 shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/80 text-violet-600 shadow-sm sm:h-14 sm:w-14">
                 <Mail size={23} />
               </div>
 
               <div>
-                <h2 className="text-[15px] font-extrabold">
+                <h2 className="text-sm font-extrabold sm:text-[15px]">
                   Get Exclusive Offers & Updates
                 </h2>
 
@@ -472,10 +484,10 @@ const Home = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="min-w-0 flex-1 bg-transparent px-4 text-xs outline-none"
+                className="min-w-0 flex-1 bg-transparent px-3 text-xs outline-none sm:px-4"
               />
 
-              <button className="rounded-full bg-violet-600 px-6 py-2.5 text-xs font-bold text-white transition hover:bg-violet-700">
+              <button className="shrink-0 rounded-full bg-violet-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-violet-700 sm:px-6">
                 Subscribe
               </button>
             </div>

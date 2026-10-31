@@ -94,17 +94,6 @@ const Shop = () => {
               </p>
             </div>
 
-            {/* Product Count */}
-            <div className="w-fit rounded-2xl border border-gray-100 bg-white px-5 py-3 shadow-sm">
-              <p className="text-xs text-gray-400">
-                {category ? 'Products in category' : 'Available Products'}
-              </p>
-
-              <p className="mt-0.5 text-lg font-bold text-[#171329]">
-                {category ? categoryProducts.length : products.length}
-              </p>
-            </div>
-
           </div>
 
         </div>
@@ -188,7 +177,7 @@ const Shop = () => {
           </div>
         ) : loading ? (
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
 
             {[1, 2, 3, 4].map((item) => (
               <div
@@ -210,7 +199,7 @@ const Shop = () => {
         ) : filteredProducts.length > 0 ? (
 
           /* Product Grid */
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
 
             {filteredProducts.map((product) => (
               <ProductCard
