@@ -10,6 +10,8 @@ import {
   Layers3,
 } from 'lucide-react';
 
+const MAX_PRODUCT_IMAGES = 8;
+
 const EditProduct = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
@@ -23,11 +25,13 @@ const EditProduct = () => {
     stock: '',
   });
 
-  const [image, setImage] = useState(null);
+  const [existingImages, setExistingImages] = useState([]);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoriesError, setCategoriesError] = useState('');
   const [productError, setProductError] = useState('');
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     let isCurrent = true;
@@ -48,6 +52,9 @@ const EditProduct = () => {
             category: data.category,
             stock: data.stock,
           });
+          setExistingImages(
+            [...new Set([...(Array.isArray(data.images) ? data.images : []), data.imageUrl].filter(Boolean))]
+          );
         }
       } catch (error) {
         if (isCurrent) {
@@ -91,6 +98,12 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
+    if (existingImages.length + images.length > MAX_PRODUCT_IMAGES) {
+      setSubmitError(`A product can have up to ${MAX_PRODUCT_IMAGES} images.`);
+      return;
+    }
+
     setLoading(true);
 
     const data = new FormData();
@@ -101,19 +114,30 @@ const EditProduct = () => {
     data.append('category', formData.category);
     data.append('stock', formData.stock);
 
-    if (image) {
-      data.append('image', image);
-    }
+    images.forEach((image) => data.append('images', image));
 
-    const res = await fetch(`/api/products/${id}`, {
+    let res;
+    try {
+      res = await fetch(`/api/products/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
-      body: data,
-    });
+        body: data,
+      });
+    } catch (error) {
+      setSubmitError(error.message || 'Unable to update this product.');
+      setLoading(false);
+      return;
+    }
 
     setLoading(false);
+
+    if (!res.ok) {
+      const responseData = await res.json();
+      setSubmitError(responseData.message || 'Unable to update this product.');
+      return;
+    }
 
     if (res.ok) {
       alert('Product updated successfully!');
@@ -305,7 +329,7 @@ const EditProduct = () => {
               </div>
             </div>
 
-            {/* Image */}
+            {/* Images */}
             <div className="border-t border-gray-100 pt-6">
 
               <div className="mb-4 flex items-center gap-3">
@@ -315,11 +339,11 @@ const EditProduct = () => {
 
                 <div>
                   <h2 className="font-semibold text-[#171329]">
-                    Product Image
+                    Product Images
                   </h2>
 
                   <p className="text-xs text-gray-400">
-                    Replace the existing image if needed
+                    Add more images, up to {MAX_PRODUCT_IMAGES} total
                   </p>
                 </div>
               </div>
@@ -331,7 +355,9 @@ const EditProduct = () => {
                 </div>
 
                 <p className="mt-4 text-sm font-semibold text-[#171329]">
-                  {image ? image.name : 'Choose a new image'}
+                  {images.length > 0
+                    ? `${images.length} new image${images.length === 1 ? '' : 's'} selected`
+                    : 'Choose additional images'}
                 </p>
 
                 <p className="mt-1 text-xs text-gray-400">
@@ -341,15 +367,50 @@ const EditProduct = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setImage(e.target.files[0])}
+                  multiple
+                  disabled={existingImages.length >= MAX_PRODUCT_IMAGES}
+                  onChange={(e) => {
+                    const selectedImages = Array.from(e.target.files || []);
+                    const remainingSlots = MAX_PRODUCT_IMAGES - existingImages.length;
+                    if (selectedImages.length > remainingSlots) {
+                      setSubmitError(`You can add up to ${remainingSlots} more image${remainingSlots === 1 ? '' : 's'}.`);
+                      setImages([]);
+                      e.target.value = '';
+                      return;
+                    }
+                    setSubmitError('');
+                    setImages(selectedImages);
+                  }}
                   className="hidden"
                 />
 
               </label>
 
-              {image && (
+              {submitError && (
+                <p role="alert" className="mt-3 text-sm text-red-600">
+                  {submitError}
+                </p>
+              )}
+
+              {existingImages.length > 0 && (
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-semibold text-gray-500">Current images</p>
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {existingImages.map((imageUrl) => (
+                      <img
+                        key={imageUrl}
+                        src={imageUrl}
+                        alt="Current product"
+                        className="h-16 w-16 shrink-0 rounded-lg border border-gray-200 object-cover"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {images.length > 0 && (
                 <p className="mt-2 text-xs text-purple-600">
-                  New image selected: {image.name}
+                  Adding: {images.map((image) => image.name).join(', ')}
                 </p>
               )}
 

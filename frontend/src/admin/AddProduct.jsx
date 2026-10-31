@@ -1,8 +1,10 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Check, PackagePlus } from 'lucide-react';
+import { Check, PackagePlus, X } from 'lucide-react';
 import { getCategoryDesign } from '../lib/categoryDesign';
+
+const MAX_PRODUCT_IMAGES = 8;
 
 const AddProduct = () => {
   const { user } = useContext(AuthContext);
@@ -16,7 +18,7 @@ const AddProduct = () => {
     stock: ''
   });
 
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -63,8 +65,8 @@ const AddProduct = () => {
     e.preventDefault();
     setSubmitError('');
     setSubmitSuccess(false);
-    if (!image) {
-      setSubmitError('Please select an image.');
+    if (images.length === 0) {
+      setSubmitError('Please select at least one product image.');
       return;
     }
 
@@ -76,7 +78,7 @@ const AddProduct = () => {
     data.append('price', formData.price);
     data.append('category', formData.category);
     data.append('stock', formData.stock);
-    data.append('image', image);
+    images.forEach((image) => data.append('images', image));
 
     try {
       const res = await fetch('/api/products', {
@@ -311,7 +313,7 @@ const AddProduct = () => {
             {/* Image Upload */}
             <div>
               <label className="mb-2 block text-sm font-semibold text-gray-800">
-                Product Image
+                Product Images
               </label>
 
               <div className="rounded-2xl border-2 border-dashed border-violet-200 bg-violet-50/40 p-6 text-center transition hover:border-violet-300 hover:bg-violet-50">
@@ -333,7 +335,7 @@ const AddProduct = () => {
                 </div>
 
                 <p className="mb-1 text-sm font-semibold text-gray-800">
-                  Upload product image
+                  Upload up to {MAX_PRODUCT_IMAGES} product images
                 </p>
 
                 <p className="mb-4 text-xs text-gray-500">
@@ -341,21 +343,46 @@ const AddProduct = () => {
                 </p>
 
                 <label className="inline-flex cursor-pointer items-center rounded-xl border border-violet-200 bg-white px-5 py-2.5 text-sm font-semibold text-violet-600 shadow-sm transition hover:border-violet-300 hover:bg-violet-50">
-                  Choose Image
+                  Choose Images
 
                   <input
                     type="file"
                     accept="image/*"
-                    required
-                    onChange={(e) => setImage(e.target.files[0])}
+                    multiple
+                    onChange={(e) => {
+                      const selectedImages = Array.from(e.target.files || []);
+                      if (selectedImages.length > MAX_PRODUCT_IMAGES) {
+                        setSubmitError(`Choose no more than ${MAX_PRODUCT_IMAGES} images.`);
+                        setImages([]);
+                        e.target.value = '';
+                        return;
+                      }
+                      setSubmitError('');
+                      setImages(selectedImages);
+                    }}
                     className="hidden"
                   />
                 </label>
 
-                {image && (
-                  <p className="mt-3 text-xs font-medium text-gray-600">
-                    Selected: {image.name}
-                  </p>
+                {images.length > 0 && (
+                  <ul className="mt-4 space-y-2 text-left">
+                    {images.map((image, index) => (
+                      <li
+                        key={`${image.name}-${image.lastModified}-${index}`}
+                        className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2 text-xs text-gray-600"
+                      >
+                        <span className="truncate">{image.name}</span>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${image.name}`}
+                          onClick={() => setImages((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                          className="shrink-0 rounded-full p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <X size={15} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>

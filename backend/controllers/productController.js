@@ -2,6 +2,21 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const Review = require("../models/Review");
 const cloudinary = require("../config/cloudinary");
+const MAX_PRODUCT_IMAGES = 8;
+
+const getUploadedImageFiles = (req) => [
+    ...(req.files?.images || []),
+    ...(req.files?.image || []),
+];
+
+const uploadImages = async (files) => Promise.all(
+    files.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, {
+            folder: 'nuvora/products',
+        });
+        return result.secure_url;
+    })
+);
 
 const findCategoryName = async (value) => {
     if (typeof value !== "string" || !value.trim() || value.trim().length > 60) {
@@ -103,9 +118,13 @@ const createReview = async (req, res) => {
 
 const createProduct = async (req, res) => {
     const { name, description, price, stock, category } = req.body;
+    const imageFiles = getUploadedImageFiles(req);
 
-    if (!req.file) {
-        return res.status(400).json({ message: 'Product image is required.' });
+    if (imageFiles.length === 0) {
+        return res.status(400).json({ message: 'At least one product image is required.' });
+    }
+    if (imageFiles.length > MAX_PRODUCT_IMAGES) {
+        return res.status(400).json({ message: `A product can have up to ${MAX_PRODUCT_IMAGES} images.` });
     }
 
     try {
@@ -114,9 +133,7 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Select an existing product category.' });
         }
 
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'nuvora/products',
-        });
+        const imageUrls = await uploadImages(imageFiles);
 
         const product = new Product({
             name,
@@ -124,7 +141,8 @@ const createProduct = async (req, res) => {
             price,
             stock,
             category: categoryName,
-            imageUrl: result.secure_url,
+            imageUrl: imageUrls[0],
+            images: imageUrls,
         });
 
         const savedProduct = await product.save();
@@ -136,6 +154,7 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     const { name, description, price, stock, category } = req.body;
+    const imageFiles = getUploadedImageFiles(req);
 
     try {
         const product = await Product.findById(req.params.id);
@@ -149,17 +168,33 @@ const updateProduct = async (req, res) => {
             return res.status(400).json({ message: 'Select an existing product category.' });
         }
 
+        const existingImages = product.images?.length
+            ? product.images
+            : product.imageUrl ? [product.imageUrl] : [];
+        const isLegacySingleImageUpload = Boolean(req.files?.image?.length);
+        const resultingImageCount = isLegacySingleImageUpload
+            ? Math.max(existingImages.length, 1)
+            : existingImages.length + imageFiles.length;
+        if (resultingImageCount > MAX_PRODUCT_IMAGES) {
+            return res.status(400).json({
+                message: `A product can have up to ${MAX_PRODUCT_IMAGES} images. Remove or select fewer images.`,
+            });
+        }
+
         product.name = name || product.name;
         product.description = description || product.description;
         product.price = price || product.price;
         product.stock = stock || product.stock;
         product.category = categoryName;
 
-        if (req.file) {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: 'nuvora/products',
-            });
-            product.imageUrl = result.secure_url;
+        if (imageFiles.length > 0) {
+            const imageUrls = await uploadImages(imageFiles);
+            product.images = isLegacySingleImageUpload
+                ? [imageUrls[0], ...existingImages.slice(1)]
+                : [...existingImages, ...imageUrls];
+            product.imageUrl = product.images[0];
+        } else if (!product.images?.length && product.imageUrl) {
+            product.images = [product.imageUrl];
         }
 
         const updatedProduct = await product.save();

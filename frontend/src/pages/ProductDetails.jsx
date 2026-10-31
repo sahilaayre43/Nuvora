@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../store/cartSlice';
 import { toggleFavorite } from '../store/favoritesSlice';
 import { AuthContext } from '../components/context/AuthContext';
+import ProductCard from '../components/ProductCard';
 import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft, Check } from 'lucide-react';
 
 const ProductDetail = () => {
@@ -15,6 +16,9 @@ const ProductDetail = () => {
   const { user } = useContext(AuthContext);
 
   const [product, setProduct] = useState(null);
+  const [selectedImageUrl, setSelectedImageUrl] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [relatedProductsError, setRelatedProductsError] = useState('');
   const [loading, setLoading] = useState(true);
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -39,6 +43,9 @@ const ProductDetail = () => {
         const res = await fetch(`/api/products/${id}`);
         const data = await res.json();
         setProduct(data);
+        setSelectedImageUrl(
+          [...new Set([...(Array.isArray(data.images) ? data.images : []), data.imageUrl].filter(Boolean))][0] || ''
+        );
       } catch (error) {
         console.error(error);
       } finally {
@@ -48,6 +55,47 @@ const ProductDetail = () => {
 
     fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    if (!product?.category) return undefined;
+
+    let isCurrent = true;
+    const fetchRelatedProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.message || 'Unable to load related products.');
+        }
+        if (!Array.isArray(data)) {
+          throw new Error('The server returned an invalid products response.');
+        }
+
+        const category = product.category.trim().toLowerCase();
+        const currentProductId = String(product._id || product.id);
+        if (isCurrent) {
+          setRelatedProducts(
+            data
+              .filter((item) =>
+                item.category?.trim().toLowerCase() === category
+                && String(item._id || item.id) !== currentProductId
+              )
+              .slice(0, 5)
+          );
+          setRelatedProductsError('');
+        }
+      } catch (error) {
+        if (isCurrent) {
+          setRelatedProductsError(error.message || 'Unable to load related products.');
+        }
+      }
+    };
+
+    fetchRelatedProducts();
+    return () => {
+      isCurrent = false;
+    };
+  }, [product]);
 
   const getCartItem = () => ({
     productId: product._id,
@@ -86,6 +134,12 @@ const ProductDetail = () => {
   const isFavorite = favoriteItems.some(
     (item) => String(item._id || item.id) === String(product?._id || product?.id)
   );
+  const productImageUrls = [
+    ...new Set([
+      ...(Array.isArray(product?.images) ? product.images : []),
+      product?.imageUrl,
+    ].filter(Boolean)),
+  ];
 
   const handleOpenRatingForm = () => {
     if (!user) {
@@ -202,12 +256,12 @@ const ProductDetail = () => {
             </button>
 
             {/* Image */}
-            <div className="relative flex h-full min-h-[450px] items-center justify-center p-8 sm:min-h-[560px]">
-              {product.imageUrl ? (
+            <div className="relative flex h-full min-h-[450px] items-center justify-center px-8 pb-24 pt-20 sm:min-h-[560px] sm:pb-28 sm:pt-24">
+              {selectedImageUrl || productImageUrls[0] ? (
                 <img
-                  src={product.imageUrl}
+                  src={selectedImageUrl || productImageUrls[0]}
                   alt={product.name}
-                  className="max-h-[480px] w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
+                  className="max-h-[360px] w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105 sm:max-h-[440px]"
                 />
               ) : (
                 <span className="text-sm text-gray-400">
@@ -216,16 +270,34 @@ const ProductDetail = () => {
               )}
             </div>
 
-            {/* Bottom image label */}
-            <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-white/70 p-4 backdrop-blur-md">
-              <p className="text-xs font-medium text-gray-500">
-                NUVORA COLLECTION
-              </p>
-
-              <p className="mt-1 text-sm font-bold text-[#171329]">
-                Premium quality. Designed for you.
-              </p>
-            </div>
+            {productImageUrls.length > 1 && (
+              <div
+                className="absolute bottom-5 left-5 right-5 z-10 flex snap-x snap-mandatory gap-2 overflow-x-auto rounded-2xl bg-white/75 p-2 backdrop-blur-md"
+                aria-label="Product images"
+              >
+                {productImageUrls.map((imageUrl, index) => (
+                  <button
+                    key={imageUrl}
+                    type="button"
+                    onClick={() => setSelectedImageUrl(imageUrl)}
+                    aria-label={`Show product image ${index + 1}`}
+                    aria-pressed={selectedImageUrl === imageUrl}
+                    className={`h-16 w-16 shrink-0 snap-start overflow-hidden rounded-xl border-2 transition sm:h-[72px] sm:w-[72px] ${
+                      selectedImageUrl === imageUrl
+                        ? 'border-purple-600 ring-2 ring-purple-200'
+                        : 'border-transparent hover:border-purple-300'
+                    }`}
+                  >
+                    <img
+                      src={imageUrl}
+                      alt={`${product.name} view ${index + 1}`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ================= DETAILS ================= */}
@@ -469,6 +541,34 @@ const ProductDetail = () => {
             <p className="mt-4 text-sm text-gray-500">No reviews yet. Be the first to rate this product.</p>
           )}
         </section>
+
+        {relatedProductsError ? (
+          <p role="alert" className="mt-8 rounded-2xl border border-red-100 bg-white p-5 text-sm text-red-600">
+            Could not load related products: {relatedProductsError}
+          </p>
+        ) : relatedProducts.length > 0 ? (
+          <section className="mt-8 rounded-2xl border border-purple-100 bg-white p-4 sm:p-6" aria-labelledby="related-products-heading">
+            <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
+              <h2 id="related-products-heading" className="text-lg font-bold text-[#171329] sm:text-xl">
+                More from {product.category}
+              </h2>
+              <Link
+                to={`/shop?category=${encodeURIComponent(product.category)}`}
+                className="shrink-0 text-sm font-bold text-purple-700 hover:text-purple-900"
+              >
+                View category
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5">
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard
+                  key={relatedProduct._id || relatedProduct.id}
+                  product={relatedProduct}
+                />
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
     </div>
   );
