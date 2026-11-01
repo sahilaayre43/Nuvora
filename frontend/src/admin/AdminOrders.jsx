@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { Package, UserRound, CalendarDays, IndianRupee, ChevronDown, ShoppingBag, MapPin } from 'lucide-react';
+import { apiFetch } from '../lib/api';
 
 const AdminOrders = () => {
   const { user } = useContext(AuthContext);
@@ -24,7 +25,7 @@ const AdminOrders = () => {
       }
 
       try {
-        const res = await fetch('/api/orders', {
+        const res = await apiFetch('/api/orders', {
           headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -63,7 +64,7 @@ const AdminOrders = () => {
     setUpdatingOrderIds((ids) => [...ids, id]);
 
     try {
-      const res = await fetch(`/api/orders/${id}/status`, {
+      const res = await apiFetch(`/api/orders/${id}/status`, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',

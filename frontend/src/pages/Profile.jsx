@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react'
 import { AuthContext } from '../components/context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import {UserRound,Mail,ShieldCheck,LogOut,Package,CalendarDays,IndianRupee,ArrowRight,ShoppingBag} from 'lucide-react'
+import { apiFetch } from '../lib/api'
 
 const getOrderStatusLabel = (status = '') =>
   status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
@@ -23,7 +24,7 @@ const Profile = () => {
       }
 
       try {
-        const res = await fetch('/api/orders/myorders', {
+        const res = await apiFetch('/api/orders/myorders', {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

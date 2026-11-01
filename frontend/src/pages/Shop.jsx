@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { loadProductCatalog, refreshProductCatalog } from '../lib/api';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -26,16 +27,21 @@ const Shop = () => {
 
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products');
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data?.message || 'Unable to load products.');
-        }
-        if (!Array.isArray(data)) {
-          throw new Error('The server returned an invalid products response.');
-        }
+        const data = await loadProductCatalog();
         if (isCurrent) {
           setProducts(data);
+        }
+
+        if (import.meta.env.PROD) {
+          refreshProductCatalog()
+            .then((latestProducts) => {
+              if (isCurrent) {
+                setProducts(latestProducts);
+              }
+            })
+            .catch((fetchError) => {
+              console.warn('Could not refresh the published product catalog:', fetchError);
+            });
         }
       } catch (fetchError) {
         if (isCurrent) {

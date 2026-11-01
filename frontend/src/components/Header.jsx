@@ -12,6 +12,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext.jsx";
 import { useSelector } from "react-redux";
+import { loadCategoryCatalog } from "../lib/api";
 
 const navLinkClass =
   "relative inline-flex px-1.5 py-2 text-sm text-slate-700 transition-colors duration-200 after:absolute after:bottom-1 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-violet-600 after:transition-[width] after:duration-200 hover:text-violet-700 hover:after:w-1/2 focus-visible:text-violet-700 focus-visible:outline-none focus-visible:after:w-1/2";
@@ -79,16 +80,7 @@ const Navbar = () => {
       setCategoriesError("");
 
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || "";
-        const response = await fetch(`${apiUrl}/api/categories`);
-        if (!response.ok) {
-          throw new Error(`Category request failed (${response.status}).`);
-        }
-
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          throw new Error("Category response was not a list.");
-        }
+        const data = await loadCategoryCatalog();
 
         if (isCurrent) {
           setCategories(data.filter((category) => category?.name));

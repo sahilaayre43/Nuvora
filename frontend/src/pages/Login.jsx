@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Mail, LockKeyhole, Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/context/AuthContext.jsx";
+import { apiFetch } from "../lib/api";
 
 const Login = () => {
 
@@ -15,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await apiFetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -30,7 +31,7 @@ const Login = () => {
       } else {
         setError(data.message || "An error occurred while logging in.");
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred while logging in.");
     }
   };

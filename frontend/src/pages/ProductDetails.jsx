@@ -6,6 +6,7 @@ import { toggleFavorite } from '../store/favoritesSlice';
 import { AuthContext } from '../components/context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import { ShoppingCart, Heart, Star, Truck, ShieldCheck, RotateCcw, ArrowLeft, Check } from 'lucide-react';
+import { apiFetch, loadProductCatalog } from '../lib/api';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -38,22 +39,48 @@ const ProductDetail = () => {
   }, [cartConfirmation]);
 
   useEffect(() => {
+    let isCurrent = true;
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`);
-        const data = await res.json();
-        setProduct(data);
-        setSelectedImageUrl(
-          [...new Set([...(Array.isArray(data.images) ? data.images : []), data.imageUrl].filter(Boolean))][0] || ''
+        const products = await loadProductCatalog();
+        const catalogProduct = products.find(
+          (item) => String(item._id || item.id) === String(id)
         );
+
+        if (isCurrent && catalogProduct) {
+          setProduct(catalogProduct);
+          setSelectedImageUrl(
+            [...new Set([...(Array.isArray(catalogProduct.images) ? catalogProduct.images : []), catalogProduct.imageUrl].filter(Boolean))][0] || ''
+          );
+          setLoading(false);
+        }
+
+        const response = await apiFetch(`/api/products/${id}`);
+        if (!response.ok) {
+          throw new Error(`Product request failed (${response.status}).`);
+        }
+        const data = await response.json();
+        if (isCurrent) {
+          setProduct(data);
+          setSelectedImageUrl(
+            [...new Set([...(Array.isArray(data.images) ? data.images : []), data.imageUrl].filter(Boolean))][0] || ''
+          );
+        }
       } catch (error) {
-        console.error(error);
+        if (isCurrent) {
+          console.error('Could not refresh product details:', error);
+        }
       } finally {
-        setLoading(false);
+        if (isCurrent) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProduct();
+    return () => {
+      isCurrent = false;
+    };
   }, [id]);
 
   useEffect(() => {
@@ -62,14 +89,7 @@ const ProductDetail = () => {
     let isCurrent = true;
     const fetchRelatedProducts = async () => {
       try {
-        const response = await fetch('/api/products');
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data?.message || 'Unable to load related products.');
-        }
-        if (!Array.isArray(data)) {
-          throw new Error('The server returned an invalid products response.');
-        }
+        const data = await loadProductCatalog();
 
         const category = product.category.trim().toLowerCase();
         const currentProductId = String(product._id || product.id);
@@ -163,7 +183,7 @@ const ProductDetail = () => {
     setSubmittingRating(true);
     setRatingError('');
     try {
-      const response = await fetch(`/api/products/${id}/reviews`, {
+      const response = await apiFetch(`/api/products/${id}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

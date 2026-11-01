@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, FolderKanban, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react';
+import { apiFetch } from '../lib/api';
 
 const AdminCategories = () => {
   const { user } = useContext(AuthContext);
@@ -18,7 +19,7 @@ const AdminCategories = () => {
   const [success, setSuccess] = useState('');
 
   const requestCategories = useCallback(async () => {
-      const res = await fetch('/api/categories', {
+      const res = await apiFetch('/api/categories', {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       const data = await res.json();
@@ -83,7 +84,7 @@ const AdminCategories = () => {
     setSaving(true);
 
     try {
-      const res = await fetch('/api/categories', {
+      const res = await apiFetch('/api/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ const AdminCategories = () => {
       const endpoint = category._id
         ? `/api/categories/${category._id}`
         : '/api/categories/legacy';
-      const res = await fetch(endpoint, {
+      const res = await apiFetch(endpoint, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ const AdminCategories = () => {
     setSuccess('');
     setDeletingId(category._id);
     try {
-      const res = await fetch(`/api/categories/${category._id}`, {
+      const res = await apiFetch(`/api/categories/${category._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${user.token}` },
       });

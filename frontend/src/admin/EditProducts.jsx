@@ -9,6 +9,7 @@ import {
   IndianRupee,
   Layers3,
 } from 'lucide-react';
+import { apiFetch } from '../lib/api';
 
 const MAX_PRODUCT_IMAGES = 8;
 
@@ -38,7 +39,7 @@ const EditProduct = () => {
 
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`);
+        const res = await apiFetch(`/api/products/${id}`);
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.message || 'Unable to load this product.');
@@ -75,7 +76,7 @@ const EditProduct = () => {
 
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
+        const res = await apiFetch('/api/categories');
         const data = await res.json();
         if (!res.ok || !Array.isArray(data)) {
           throw new Error(data?.message || 'Unable to load categories.');
@@ -118,7 +119,7 @@ const EditProduct = () => {
 
     let res;
     try {
-      res = await fetch(`/api/products/${id}`, {
+      res = await apiFetch(`/api/products/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,

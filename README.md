@@ -113,9 +113,24 @@ npm install
 cd ../backend
 npm install
 
-### Frontend deployment on Render
+### Frontend deployment on Vercel
 
-Configure the static site with `frontend` as its root directory, `npm install --include=dev && npm run build` as its build command, and `dist` as its publish directory. The frontend `.npmrc` also ensures build-time dependencies are installed when `NODE_ENV=production`.
+Import the repository into Vercel and set `frontend` as the root directory. Use
+`npm run build` as the build command and `dist` as the output directory.
+
+Add `VITE_API_URL` to the Vercel project environment variables, using the base
+URL of your Render backend (for example, `https://your-backend.onrender.com`,
+without `/api`). The frontend build fetches the product and category catalogs
+from Render and includes them as static files. Visitors can browse products
+without waiting for Render to wake up; account, order, review, and admin actions
+still use the live backend.
+The storefront refreshes the static catalog from Render in the background when
+visitors open it, so the published products remain usable immediately while
+newer products appear once the backend responds.
+
+Set `FRONTEND_URL` on Render to your Vercel site URL so the backend accepts
+browser requests from the deployed frontend. Each Vercel deployment refreshes
+the static catalog, so redeploy after changing products or categories.
 
 ---
 
@@ -139,9 +154,13 @@ RAZORPAY_KEY_SECRET=your_razorpay_secret
 EMAIL_USER=your_email
 EMAIL_PASSWORD=your_email_password
 
-Optionally create a `.env` file inside `frontend` to point the Vite API proxy at a different backend URL:
+For local development, optionally create a `.env` file inside `frontend` to
+point the Vite API proxy at a different backend URL:
 
 VITE_API_PROXY_TARGET=http://127.0.0.1:5000
+
+For a local production build that should generate the same static catalog, set
+`VITE_API_URL` to your backend's base URL as well.
 
 Never commit your ".env" files or API keys to GitHub.
 

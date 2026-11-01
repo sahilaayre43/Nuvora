@@ -2,6 +2,12 @@ import { ArrowRight, ArrowUpRight, Search, Truck, ShieldCheck, RotateCcw, Headse
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  loadCategoryCatalog,
+  loadProductCatalog,
+  refreshCategoryCatalog,
+  refreshProductCatalog,
+} from "../lib/api";
 
 const categoryImages = [
   {
@@ -84,29 +90,41 @@ const Home = () => {
   const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
+    let isCurrent = true;
     const fetchProducts = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || "";
-        const response = await fetch(`${apiUrl}/api/products`);
-
-        if (!response.ok) {
-          throw new Error(`Product request failed (${response.status}).`);
+        const data = await loadProductCatalog();
+        if (isCurrent) {
+          setProducts(data);
         }
 
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          throw new Error("Product response was not a list.");
+        if (import.meta.env.PROD) {
+          refreshProductCatalog()
+            .then((latestProducts) => {
+              if (isCurrent) {
+                setProducts(latestProducts);
+              }
+            })
+            .catch((error) => {
+              console.warn("Could not refresh the published product catalog:", error);
+            });
         }
-        setProducts(data);
       } catch (error) {
-        setProductsError(error.message);
-        console.error("Error fetching products:", error);
+        if (isCurrent) {
+          setProductsError(error.message);
+          console.error("Error fetching products:", error);
+        }
       } finally {
-        setLoading(false);
+        if (isCurrent) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProducts();
+    return () => {
+      isCurrent = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -114,16 +132,7 @@ const Home = () => {
 
     const fetchCategories = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || "";
-        const response = await fetch(`${apiUrl}/api/categories`);
-        if (!response.ok) {
-          throw new Error(`Category request failed (${response.status}).`);
-        }
-
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          throw new Error("Category response was not a list.");
-        }
+        const data = await loadCategoryCatalog();
 
         if (isCurrent) {
           const validCategories = data.filter((category) => category?.name);
@@ -131,6 +140,22 @@ const Home = () => {
             validCategories.push({ name: "Decor" });
           }
           setCategories(validCategories);
+
+          if (import.meta.env.PROD) {
+            refreshCategoryCatalog()
+              .then((latestCategories) => {
+                if (isCurrent) {
+                  const latest = latestCategories.filter((category) => category?.name);
+                  if (!latest.some((category) => /decor/i.test(category.name))) {
+                    latest.push({ name: "Decor" });
+                  }
+                  setCategories(latest);
+                }
+              })
+              .catch((error) => {
+                console.warn("Could not refresh the published category catalog:", error);
+              });
+          }
         }
       } catch (error) {
         if (isCurrent) {

@@ -3,6 +3,7 @@ import { AuthContext } from '../components/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Check, PackagePlus, X } from 'lucide-react';
 import { getCategoryDesign } from '../lib/categoryDesign';
+import { apiFetch } from '../lib/api';
 
 const MAX_PRODUCT_IMAGES = 8;
 
@@ -31,7 +32,7 @@ const AddProduct = () => {
 
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
+        const res = await apiFetch('/api/categories');
         const data = await res.json();
         if (!res.ok || !Array.isArray(data)) {
           throw new Error(data?.message || 'Unable to load categories.');
@@ -81,7 +82,7 @@ const AddProduct = () => {
     images.forEach((image) => data.append('images', image));
 
     try {
-      const res = await fetch('/api/products', {
+      const res = await apiFetch('/api/products', {
         method: 'POST',
         headers: { Authorization: `Bearer ${user.token}` },
         body: data
