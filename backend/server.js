@@ -7,12 +7,22 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
-app.use(cors(
-  {
-    origin: ['http://localhost:3000', 'https://127.0.0.1:3000', process.env.FRONTEND_URL],
-    credentials: true,
-  }
-));
+const allowedOrigins = new Set([
+  'http://localhost:3000',
+  'https://127.0.0.1:3000',
+  'https://nuvora-ecom.vercel.app',
+  ...(process.env.FRONTEND_URL || '')
+    .split(',')
+    .map((origin) => origin.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
+]);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    callback(null, !origin || allowedOrigins.has(origin));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
