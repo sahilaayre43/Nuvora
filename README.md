@@ -34,8 +34,6 @@ Additional Features
 - Protected routes
 - Backend validation and error handling
 
-«Note: Some features are currently under development.»
-
 ---
 
 🛠️ Tech Stack
@@ -153,6 +151,9 @@ RAZORPAY_KEY_SECRET=your_razorpay_secret
 
 EMAIL_USER=your_email
 EMAIL_PASSWORD=your_email_password
+
+FRONTEND_URL=https://nuvora-ecom.vercel.app
+NODE_ENV=development
 
 For local development, optionally create a `.env` file inside `frontend` to
 point the Vite API proxy at a different backend URL:
