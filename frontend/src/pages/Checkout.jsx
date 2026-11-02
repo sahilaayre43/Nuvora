@@ -107,7 +107,7 @@ const Checkout = () => {
         name: address.fullName,
         email: user.email
       },
-      theme: { color: '#6d35e8' },
+      theme: { color: '#ff4f0a' },
       modal: { ondismiss: () => setIsSubmitting(false) }
     });
 
@@ -148,17 +148,17 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f6ff] px-4 py-8">
+    <div className="min-h-screen bg-[#fffaf6] px-4 py-8">
       <div className="mx-auto max-w-[1200px]">
         <h2 className="mb-8 text-3xl font-bold text-[#171329]">Checkout</h2>
 
         {checkoutItems.length === 0 ? (
-          <div className="rounded-3xl border border-purple-100 bg-white p-8 text-center shadow-sm">
+          <div className="rounded-3xl border border-orange-100 bg-white p-8 text-center shadow-sm">
             <p className="font-semibold text-[#171329]">Your cart is empty.</p>
             <button
               type="button"
               onClick={() => navigate('/shop')}
-              className="mt-4 rounded-full bg-[#6d35e8] px-6 py-3 text-sm font-bold text-white"
+              className="mt-4 rounded-full bg-[#ff4f0a] px-6 py-3 text-sm font-bold text-white"
             >
               Continue shopping
             </button>
@@ -168,7 +168,7 @@ const Checkout = () => {
             onSubmit={handleSubmit}
             className="grid gap-6 lg:grid-cols-[1fr_380px]"
           >
-            <section className="rounded-3xl border border-purple-100 bg-white p-6 shadow-sm">
+            <section className="rounded-3xl border border-orange-100 bg-white p-6 shadow-sm">
               <h3 className="mb-6 text-xl font-bold text-[#171329]">
                 Shipping Address
               </h3>
@@ -181,7 +181,7 @@ const Checkout = () => {
                   required
                   value={address.fullName}
                   onChange={updateAddress('fullName')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
                 <input
                   type="tel"
@@ -193,7 +193,7 @@ const Checkout = () => {
                   required
                   value={address.phone}
                   onChange={updateAddress('phone')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
                 <input
                   type="text"
@@ -202,7 +202,7 @@ const Checkout = () => {
                   required
                   value={address.street}
                   onChange={updateAddress('street')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500 sm:col-span-2"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500 sm:col-span-2"
                 />
                 <input
                   type="text"
@@ -211,7 +211,7 @@ const Checkout = () => {
                   required
                   value={address.city}
                   onChange={updateAddress('city')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
                 <input
                   type="text"
@@ -220,7 +220,7 @@ const Checkout = () => {
                   required
                   value={address.state}
                   onChange={updateAddress('state')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
                 <input
                   type="text"
@@ -229,7 +229,7 @@ const Checkout = () => {
                   required
                   value={address.postalCode}
                   onChange={updateAddress('postalCode')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
                 <input
                   type="text"
@@ -238,12 +238,12 @@ const Checkout = () => {
                   required
                   value={address.country}
                   onChange={updateAddress('country')}
-                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-purple-500"
+                  className="rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-orange-500"
                 />
               </div>
             </section>
 
-            <section className="h-fit rounded-3xl border border-purple-100 bg-white p-6 shadow-sm">
+            <section className="h-fit rounded-3xl border border-orange-100 bg-white p-6 shadow-sm">
               <h3 className="text-xl font-bold text-[#171329]">Order Summary</h3>
 
               <div className="my-6 border-t border-gray-100 pt-5">
@@ -258,7 +258,7 @@ const Checkout = () => {
                 </div>
                 <div className="mt-3 flex justify-between">
                   <span className="font-semibold text-gray-700">Total</span>
-                  <span className="text-2xl font-extrabold text-[#6d35e8]">
+                  <span className="text-2xl font-extrabold text-[#ff4f0a]">
                     ₹{totalPrice.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -272,7 +272,7 @@ const Checkout = () => {
                   <label
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition ${
                       paymentMethod === 'cod'
-                        ? 'border-purple-500 bg-purple-50'
+                        ? 'border-orange-500 bg-orange-50'
                         : 'border-gray-200'
                     }`}
                   >
@@ -282,7 +282,7 @@ const Checkout = () => {
                       value="cod"
                       checked={paymentMethod === 'cod'}
                       onChange={() => setPaymentMethod('cod')}
-                      className="accent-purple-600"
+                      className="accent-orange-600"
                     />
                     <span>
                       <span className="block font-bold text-gray-800">
@@ -297,7 +297,7 @@ const Checkout = () => {
                   <label
                     className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition ${
                       paymentMethod === 'razorpay'
-                        ? 'border-purple-500 bg-purple-50'
+                        ? 'border-orange-500 bg-orange-50'
                         : 'border-gray-200'
                     }`}
                   >
@@ -307,7 +307,7 @@ const Checkout = () => {
                       value="razorpay"
                       checked={paymentMethod === 'razorpay'}
                       onChange={() => setPaymentMethod('razorpay')}
-                      className="accent-purple-600"
+                      className="accent-orange-600"
                     />
                     <span>
                       <span className="block font-bold text-gray-800">
@@ -330,7 +330,7 @@ const Checkout = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-6 w-full rounded-2xl bg-[#6d35e8] py-4 text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:bg-[#5c27d6] disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-6 w-full rounded-2xl bg-[#ff4f0a] py-4 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-[#e94300] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting
                   ? 'Processing...'

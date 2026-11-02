@@ -65,7 +65,7 @@ const AdminUsers = () => {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-[#fafaff] px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffdfb] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1200px]">
 
         {/* Header */}
@@ -73,11 +73,11 @@ const AdminUsers = () => {
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-                <Users className="h-5 w-5 text-purple-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100">
+                <Users className="h-5 w-5 text-orange-600" />
               </div>
 
-              <span className="text-sm font-medium text-purple-600">
+              <span className="text-sm font-medium text-orange-600">
                 NUVORA ADMIN
               </span>
             </div>
@@ -94,8 +94,8 @@ const AdminUsers = () => {
           {/* User Count */}
           <div className="flex w-fit items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
-              <Users className="h-5 w-5 text-purple-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
+              <Users className="h-5 w-5 text-orange-600" />
             </div>
 
             <div>
@@ -113,7 +113,7 @@ const AdminUsers = () => {
         </div>
 
         {/* Main Card */}
-        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(80,50,150,0.06)]">
+        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(90,45,20,0.06)]">
 
           {/* Card Header */}
           <div className="flex flex-col gap-2 border-b border-gray-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
@@ -128,11 +128,11 @@ const AdminUsers = () => {
               </p>
             </div>
 
-            <div className="flex w-fit items-center gap-2 rounded-full bg-purple-50 px-4 py-2">
+            <div className="flex w-fit items-center gap-2 rounded-full bg-orange-50 px-4 py-2">
 
-              <Users className="h-4 w-4 text-purple-600" />
+              <Users className="h-4 w-4 text-orange-600" />
 
-              <span className="text-sm font-semibold text-purple-600">
+              <span className="text-sm font-semibold text-orange-600">
                 {users.length} Users
               </span>
 
@@ -172,8 +172,8 @@ const AdminUsers = () => {
                       className="px-6 py-16 text-center"
                     >
 
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
-                        <Users className="h-6 w-6 text-purple-500" />
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
+                        <Users className="h-6 w-6 text-orange-500" />
                       </div>
 
                       <h3 className="mt-4 text-base font-semibold text-[#171329]">
@@ -210,8 +210,8 @@ const AdminUsers = () => {
 
                         <div className="flex items-center gap-3">
 
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-blue-100">
-                            <UserRound className="h-4 w-4 text-purple-600" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-blue-100">
+                            <UserRound className="h-4 w-4 text-orange-600" />
                           </div>
 
                           <div>
@@ -243,7 +243,7 @@ const AdminUsers = () => {
                         <div
                           className={`flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 ${
                             u.role === 'admin'
-                              ? 'border-purple-100 bg-purple-50 text-purple-600'
+                              ? 'border-orange-100 bg-orange-50 text-orange-600'
                               : 'border-emerald-100 bg-emerald-50 text-emerald-600'
                           }`}
                         >

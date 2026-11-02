@@ -69,7 +69,7 @@ const Shop = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#fafaff] px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffdfb] px-4 py-8 sm:px-6 lg:px-8">
 
       <div className="mx-auto max-w-[1200px]">
 
@@ -79,7 +79,7 @@ const Shop = () => {
           {category && (
             <Link
               to="/shop"
-              className="mb-4 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-white px-4 py-2 text-sm font-semibold text-purple-700 transition hover:border-purple-300 hover:bg-purple-50"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-white px-4 py-2 text-sm font-semibold text-orange-700 transition hover:border-orange-300 hover:bg-orange-50"
             >
               <ArrowLeft size={16} />
               Back to all products
@@ -87,10 +87,10 @@ const Shop = () => {
           )}
 
           {!category && (
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-3 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-purple-600" />
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-orange-50 px-3 py-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
 
-              <span className="text-xs font-semibold uppercase tracking-wide text-purple-600">
+              <span className="text-xs font-semibold uppercase tracking-wide text-orange-600">
                 NUVORA SHOP
               </span>
             </div>
@@ -115,7 +115,7 @@ const Shop = () => {
         </div>
 
         {/* Search Section */}
-        <div className="mb-8 rounded-3xl border border-gray-100 bg-white p-4 shadow-[0_8px_30px_rgba(80,50,150,0.05)] sm:p-5">
+        <div className="mb-8 rounded-3xl border border-gray-100 bg-white p-4 shadow-[0_8px_30px_rgba(90,45,20,0.05)] sm:p-5">
 
           <div className="relative">
 
@@ -139,7 +139,7 @@ const Shop = () => {
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-gray-200 bg-[#fcfbff] pl-12 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:bg-white focus:ring-4 focus:ring-purple-50"
+              className="h-12 w-full rounded-2xl border border-gray-200 bg-[#fcfbff] pl-12 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-50"
             />
 
           </div>
@@ -149,7 +149,7 @@ const Shop = () => {
             <div className="mt-3 px-1">
               <p className="text-xs text-gray-500">
                 Showing{' '}
-                <span className="font-semibold text-purple-600">
+                <span className="font-semibold text-orange-600">
                   {filteredProducts.length}
                 </span>{' '}
                 product
@@ -200,7 +200,7 @@ const Shop = () => {
                 key={item}
                 className="overflow-hidden rounded-3xl border border-gray-100 bg-white"
               >
-                <div className="aspect-square animate-pulse bg-purple-50" />
+                <div className="aspect-square animate-pulse bg-orange-50" />
 
                 <div className="space-y-3 p-5">
                   <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100" />
@@ -229,12 +229,12 @@ const Shop = () => {
         ) : (
 
           /* No Products */
-          <div className="rounded-3xl border border-gray-100 bg-white px-6 py-20 text-center shadow-[0_8px_30px_rgba(80,50,150,0.05)]">
+          <div className="rounded-3xl border border-gray-100 bg-white px-6 py-20 text-center shadow-[0_8px_30px_rgba(90,45,20,0.05)]">
 
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-50">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-50">
 
               <svg
-                className="h-7 w-7 text-purple-500"
+                className="h-7 w-7 text-orange-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ const Shop = () => {
               {search && (
                 <button
                   onClick={() => setSearch('')}
-                  className="rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition hover:bg-[#5c27d6]"
+                  className="rounded-full bg-[#ff4f0a] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-200 transition hover:bg-[#e94300]"
                 >
                   Clear Search
                 </button>
@@ -273,7 +273,7 @@ const Shop = () => {
               {category && (
                 <Link
                   to="/shop"
-                  className="rounded-full border border-purple-200 bg-white px-5 py-2.5 text-sm font-semibold text-purple-700 transition hover:bg-purple-50"
+                  className="rounded-full border border-orange-200 bg-white px-5 py-2.5 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
                 >
                   Browse all products
                 </Link>

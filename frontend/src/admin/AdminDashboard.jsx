@@ -72,8 +72,8 @@ const AdminDashboard = () => {
       title: "Total Revenue",
       value: `₹${stats.totalRevenue.toLocaleString("en-IN")}`,
       icon: IndianRupee,
-      bg: "bg-purple-100",
-      iconColor: "text-purple-600",
+      bg: "bg-orange-100",
+      iconColor: "text-orange-600",
     },
     {
       title: "Total Orders",
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <p className="mb-1 text-sm font-medium text-purple-600">
+            <p className="mb-1 text-sm font-medium text-orange-600">
               NUVORA ADMIN
             </p>
 
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
 
           <button
             onClick={() => navigate("/admin/add-product")}
-            className="flex w-fit items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:shadow-xl"
+            className="flex w-fit items-center gap-2 rounded-xl bg-gradient-to-r from-orange-600 to-orange-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200 transition hover:-translate-y-0.5 hover:shadow-xl"
           >
             <Plus size={18} />
             Add Product
@@ -180,10 +180,10 @@ const AdminDashboard = () => {
                 </p>
               </div>
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
                 <TrendingUp
                   size={19}
-                  className="text-purple-600"
+                  className="text-orange-600"
                 />
               </div>
             </div>
@@ -199,8 +199,8 @@ const AdminDashboard = () => {
                   {stats.totalOrders}
                 </p>
 
-                <div className="mt-3 h-1.5 rounded-full bg-purple-100">
-                  <div className="h-1.5 w-3/4 rounded-full bg-purple-500" />
+                <div className="mt-3 h-1.5 rounded-full bg-orange-100">
+                  <div className="h-1.5 w-3/4 rounded-full bg-orange-500" />
                 </div>
               </div>
 
@@ -249,13 +249,13 @@ const AdminDashboard = () => {
 
               <button
                 onClick={() => navigate("/admin/products")}
-                className="group flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-purple-200 hover:bg-purple-50"
+                className="group flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-orange-200 hover:bg-orange-50"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
                     <Package
                       size={18}
-                      className="text-purple-600"
+                      className="text-orange-600"
                     />
                   </div>
 
@@ -272,7 +272,7 @@ const AdminDashboard = () => {
 
                 <ArrowUpRight
                   size={18}
-                  className="text-slate-400 transition group-hover:text-purple-600"
+                  className="text-slate-400 transition group-hover:text-orange-600"
                 />
               </button>
 
@@ -307,18 +307,18 @@ const AdminDashboard = () => {
 
               <button
                 onClick={() => navigate("/admin/categories")}
-                className="group flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-violet-200 hover:bg-violet-50"
+                className="group flex w-full items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-4 text-left transition hover:border-orange-200 hover:bg-orange-50"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
-                    <FolderKanban size={18} className="text-violet-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
+                    <FolderKanban size={18} className="text-orange-600" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-slate-900">Manage Categories</p>
                     <p className="text-xs text-slate-500">Add and organize shop categories</p>
                   </div>
                 </div>
-                <ArrowUpRight size={18} className="text-slate-400 transition group-hover:text-violet-600" />
+                <ArrowUpRight size={18} className="text-slate-400 transition group-hover:text-orange-600" />
               </button>
 
               <button
@@ -355,10 +355,10 @@ const AdminDashboard = () => {
         </div>
 
         {/* Revenue card */}
-        <div className="mt-6 overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-500 p-6 text-white shadow-lg shadow-purple-200">
+        <div className="mt-6 overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 via-orange-600 to-indigo-500 p-6 text-white shadow-lg shadow-orange-200">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
             <div>
-              <p className="text-sm font-medium text-purple-100">
+              <p className="text-sm font-medium text-orange-100">
                 Total Store Revenue
               </p>
 
@@ -366,7 +366,7 @@ const AdminDashboard = () => {
                 ₹{stats.totalRevenue.toLocaleString("en-IN")}
               </h2>
 
-              <p className="mt-1 text-sm text-purple-100">
+              <p className="mt-1 text-sm text-orange-100">
                 Revenue generated from all orders
               </p>
             </div>

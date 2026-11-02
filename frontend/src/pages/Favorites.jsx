@@ -7,7 +7,7 @@ const Favorites = () => {
   const favoriteItems = useSelector((state) => state.favorites.items);
 
   return (
-    <main className="min-h-screen bg-[#fafaff] px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
+    <main className="min-h-screen bg-[#fffdfb] px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-rose-50 text-rose-600">
@@ -42,7 +42,7 @@ const Favorites = () => {
             </p>
             <Link
               to="/shop"
-              className="mt-6 inline-flex rounded-full bg-violet-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-violet-700"
+              className="mt-6 inline-flex rounded-full bg-orange-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-orange-700"
             >
               Explore products
             </Link>

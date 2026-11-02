@@ -149,8 +149,8 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 
-EMAIL_USER=your_email
-EMAIL_PASSWORD=your_email_password
+GMAIL_USER=your_email
+GMAIL_PASSWORD=your_gmail_app_password
 
 FRONTEND_URL=https://nuvora-ecom.vercel.app
 NODE_ENV=development
@@ -167,6 +167,8 @@ Never commit your ".env" files or API keys to GitHub.
 
 The backend accepts `MONGODB_URI` (recommended) or the legacy `MONGODB_URL`
 variable for the MongoDB connection string.
+Email uses `GMAIL_USER` and `GMAIL_PASSWORD`; `GMAIL_PASS`, `EMAIL_USER`, and
+`EMAIL_PASSWORD` are also accepted for existing deployments.
 
 ---
 

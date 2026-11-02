@@ -195,12 +195,12 @@ const AdminCategories = () => {
   }
 
   return (
-    <main className="min-h-screen bg-[#fafaff] px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#fffdfb] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <button
           type="button"
           onClick={() => navigate('/admin')}
-          className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-purple-600"
+          className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-orange-600"
         >
           <ArrowLeft size={16} />
           Back to dashboard
@@ -209,10 +209,10 @@ const AdminCategories = () => {
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-                <FolderKanban className="h-5 w-5 text-purple-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100">
+                <FolderKanban className="h-5 w-5 text-orange-600" />
               </div>
-              <span className="text-sm font-medium text-purple-600">NUVORA ADMIN</span>
+              <span className="text-sm font-medium text-orange-600">NUVORA ADMIN</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-[#171329]">Manage Categories</h1>
             <p className="mt-1 text-sm text-gray-500">
@@ -223,7 +223,7 @@ const AdminCategories = () => {
             type="button"
             onClick={handleRefresh}
             disabled={loading}
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-purple-200 hover:text-purple-600 disabled:opacity-60"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-orange-200 hover:text-orange-600 disabled:opacity-60"
           >
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
             Refresh
@@ -243,7 +243,7 @@ const AdminCategories = () => {
 
         <form
           onSubmit={handleCreate}
-          className="mb-6 rounded-3xl border border-gray-100 bg-white p-5 shadow-[0_8px_30px_rgba(80,50,150,0.05)] sm:p-7"
+          className="mb-6 rounded-3xl border border-gray-100 bg-white p-5 shadow-[0_8px_30px_rgba(90,45,20,0.05)] sm:p-7"
         >
           <h2 className="text-lg font-bold text-[#171329]">Add a category</h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -258,12 +258,12 @@ const AdminCategories = () => {
               required
               placeholder="e.g. Home Decor"
               aria-label="Category name"
-              className="min-w-0 flex-1 rounded-xl border border-gray-200 bg-[#fcfbff] px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:bg-white focus:ring-4 focus:ring-purple-50"
+              className="min-w-0 flex-1 rounded-xl border border-gray-200 bg-[#fcfbff] px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-50"
             />
             <button
               type="submit"
               disabled={saving || !name.trim()}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Plus size={17} />
               {saving ? 'Adding...' : 'Add category'}
@@ -271,7 +271,7 @@ const AdminCategories = () => {
           </div>
         </form>
 
-        <section className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(80,50,150,0.05)]">
+        <section className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(90,45,20,0.05)]">
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-5 sm:px-7">
             <div>
               <h2 className="text-lg font-bold text-[#171329]">Store categories</h2>
@@ -306,13 +306,13 @@ const AdminCategories = () => {
                         required
                         aria-label={`Edit ${category.name} category name`}
                         autoFocus
-                        className="min-w-0 flex-1 rounded-xl border border-purple-200 bg-white px-4 py-2.5 text-sm text-[#171329] outline-none focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                        className="min-w-0 flex-1 rounded-xl border border-orange-200 bg-white px-4 py-2.5 text-sm text-[#171329] outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                       />
                       <div className="flex items-center gap-2">
                         <button
                           type="submit"
                           disabled={updatingId !== '' || !editName.trim()}
-                          className="inline-flex items-center gap-1.5 rounded-xl bg-purple-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-purple-700 disabled:opacity-60"
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-orange-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-orange-700 disabled:opacity-60"
                         >
                           <Check size={14} />
                           {updatingId ? 'Saving...' : 'Save'}
@@ -331,7 +331,7 @@ const AdminCategories = () => {
                   ) : (
                     <>
                       <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
                           <FolderKanban size={18} />
                         </div>
                         <div className="min-w-0">
@@ -346,7 +346,7 @@ const AdminCategories = () => {
                           type="button"
                           onClick={() => startEditing(category)}
                           disabled={updatingId !== '' || deletingId !== ''}
-                          className="inline-flex w-fit items-center gap-2 rounded-xl border border-purple-100 px-3 py-2 text-xs font-semibold text-purple-700 transition hover:bg-purple-50 disabled:opacity-60"
+                          className="inline-flex w-fit items-center gap-2 rounded-xl border border-orange-100 px-3 py-2 text-xs font-semibold text-orange-700 transition hover:bg-orange-50 disabled:opacity-60"
                         >
                           <Pencil size={14} />
                           Edit

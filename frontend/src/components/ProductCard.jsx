@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
   );
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-purple-100 bg-[#f3edff] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-100/70">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-orange-100 bg-[#fff4ed] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-100/70">
 
       {/* IMAGE - FULL WIDTH, PART OF CARD */}
       <Link
@@ -30,13 +30,13 @@ const ProductCard = ({ product }) => {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-purple-100 text-sm text-gray-400">
+          <div className="flex h-full w-full items-center justify-center bg-orange-100 text-sm text-gray-400">
             Image unavailable
           </div>
         )}
 
         {/* Discount */}
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-purple-700 shadow-sm backdrop-blur-sm">
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-orange-700 shadow-sm backdrop-blur-sm">
           -20%
         </span>
         
@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
 
         {/* Product Name */}
         <Link to={`/product/${productId}`}>
-          <h2 className="line-clamp-2 min-h-[36px] text-xs font-bold leading-[18px] text-[#171329] transition-colors hover:text-purple-600 sm:min-h-[40px] sm:text-sm sm:leading-5">
+          <h2 className="line-clamp-2 min-h-[36px] text-xs font-bold leading-[18px] text-[#171329] transition-colors hover:text-orange-600 sm:min-h-[40px] sm:text-sm sm:leading-5">
             {product.name}
           </h2>
         </Link>
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
 
         {/* Price */}
         <div className="mt-2 flex flex-wrap items-baseline gap-x-1.5">
-          <span className="text-sm font-bold text-[#6d35e8] sm:text-lg">
+          <span className="text-sm font-bold text-[#ff4f0a] sm:text-lg">
             ₹{Number(product.price).toLocaleString('en-IN')}
           </span>
 
@@ -90,7 +90,7 @@ const ProductCard = ({ product }) => {
               e.preventDefault();
               navigate(`/product/${productId}`);
             }}
-            className="flex h-9 flex-1 items-center justify-center gap-1 rounded-full border border-purple-200 bg-white/70 text-[10px] font-semibold text-purple-600 transition hover:border-purple-300 hover:bg-white sm:gap-1.5 sm:text-xs"
+            className="flex h-9 flex-1 items-center justify-center gap-1 rounded-full border border-orange-200 bg-white/70 text-[10px] font-semibold text-orange-600 transition hover:border-orange-300 hover:bg-white sm:gap-1.5 sm:text-xs"
           >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
             <span className="sm:hidden">Details</span>
@@ -103,8 +103,8 @@ const ProductCard = ({ product }) => {
             aria-label={isFavorite ? `Remove ${product.name} from likes` : `Like ${product.name}`}
             aria-pressed={isFavorite}
             onClick={() => dispatch(toggleFavorite(product))}
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-purple-200 bg-white/70 transition hover:border-purple-300 hover:bg-white ${
-              isFavorite ? 'text-rose-600' : 'text-gray-500 hover:text-purple-600'
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-orange-200 bg-white/70 transition hover:border-orange-300 hover:bg-white ${
+              isFavorite ? 'text-rose-600' : 'text-gray-500 hover:text-orange-600'
             }`}
           >
             <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />

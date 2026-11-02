@@ -10,7 +10,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-black tracking-tight">
-              NUVO<span className="text-violet-400">RA</span>
+              NUVO<span className="text-orange-400">RA</span>
             </h2>
 
             <p className="mt-4 max-w-sm text-sm leading-6 text-slate-400">
@@ -22,28 +22,28 @@ export default function Footer() {
             <div className="flex gap-3">
   <a
     href="#"
-    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-violet-500"
+    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-orange-500"
   >
     IG
   </a>
 
   <a
     href="#"
-    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-violet-500"
+    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-orange-500"
   >
     X
   </a>
 
   <a
     href="#"
-    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-violet-500"
+    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-orange-500"
   >
     FB
   </a>
 
   <a
     href="#"
-    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-violet-500"
+    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm font-medium transition hover:bg-orange-500"
   >
     YT
   </a>

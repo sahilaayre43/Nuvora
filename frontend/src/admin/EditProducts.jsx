@@ -154,14 +154,14 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaff] px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffdfb] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
 
         {/* Back */}
         <button
           type="button"
           onClick={() => navigate('/admin/products')}
-          className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-purple-600"
+          className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-orange-600"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Products
@@ -170,11 +170,11 @@ const EditProduct = () => {
         {/* Header */}
         <div className="mb-6">
           <div className="mb-2 flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-              <Package className="h-5 w-5 text-purple-600" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100">
+              <Package className="h-5 w-5 text-orange-600" />
             </div>
 
-            <span className="text-sm font-medium text-purple-600">
+            <span className="text-sm font-medium text-orange-600">
               NUVORA ADMIN
             </span>
           </div>
@@ -189,15 +189,15 @@ const EditProduct = () => {
         </div>
 
         {/* Form Card */}
-        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-[0_8px_30px_rgba(80,50,150,0.06)] sm:p-8">
+        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-[0_8px_30px_rgba(90,45,20,0.06)] sm:p-8">
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Product Information */}
             <div>
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50">
-                  <Package className="h-4 w-4 text-purple-600" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50">
+                  <Package className="h-4 w-4 text-orange-600" />
                 </div>
 
                 <div>
@@ -226,7 +226,7 @@ const EditProduct = () => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                   />
                 </div>
 
@@ -243,7 +243,7 @@ const EditProduct = () => {
                     rows="5"
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                   />
                 </div>
 
@@ -265,7 +265,7 @@ const EditProduct = () => {
                         required
                         value={formData.price}
                         onChange={handleChange}
-                        className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                        className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                       />
                     </div>
                   </div>
@@ -280,7 +280,7 @@ const EditProduct = () => {
                       required
                       value={formData.category}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                     >
                       {!formData.category && <option value="">Select a category</option>}
                       {!categories.some((category) => category.name === formData.category) && formData.category && (
@@ -322,7 +322,7 @@ const EditProduct = () => {
                       required
                       value={formData.stock}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-purple-400 focus:ring-4 focus:ring-purple-50"
+                      className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-[#171329] outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-50"
                     />
                   </div>
                 </div>
@@ -334,8 +334,8 @@ const EditProduct = () => {
             <div className="border-t border-gray-100 pt-6">
 
               <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50">
-                  <ImagePlus className="h-4 w-4 text-purple-600" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50">
+                  <ImagePlus className="h-4 w-4 text-orange-600" />
                 </div>
 
                 <div>
@@ -349,10 +349,10 @@ const EditProduct = () => {
                 </div>
               </div>
 
-              <label className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/40 px-6 py-10 text-center transition hover:border-purple-400 hover:bg-purple-50">
+              <label className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50/40 px-6 py-10 text-center transition hover:border-orange-400 hover:bg-orange-50">
 
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
-                  <ImagePlus className="h-5 w-5 text-purple-600" />
+                  <ImagePlus className="h-5 w-5 text-orange-600" />
                 </div>
 
                 <p className="mt-4 text-sm font-semibold text-[#171329]">
@@ -410,7 +410,7 @@ const EditProduct = () => {
               )}
 
               {images.length > 0 && (
-                <p className="mt-2 text-xs text-purple-600">
+                <p className="mt-2 text-xs text-orange-600">
                   Adding: {images.map((image) => image.name).join(', ')}
                 </p>
               )}
@@ -431,7 +431,7 @@ const EditProduct = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#6d35e8] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition hover:bg-[#5c27d6] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff4f0a] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200 transition hover:bg-[#e94300] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Save className="h-4 w-4" />
 

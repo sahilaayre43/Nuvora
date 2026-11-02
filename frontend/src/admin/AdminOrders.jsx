@@ -97,7 +97,7 @@ const AdminOrders = () => {
       case 'shipped':
         return 'border-blue-200 bg-blue-50 text-blue-700';
       case 'processing':
-        return 'border-violet-200 bg-violet-50 text-violet-700';
+        return 'border-orange-200 bg-orange-50 text-orange-700';
       case 'cancelled':
         return 'border-gray-200 bg-gray-50 text-gray-600';
       case 'pending':
@@ -107,18 +107,18 @@ const AdminOrders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaff] px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffdfb] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1200px]">
 
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-                <ShoppingBag className="h-5 w-5 text-purple-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100">
+                <ShoppingBag className="h-5 w-5 text-orange-600" />
               </div>
 
-              <span className="text-sm font-medium text-purple-600">
+              <span className="text-sm font-medium text-orange-600">
                 NUVORA ADMIN
               </span>
             </div>
@@ -134,8 +134,8 @@ const AdminOrders = () => {
 
           {/* Order count */}
           <div className="flex w-fit items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
-              <Package className="h-5 w-5 text-purple-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
+              <Package className="h-5 w-5 text-orange-600" />
             </div>
 
             <div>
@@ -148,7 +148,7 @@ const AdminOrders = () => {
         </div>
 
         {/* Main Card */}
-        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(80,50,150,0.06)]">
+        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(90,45,20,0.06)]">
 
           {/* Card Header */}
           <div className="flex flex-col gap-2 border-b border-gray-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
@@ -162,7 +162,7 @@ const AdminOrders = () => {
               </p>
             </div>
 
-            <div className="rounded-full bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600">
+            <div className="rounded-full bg-orange-50 px-4 py-2 text-sm font-medium text-orange-600">
               {orders.length} Orders
             </div>
           </div>
@@ -218,8 +218,8 @@ const AdminOrders = () => {
                       colSpan="6"
                       className="px-6 py-16 text-center"
                     >
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
-                        <Package className="h-6 w-6 text-purple-500" />
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
+                        <Package className="h-6 w-6 text-orange-500" />
                       </div>
 
                       <h3 className="mt-4 text-base font-semibold text-[#171329]">
@@ -243,8 +243,8 @@ const AdminOrders = () => {
                       {/* Order ID */}
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
-                            <Package className="h-4 w-4 text-purple-600" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
+                            <Package className="h-4 w-4 text-orange-600" />
                           </div>
 
                           <div>
@@ -262,8 +262,8 @@ const AdminOrders = () => {
                       {/* User */}
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-blue-100">
-                            <UserRound className="h-4 w-4 text-purple-600" />
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-blue-100">
+                            <UserRound className="h-4 w-4 text-orange-600" />
                           </div>
 
                           <div>
@@ -282,7 +282,7 @@ const AdminOrders = () => {
                       <td className="px-6 py-5">
                         {order.address ? (
                           <div className="flex items-start gap-2 text-sm text-gray-600">
-                            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+                            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
                             <div>
                               <p className="font-medium text-[#171329]">
                                 {order.address.fullName}
@@ -290,7 +290,7 @@ const AdminOrders = () => {
                               {order.address.phone ? (
                                 <a
                                   href={`tel:${order.address.phone}`}
-                                  className="text-purple-600 hover:underline"
+                                  className="text-orange-600 hover:underline"
                                 >
                                   {order.address.phone}
                                 </a>
@@ -322,7 +322,7 @@ const AdminOrders = () => {
                       {/* Total */}
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-1 font-semibold text-[#171329]">
-                          <IndianRupee className="h-4 w-4 text-purple-600" />
+                          <IndianRupee className="h-4 w-4 text-orange-600" />
 
                           {Number(order.totalAmount || 0).toFixed(2)}
                         </div>
@@ -357,7 +357,7 @@ const AdminOrders = () => {
                             }
                             aria-label={`Update status for order ${order._id}`}
                             disabled={updatingOrderIds.includes(order._id)}
-                            className={`h-10 w-[145px] cursor-pointer appearance-none rounded-full border pl-3 pr-9 text-xs font-semibold outline-none transition-all hover:shadow-sm focus:ring-4 focus:ring-purple-100 disabled:cursor-wait disabled:opacity-60 ${getStatusStyle(
+                            className={`h-10 w-[145px] cursor-pointer appearance-none rounded-full border pl-3 pr-9 text-xs font-semibold outline-none transition-all hover:shadow-sm focus:ring-4 focus:ring-orange-100 disabled:cursor-wait disabled:opacity-60 ${getStatusStyle(
                               order.status
                             )}`}
                           >

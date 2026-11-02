@@ -207,8 +207,8 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f8f6ff]">
-        <p className="text-sm font-semibold text-purple-600">
+      <div className="flex min-h-screen items-center justify-center bg-[#fffaf6]">
+        <p className="text-sm font-semibold text-orange-600">
           Loading product...
         </p>
       </div>
@@ -217,12 +217,12 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f8f6ff]">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#fffaf6]">
         <p className="font-semibold text-red-500">Product not found</p>
 
         <Link
           to="/shop"
-          className="mt-4 text-sm font-semibold text-purple-600"
+          className="mt-4 text-sm font-semibold text-orange-600"
         >
           Back to shop
         </Link>
@@ -231,14 +231,14 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f6ff] px-4 py-6 sm:px-6 lg:px-10">
+    <div className="min-h-screen bg-[#fffaf6] px-4 py-6 sm:px-6 lg:px-10">
 
       <div className="mx-auto max-w-[1200px]">
 
         {/* Back */}
         <Link
           to="/shop"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition hover:text-purple-600"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition hover:text-orange-600"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Shop
@@ -248,16 +248,16 @@ const ProductDetail = () => {
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
 
           {/* ================= IMAGE ================= */}
-          <div className="relative min-h-[450px] overflow-hidden rounded-[28px] bg-[#e9ddff] sm:min-h-[560px]">
+          <div className="relative min-h-[450px] overflow-hidden rounded-[28px] bg-[#ffe2d4] sm:min-h-[560px]">
 
             {/* Decorative background */}
-            <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-purple-300/30 blur-3xl" />
+            <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-orange-300/30 blur-3xl" />
 
-            <div className="absolute -bottom-24 -right-20 h-80 w-80 rounded-full bg-violet-300/30 blur-3xl" />
+            <div className="absolute -bottom-24 -right-20 h-80 w-80 rounded-full bg-orange-300/30 blur-3xl" />
 
             {/* Category */}
             <div className="absolute left-6 top-6 z-10">
-              <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-bold text-purple-700 shadow-sm backdrop-blur">
+              <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-bold text-orange-700 shadow-sm backdrop-blur">
                 {product.category}
               </span>
             </div>
@@ -268,7 +268,7 @@ const ProductDetail = () => {
               aria-label={isFavorite ? 'Remove product from likes' : 'Like product'}
               aria-pressed={isFavorite}
               onClick={() => dispatch(toggleFavorite(product))}
-              className={`absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-sm backdrop-blur transition hover:text-purple-600 ${
+              className={`absolute right-6 top-6 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 shadow-sm backdrop-blur transition hover:text-orange-600 ${
                 isFavorite ? 'text-rose-600' : 'text-gray-500'
               }`}
             >
@@ -304,8 +304,8 @@ const ProductDetail = () => {
                     aria-pressed={selectedImageUrl === imageUrl}
                     className={`h-16 w-16 shrink-0 snap-start overflow-hidden rounded-xl border-2 transition sm:h-[72px] sm:w-[72px] ${
                       selectedImageUrl === imageUrl
-                        ? 'border-purple-600 ring-2 ring-purple-200'
-                        : 'border-transparent hover:border-purple-300'
+                        ? 'border-orange-600 ring-2 ring-orange-200'
+                        : 'border-transparent hover:border-orange-300'
                     }`}
                   >
                     <img
@@ -321,13 +321,13 @@ const ProductDetail = () => {
           </div>
 
           {/* ================= DETAILS ================= */}
-          <div className="flex flex-col rounded-[28px] border border-purple-100 bg-white p-6 shadow-[0_10px_40px_rgba(80,50,150,0.07)] sm:p-8">
+          <div className="flex flex-col rounded-[28px] border border-orange-100 bg-white p-6 shadow-[0_10px_40px_rgba(90,45,20,0.07)] sm:p-8">
 
             {/* Small heading */}
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-purple-600" />
+              <span className="h-2 w-2 rounded-full bg-orange-600" />
 
-              <span className="text-xs font-bold uppercase tracking-[0.15em] text-purple-600">
+              <span className="text-xs font-bold uppercase tracking-[0.15em] text-orange-600">
                 NUVORA
               </span>
             </div>
@@ -356,7 +356,7 @@ const ProductDetail = () => {
                 type="button"
                 onClick={handleOpenRatingForm}
                 aria-expanded={showRatingForm}
-                className="ml-2 inline-flex items-center gap-1.5 text-sm font-semibold text-purple-700 hover:text-purple-900"
+                className="ml-2 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:text-orange-900"
               >
                 <Star className="h-4 w-4" />
                 {userReview ? 'Update your rating' : 'Rate this product'}
@@ -400,7 +400,7 @@ const ProductDetail = () => {
                 <button
                   type="submit"
                   disabled={submittingRating}
-                  className="mt-3 rounded-lg bg-purple-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-3 rounded-lg bg-orange-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-800 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {submittingRating ? 'Saving...' : userReview ? 'Update rating' : 'Submit rating'}
                 </button>
@@ -408,13 +408,13 @@ const ProductDetail = () => {
             )}
 
             {/* Price */}
-            <div className="mt-7 rounded-2xl bg-[#f6f1ff] p-5">
+            <div className="mt-7 rounded-2xl bg-[#fff4ed] p-5">
 
               <p className="text-xs font-medium text-gray-400">
                 Price
               </p>
 
-              <p className="mt-1 text-3xl font-extrabold text-[#6d35e8]">
+              <p className="mt-1 text-3xl font-extrabold text-[#ff4f0a]">
                 ₹{Number(product.price).toLocaleString('en-IN')}
               </p>
 
@@ -483,7 +483,7 @@ const ProductDetail = () => {
                 type="button"
                 onClick={handleBuyNow}
                 disabled={product.stock <= 0}
-                className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-[#6d35e8] px-5 text-sm font-bold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#5c27d6] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-[#ff4f0a] px-5 text-sm font-bold text-white shadow-lg shadow-orange-200 transition-all hover:bg-[#e94300] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
               >
                 {!user ? 'Login to Buy' : product.stock > 0 ? 'Buy Now' : 'Out of Stock'}
               </button>
@@ -493,7 +493,7 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
                 aria-label="Add to cart"
-                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-purple-200 bg-white px-4 text-sm font-semibold text-purple-700 transition hover:border-purple-300 hover:bg-purple-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
+                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-white px-4 text-sm font-semibold text-orange-700 transition hover:border-orange-300 hover:bg-orange-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span className="hidden sm:inline">Add to Cart</span>
@@ -502,10 +502,10 @@ const ProductDetail = () => {
             </div>
 
             {/* Benefits */}
-            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-[#fafaff]">
+            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-[#fffdfb]">
 
               <div className="flex flex-col items-center px-2 py-4 text-center">
-                <Truck className="h-5 w-5 text-purple-600" />
+                <Truck className="h-5 w-5 text-orange-600" />
 
                 <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
                   Fast Delivery
@@ -533,7 +533,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        <section className="mt-8 rounded-2xl border border-purple-100 bg-white p-6 sm:p-8" aria-labelledby="reviews-heading">
+        <section className="mt-8 rounded-2xl border border-orange-100 bg-white p-6 sm:p-8" aria-labelledby="reviews-heading">
           <div className="flex items-center justify-between gap-4">
             <h2 id="reviews-heading" className="text-xl font-bold text-[#171329]">Customer reviews</h2>
             <span className="text-sm text-gray-500">{product.numReviews || 0} total</span>
@@ -567,14 +567,14 @@ const ProductDetail = () => {
             Could not load related products: {relatedProductsError}
           </p>
         ) : relatedProducts.length > 0 ? (
-          <section className="mt-8 rounded-2xl border border-purple-100 bg-white p-4 sm:p-6" aria-labelledby="related-products-heading">
+          <section className="mt-8 rounded-2xl border border-orange-100 bg-white p-4 sm:p-6" aria-labelledby="related-products-heading">
             <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
               <h2 id="related-products-heading" className="text-lg font-bold text-[#171329] sm:text-xl">
                 More from {product.category}
               </h2>
               <Link
                 to={`/shop?category=${encodeURIComponent(product.category)}`}
-                className="shrink-0 text-sm font-bold text-purple-700 hover:text-purple-900"
+                className="shrink-0 text-sm font-bold text-orange-700 hover:text-orange-900"
               >
                 View category
               </Link>

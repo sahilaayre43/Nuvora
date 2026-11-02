@@ -111,8 +111,8 @@ const AddProduct = () => {
 
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-purple-200 shadow-sm">
-            <PackagePlus className="h-7 w-7 text-violet-600" aria-hidden="true" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-100 to-orange-200 shadow-sm">
+            <PackagePlus className="h-7 w-7 text-orange-600" aria-hidden="true" />
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -125,7 +125,7 @@ const AddProduct = () => {
         </div>
 
         {/* Form Card */}
-        <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_10px_40px_rgba(80,50,150,0.07)] sm:p-8">
+        <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_10px_40px_rgba(90,45,20,0.07)] sm:p-8">
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -170,7 +170,7 @@ const AddProduct = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
               />
             </div>
 
@@ -187,7 +187,7 @@ const AddProduct = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
               />
             </div>
 
@@ -214,7 +214,7 @@ const AddProduct = () => {
                         price: e.target.value
                       })
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 pl-9 pr-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                    className="w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 pl-9 pr-4 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
                   />
                 </div>
               </div>
@@ -234,7 +234,7 @@ const AddProduct = () => {
                       stock: e.target.value
                     })
                   }
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100"
                 />
               </div>
 
@@ -276,9 +276,9 @@ const AddProduct = () => {
                         <span
                           className={`relative flex min-h-20 items-center gap-3 rounded-2xl border p-3 transition ${
                             isSelected
-                              ? 'border-violet-400 bg-violet-50 shadow-sm'
-                              : 'border-gray-200 bg-white hover:border-violet-200 hover:bg-violet-50/50'
-                          } peer-focus-visible:ring-4 peer-focus-visible:ring-violet-100`}
+                              ? 'border-orange-400 bg-orange-50 shadow-sm'
+                              : 'border-gray-200 bg-white hover:border-orange-200 hover:bg-orange-50/50'
+                          } peer-focus-visible:ring-4 peer-focus-visible:ring-orange-100`}
                         >
                           <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${design.bg} ${design.color}`}>
                             <Icon size={19} />
@@ -290,7 +290,7 @@ const AddProduct = () => {
                             <Check
                               size={16}
                               aria-hidden="true"
-                              className="ml-auto shrink-0 text-violet-600"
+                              className="ml-auto shrink-0 text-orange-600"
                             />
                           )}
                         </span>
@@ -306,7 +306,7 @@ const AddProduct = () => {
                 </p>
               ) : categories.length === 0 && !categoriesLoading ? (
                 <p className="mt-2 text-sm text-gray-500">
-                  No categories yet. <Link className="font-semibold text-violet-600 hover:underline" to="/admin/categories">Create one</Link> before adding a product.
+                  No categories yet. <Link className="font-semibold text-orange-600 hover:underline" to="/admin/categories">Create one</Link> before adding a product.
                 </p>
               ) : null}
             </fieldset>
@@ -317,11 +317,11 @@ const AddProduct = () => {
                 Product Images
               </label>
 
-              <div className="rounded-2xl border-2 border-dashed border-violet-200 bg-violet-50/40 p-6 text-center transition hover:border-violet-300 hover:bg-violet-50">
+              <div className="rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50/40 p-6 text-center transition hover:border-orange-300 hover:bg-orange-50">
 
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm">
                   <svg
-                    className="h-6 w-6 text-violet-500"
+                    className="h-6 w-6 text-orange-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -343,7 +343,7 @@ const AddProduct = () => {
                   PNG, JPG or WEBP images are supported
                 </p>
 
-                <label className="inline-flex cursor-pointer items-center rounded-xl border border-violet-200 bg-white px-5 py-2.5 text-sm font-semibold text-violet-600 shadow-sm transition hover:border-violet-300 hover:bg-violet-50">
+                <label className="inline-flex cursor-pointer items-center rounded-xl border border-orange-200 bg-white px-5 py-2.5 text-sm font-semibold text-orange-600 shadow-sm transition hover:border-orange-300 hover:bg-orange-50">
                   Choose Images
 
                   <input
@@ -395,7 +395,7 @@ const AddProduct = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-200 transition hover:from-violet-700 hover:to-purple-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-gradient-to-r from-orange-600 to-orange-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-200 transition hover:from-orange-700 hover:to-orange-700 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? 'Uploading & Creating...' : 'Publish Product'}
             </button>

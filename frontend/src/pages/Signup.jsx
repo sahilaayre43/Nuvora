@@ -55,12 +55,12 @@ const Signup  = () => {
     <main className="min-h-screen bg-[#fafafd] px-4 py-8 text-[#17213d]">
 
       {/* Background decoration */}
-      <div className="pointer-events-none fixed left-[-150px] top-[15%] h-[350px] w-[350px] rounded-full bg-violet-200/30 blur-3xl" />
+      <div className="pointer-events-none fixed left-[-150px] top-[15%] h-[350px] w-[350px] rounded-full bg-orange-200/30 blur-3xl" />
       <div className="pointer-events-none fixed right-[-150px] bottom-[10%] h-[350px] w-[350px] rounded-full bg-blue-200/25 blur-3xl" />
 
       <div className="relative mx-auto flex min-h-[90vh] max-w-[1150px] items-center justify-center">
 
-        <div className="grid w-full overflow-hidden rounded-[32px] border border-[#eeeeF5] bg-white shadow-[0_20px_60px_rgba(40,30,80,0.08)] lg:grid-cols-2">
+        <div className="grid w-full overflow-hidden rounded-[32px] border border-[#eeeeF5] bg-white shadow-[0_20px_60px_rgba(65,40,25,0.08)] lg:grid-cols-2">
 
           {/* LEFT */}
           <div className="hidden min-h-[700px] flex-col justify-between overflow-hidden bg-gradient-to-br from-[#f5f0ff] via-[#f7f5ff] to-[#eaf0ff] p-12 lg:flex">
@@ -68,7 +68,7 @@ const Signup  = () => {
             <div>
               <div className="flex items-center gap-2">
                 <div className="relative flex h-9 w-8 items-center justify-center">
-                  <span className="absolute text-[34px] font-black leading-none text-violet-600">
+                  <span className="absolute text-[34px] font-black leading-none text-orange-600">
                     N
                   </span>
                   <span className="absolute left-[8px] top-[3px] text-[28px] font-black leading-none text-blue-500">
@@ -82,13 +82,13 @@ const Signup  = () => {
               </div>
 
               <div className="mt-20">
-                <span className="rounded-full border border-violet-200 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-violet-600">
+                <span className="rounded-full border border-orange-200 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-orange-600">
                   Join NUVORA
                 </span>
 
                 <h1 className="mt-6 text-[46px] font-extrabold leading-[1.05] tracking-[-2px] text-[#0b1020]">
                   Your style.
-                  <span className="block text-violet-600">
+                  <span className="block text-orange-600">
                     Your choice.
                   </span>
                 </h1>
@@ -101,7 +101,7 @@ const Signup  = () => {
             </div>
 
             <div className="relative h-[180px]">
-              <div className="absolute bottom-0 left-8 h-32 w-32 rounded-full bg-violet-200/60 blur-2xl" />
+              <div className="absolute bottom-0 left-8 h-32 w-32 rounded-full bg-orange-200/60 blur-2xl" />
               <div className="absolute bottom-0 left-16 text-[105px]">
                 📷
               </div>
@@ -119,7 +119,7 @@ const Signup  = () => {
             {/* Mobile logo */}
             <div className="mb-8 flex items-center gap-2 lg:hidden">
               <div className="relative flex h-9 w-8 items-center justify-center">
-                <span className="absolute text-[34px] font-black leading-none text-violet-600">
+                <span className="absolute text-[34px] font-black leading-none text-orange-600">
                   N
                 </span>
                 <span className="absolute left-[8px] top-[3px] text-[28px] font-black leading-none text-blue-500">
@@ -136,7 +136,7 @@ const Signup  = () => {
 
               <Link
                 to="/"
-                className="mb-7 flex w-fit items-center gap-2 text-xs font-semibold text-[#7c8499] hover:text-violet-600"
+                className="mb-7 flex w-fit items-center gap-2 text-xs font-semibold text-[#7c8499] hover:text-orange-600"
               >
                 <ArrowLeft size={15} />
                 Back to store
@@ -158,7 +158,7 @@ const Signup  = () => {
                     Full name
                   </label>
 
-                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-100">
+                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
                     <UserRound size={18} className="text-[#9299ab]" />
 
                     <input
@@ -176,7 +176,7 @@ const Signup  = () => {
                     Email address
                   </label>
 
-                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-100">
+                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
                     <Mail size={18} className="text-[#9299ab]" />
 
                     <input
@@ -194,7 +194,7 @@ const Signup  = () => {
                     Password
                   </label>
 
-                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-100">
+                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
                     <LockKeyhole size={18} className="text-[#9299ab]" />
 
                     <input
@@ -207,7 +207,7 @@ const Signup  = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="text-[#9299ab] hover:text-violet-600"
+                      className="text-[#9299ab] hover:text-orange-600"
                     >
                       {showPassword ? (
                         <EyeOff size={18} />
@@ -222,21 +222,21 @@ const Signup  = () => {
                 <label className="flex cursor-pointer items-start gap-2 pt-1 text-xs leading-5 text-[#727a91]">
                   <input
                     type="checkbox"
-                    className="mt-1 h-4 w-4 shrink-0 accent-violet-600"
+                    className="mt-1 h-4 w-4 shrink-0 accent-orange-600"
                   />
 
                   <span>
                     I agree to the{" "}
                     <button
                       type="button"
-                      className="font-semibold text-violet-600"
+                      className="font-semibold text-orange-600"
                     >
                       Terms & Conditions
                     </button>{" "}
                     and{" "}
                     <button
                       type="button"
-                      className="font-semibold text-violet-600"
+                      className="font-semibold text-orange-600"
                     >
                       Privacy Policy
                     </button>
@@ -249,7 +249,7 @@ const Signup  = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-full bg-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-full bg-orange-600 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmitting ? "Creating account..." : "Create Account"}
                   {!isSubmitting && <ArrowRight size={17} />}
@@ -260,7 +260,7 @@ const Signup  = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="font-bold text-violet-600 hover:text-violet-700"
+                  className="font-bold text-orange-600 hover:text-orange-700"
                 >
                   Sign in
                 </Link>

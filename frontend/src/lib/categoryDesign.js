@@ -15,8 +15,8 @@ const designs = [
   {
     matches: ['audio', 'headphone', 'speaker', 'sound'],
     icon: Headphones,
-    bg: 'bg-violet-100',
-    color: 'text-violet-600',
+    bg: 'bg-orange-100',
+    color: 'text-orange-600',
   },
   {
     matches: ['furniture', 'sofa', 'chair', 'home decor'],

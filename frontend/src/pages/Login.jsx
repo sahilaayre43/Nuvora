@@ -39,12 +39,12 @@ const Login = () => {
   return (
     <main className="min-h-screen bg-[#fafafd] px-4 py-8 text-[#17213d]">
 
-      <div className="pointer-events-none fixed left-[-150px] top-[20%] h-[350px] w-[350px] rounded-full bg-violet-200/30 blur-3xl" />
+      <div className="pointer-events-none fixed left-[-150px] top-[20%] h-[350px] w-[350px] rounded-full bg-orange-200/30 blur-3xl" />
       <div className="pointer-events-none fixed right-[-150px] bottom-[10%] h-[350px] w-[350px] rounded-full bg-blue-200/25 blur-3xl" />
 
       <div className="relative mx-auto flex min-h-[90vh] max-w-[1150px] items-center justify-center">
 
-        <div className="grid w-full overflow-hidden rounded-[32px] border border-[#eeeeF5] bg-white shadow-[0_20px_60px_rgba(40,30,80,0.08)] lg:grid-cols-2">
+        <div className="grid w-full overflow-hidden rounded-[32px] border border-[#eeeeF5] bg-white shadow-[0_20px_60px_rgba(65,40,25,0.08)] lg:grid-cols-2">
 
           {/* LEFT SIDE */}
           <div className="hidden min-h-[650px] flex-col justify-between overflow-hidden bg-gradient-to-br from-[#f5f0ff] via-[#f7f5ff] to-[#eaf0ff] p-12 lg:flex">
@@ -53,7 +53,7 @@ const Login = () => {
               {/* Logo */}
               <div className="flex items-center gap-2">
                 <div className="relative flex h-9 w-8 items-center justify-center">
-                  <span className="absolute text-[34px] font-black leading-none text-violet-600">
+                  <span className="absolute text-[34px] font-black leading-none text-orange-600">
                     N
                   </span>
                   <span className="absolute left-[8px] top-[3px] text-[28px] font-black leading-none text-blue-500">
@@ -67,13 +67,13 @@ const Login = () => {
               </div>
 
               <div className="mt-20">
-                <span className="rounded-full border border-violet-200 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-violet-600">
+                <span className="rounded-full border border-orange-200 bg-white/70 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-orange-600">
                   Welcome Back
                 </span>
 
                 <h1 className="mt-6 text-[46px] font-extrabold leading-[1.05] tracking-[-2px] text-[#0b1020]">
                   Everything you want.
-                  <span className="block text-violet-600">
+                  <span className="block text-orange-600">
                     One place.
                   </span>
                 </h1>
@@ -87,7 +87,7 @@ const Login = () => {
 
             {/* Decorative products */}
             <div className="relative h-[180px]">
-              <div className="absolute bottom-0 left-5 h-32 w-32 rounded-full bg-violet-200/60 blur-2xl" />
+              <div className="absolute bottom-0 left-5 h-32 w-32 rounded-full bg-orange-200/60 blur-2xl" />
               <div className="absolute bottom-2 left-16 text-[110px]">
                 🎧
               </div>
@@ -105,7 +105,7 @@ const Login = () => {
             {/* Mobile logo */}
             <div className="mb-10 flex items-center gap-2 lg:hidden">
               <div className="relative flex h-9 w-8 items-center justify-center">
-                <span className="absolute text-[34px] font-black leading-none text-violet-600">
+                <span className="absolute text-[34px] font-black leading-none text-orange-600">
                   N
                 </span>
                 <span className="absolute left-[8px] top-[3px] text-[28px] font-black leading-none text-blue-500">
@@ -122,7 +122,7 @@ const Login = () => {
 
               <Link
                 to="/"
-                className="mb-8 flex w-fit items-center gap-2 text-xs font-semibold text-[#7c8499] hover:text-violet-600"
+                className="mb-8 flex w-fit items-center gap-2 text-xs font-semibold text-[#7c8499] hover:text-orange-600"
               >
                 <ArrowLeft size={15} />
                 Back to store
@@ -144,7 +144,7 @@ const Login = () => {
                     Email address
                   </label>
 
-                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-100">
+                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
                     <Mail size={18} className="text-[#9299ab]" />
 
                     <input
@@ -165,13 +165,13 @@ const Login = () => {
 
                     <button
                       type="button"
-                      className="text-xs font-semibold text-violet-600 hover:text-violet-700"
+                      className="text-xs font-semibold text-orange-600 hover:text-orange-700"
                     >
                       Forgot password?
                     </button>
                   </div>
 
-                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-100">
+                  <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
                     <LockKeyhole size={18} className="text-[#9299ab]" />
 
                     <input
@@ -184,7 +184,7 @@ const Login = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="text-[#9299ab] hover:text-violet-600"
+                      className="text-[#9299ab] hover:text-orange-600"
                     >
                       {showPassword ? (
                         <EyeOff size={18} />
@@ -199,7 +199,7 @@ const Login = () => {
                 <label className="flex cursor-pointer items-center gap-2 text-xs text-[#727a91]">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 accent-violet-600"
+                    className="h-4 w-4 rounded border-gray-300 accent-orange-600"
                   />
                   Remember me
                 </label>
@@ -209,7 +209,7 @@ const Login = () => {
                 {/* Login */}
                 <button
                   type="submit"
-                  className="flex h-12 w-full items-center justify-center gap-3 rounded-full bg-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
+                  className="flex h-12 w-full items-center justify-center gap-3 rounded-full bg-orange-600 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-orange-700"
                 >
                   Sign In
                   <ArrowRight size={17} />
@@ -221,7 +221,7 @@ const Login = () => {
                 Don't have an account?{" "}
                 <Link
                   to="/signup"
-                  className="font-bold text-violet-600 hover:text-violet-700"
+                  className="font-bold text-orange-600 hover:text-orange-700"
                 >
                   Create account
                 </Link>

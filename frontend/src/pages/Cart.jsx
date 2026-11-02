@@ -32,7 +32,7 @@ const Cart = () => {
 
         {/* Header */}
         <div className="mb-8">
-          <p className="mb-2 text-sm font-medium text-violet-600">
+          <p className="mb-2 text-sm font-medium text-orange-600">
             NUVORA / Cart
           </p>
 
@@ -47,7 +47,7 @@ const Cart = () => {
 
         {/* Empty Cart */}
         {cartItems.length === 0 ? (
-          <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-20 text-center shadow-[0_10px_35px_rgba(40,30,80,0.05)]">
+          <div className="rounded-[28px] border border-[#eeeeF5] bg-white px-6 py-20 text-center shadow-[0_10px_35px_rgba(65,40,25,0.05)]">
 
             <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-[#f1eaff] text-3xl">
               🛒
@@ -63,7 +63,7 @@ const Cart = () => {
 
             <Link
               to="/shop"
-              className="mt-7 inline-flex rounded-full bg-violet-600 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
+              className="mt-7 inline-flex rounded-full bg-orange-600 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-orange-700"
             >
               Go Shopping →
             </Link>
@@ -79,7 +79,7 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <div
                   key={getItemId(item)}
-                  className="flex flex-col gap-5 rounded-[24px] border border-[#eeeeF5] bg-white p-5 shadow-[0_8px_30px_rgba(40,30,80,0.04)] sm:flex-row sm:items-center"
+                  className="flex flex-col gap-5 rounded-[24px] border border-[#eeeeF5] bg-white p-5 shadow-[0_8px_30px_rgba(65,40,25,0.04)] sm:flex-row sm:items-center"
                 >
 
                   {/* Product Image */}
@@ -98,7 +98,7 @@ const Cart = () => {
                       {item.name}
                     </h4>
 
-                    <p className="mt-2 text-lg font-extrabold text-violet-600">
+                    <p className="mt-2 text-lg font-extrabold text-orange-600">
                       ₹{item.price}
                     </p>
 
@@ -118,7 +118,7 @@ const Cart = () => {
                               item.quantity - 1
                             )
                           }
-                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold transition hover:bg-[#f1eaff] hover:text-violet-600"
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold transition hover:bg-[#f1eaff] hover:text-orange-600"
                         >
                           -
                         </button>
@@ -134,7 +134,7 @@ const Cart = () => {
                               item.quantity + 1
                             )
                           }
-                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold transition hover:bg-[#f1eaff] hover:text-violet-600"
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-lg font-semibold transition hover:bg-[#f1eaff] hover:text-orange-600"
                         >
                           +
                         </button>
@@ -159,7 +159,7 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="h-fit rounded-[26px] border border-[#eeeeF5] bg-white p-7 shadow-[0_10px_35px_rgba(40,30,80,0.05)] lg:sticky lg:top-6">
+            <div className="h-fit rounded-[26px] border border-[#eeeeF5] bg-white p-7 shadow-[0_10px_35px_rgba(65,40,25,0.05)] lg:sticky lg:top-6">
 
               <h3 className="text-xl font-extrabold">
                 Order Summary
@@ -194,21 +194,21 @@ const Cart = () => {
                   Total
                 </span>
 
-                <span className="text-2xl font-extrabold text-violet-600">
+                <span className="text-2xl font-extrabold text-orange-600">
                   ₹{totalPrice.toFixed(2)}
                 </span>
               </div>
 
               <button
                 onClick={() => navigate('/checkout')}
-                className="w-full rounded-full bg-violet-600 py-4 text-sm font-bold text-white shadow-lg shadow-violet-200 transition hover:bg-violet-700"
+                className="w-full rounded-full bg-orange-600 py-4 text-sm font-bold text-white shadow-lg shadow-orange-200 transition hover:bg-orange-700"
               >
                 Proceed to Checkout →
               </button>
 
               <Link
                 to="/shop"
-                className="mt-3 block text-center text-sm font-semibold text-[#737b90] transition hover:text-violet-600"
+                className="mt-3 block text-center text-sm font-semibold text-[#737b90] transition hover:text-orange-600"
               >
                 ← Continue Shopping
               </Link>

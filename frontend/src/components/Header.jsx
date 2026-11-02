@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { loadCategoryCatalog } from "../lib/api";
 
 const navLinkClass =
-  "relative inline-flex px-1.5 py-2 text-sm text-slate-700 transition-colors duration-200 after:absolute after:bottom-1 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-violet-600 after:transition-[width] after:duration-200 hover:text-violet-700 hover:after:w-1/2 focus-visible:text-violet-700 focus-visible:outline-none focus-visible:after:w-1/2";
+  "relative inline-flex px-1.5 py-2 text-sm text-slate-700 transition-colors duration-200 after:absolute after:bottom-1 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-orange-600 after:transition-[width] after:duration-200 hover:text-orange-700 hover:after:w-1/2 focus-visible:text-orange-700 focus-visible:outline-none focus-visible:after:w-1/2";
 
 const DesktopSearch = ({ initialQuery }) => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const DesktopSearch = ({ initialQuery }) => {
     <form
       role="search"
       onSubmit={handleSubmit}
-      className="ml-4 mr-8 hidden h-11 min-w-0 max-w-[420px] flex-1 items-center rounded-xl border border-slate-200 bg-white px-1.5 transition focus-within:border-violet-300 focus-within:ring-4 focus-within:ring-violet-50 lg:max-w-[420px] xl:max-w-[560px] lg:flex"
+      className="ml-5 mr-6 hidden h-10 min-w-0 max-w-[460px] flex-1 items-center rounded-xl border border-slate-200 bg-white px-1.5 transition focus-within:border-orange-300 focus-within:ring-4 focus-within:ring-orange-50 lg:flex lg:max-w-[460px] xl:max-w-[560px]"
     >
       <Search className="ml-3 h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
       <input
@@ -44,7 +44,7 @@ const DesktopSearch = ({ initialQuery }) => {
       />
       <button
         type="submit"
-        className="flex h-8 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-4 text-xs font-bold text-white transition hover:bg-violet-700"
+        className="flex h-8 shrink-0 items-center justify-center rounded-lg bg-[#ff4f0a] px-4 text-xs font-bold text-white transition hover:bg-[#e94300]"
       >
         Search
       </button>
@@ -117,16 +117,16 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 px-3 sm:h-[76px] sm:gap-5 sm:px-6 md:gap-3 lg:px-8">
+      <header className="sticky top-0 z-50 border-b border-[#f0eeec] bg-white/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-[60px] max-w-[1200px] items-center gap-2 px-3 sm:gap-5 sm:px-6 lg:px-8">
 
         {/* Logo */}
         <Link to="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <img src="/nuvora-mark.svg" alt="" className="h-8 w-7 object-contain sm:h-10 sm:w-9" />
-          <span className="flex items-center gap-[0.12em] text-base font-black tracking-[0.08em] text-slate-950 max-[360px]:hidden sm:text-lg">
+          <img src="/nuvora-mark.svg" alt="" className="h-8 w-7 object-contain" />
+          <span className="flex items-center gap-[0.12em] text-base font-black tracking-[0.08em] text-slate-950 max-[360px]:hidden sm:text-[17px]">
             <span className="relative inline-block">
               N
-              <span className="absolute right-0 top-[2px] h-2 w-2 bg-violet-600 [clip-path:polygon(0_0,100%_0,100%_100%)]" />
+              <span className="absolute right-0 top-[2px] h-2 w-2 bg-orange-600 [clip-path:polygon(0_0,100%_0,100%_100%)]" />
             </span>
             <span>U</span>
             <span>V</span>
@@ -134,7 +134,7 @@ const Navbar = () => {
             <span>R</span>
             <span className="relative inline-block">
               A
-              <span className="absolute left-1/2 top-[58%] h-1 w-1 -translate-x-1/2 rounded-full bg-violet-600" />
+              <span className="absolute left-1/2 top-[58%] h-1 w-1 -translate-x-1/2 rounded-full bg-orange-600" />
             </span>
           </span>
         </Link>
@@ -145,13 +145,13 @@ const Navbar = () => {
         />
 
         {/* Navigation */}
-        <nav className="hidden shrink-0 items-center gap-3 border-l border-slate-200 pl-6 md:ml-auto md:flex lg:ml-auto lg:gap-4 lg:pl-7">
+        <nav className="hidden shrink-0 items-center gap-3 md:ml-auto md:flex lg:gap-5">
 
           {/* Always visible */}
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `${navLinkClass} font-semibold ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+              `${navLinkClass} font-semibold ${isActive ? "text-orange-700 after:w-1/2" : ""}`
             }
           >
             Home
@@ -161,7 +161,7 @@ const Navbar = () => {
             to="/shop"
             className={({ isActive }) =>
               `${navLinkClass} font-medium ${
-                isActive || isShopRoute ? "text-violet-700 after:w-1/2" : ""
+                isActive || isShopRoute ? "text-orange-700 after:w-1/2" : ""
               }`
             }
           >
@@ -173,7 +173,7 @@ const Navbar = () => {
             <NavLink
               to="/admin"
               className={({ isActive }) =>
-                `${navLinkClass} font-medium ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+                `${navLinkClass} font-medium ${isActive ? "text-orange-700 after:w-1/2" : ""}`
               }
             >
               Admin
@@ -186,7 +186,7 @@ const Navbar = () => {
               <NavLink
                 to="/login"
                 className={({ isActive }) =>
-                  `${navLinkClass} font-medium ${isActive ? "text-violet-700 after:w-1/2" : ""}`
+                  `${navLinkClass} font-medium ${isActive ? "text-orange-700 after:w-1/2" : ""}`
                 }
               >
                 Login
@@ -195,8 +195,8 @@ const Navbar = () => {
               <NavLink
                 to="/register"
                 className={({ isActive }) =>
-                  `rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-violet-700 hover:shadow-md hover:shadow-violet-300/60 ${
-                    isActive ? "bg-violet-700 shadow-md shadow-violet-300/60" : "bg-violet-600"
+                  `rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-orange-700 hover:shadow-md hover:shadow-orange-300/60 ${
+                    isActive ? "bg-orange-700 shadow-md shadow-orange-300/60" : "bg-orange-600"
                   }`
                 }
               >
@@ -216,7 +216,7 @@ const Navbar = () => {
                 to="/login"
                 className={({ isActive }) =>
                   `rounded-full px-3 py-2 text-xs font-semibold transition ${
-                    isActive ? "bg-violet-50 text-violet-700" : "text-slate-700"
+                    isActive ? "bg-orange-50 text-orange-700" : "text-slate-700"
                   }`
                 }
               >
@@ -226,7 +226,7 @@ const Navbar = () => {
                 to="/register"
                 className={({ isActive }) =>
                   `rounded-full px-3 py-2 text-xs font-semibold text-white transition ${
-                    isActive ? "bg-violet-700" : "bg-violet-600"
+                    isActive ? "bg-orange-700" : "bg-orange-600"
                   }`
                 }
               >
@@ -243,14 +243,14 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `relative inline-flex items-center justify-center rounded-full p-2.5 transition md:min-w-[52px] md:flex-col md:gap-0.5 md:px-2 md:py-1 md:text-slate-600 ${
                     isActive
-                      ? "bg-violet-50 text-violet-600"
-                      : "text-slate-700 hover:bg-violet-50 hover:text-violet-600"
+                      ? "bg-orange-50 text-orange-600"
+                      : "text-slate-700 hover:bg-orange-50 hover:text-orange-600"
                   }`
                 }
               >
                 <ShoppingBag size={20} />
                 <span className="hidden text-[10px] font-medium leading-3 md:inline">Cart</span>
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[10px] font-bold text-white">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-orange-600 px-1 text-[10px] font-bold text-white">
                   {cartItemCount}
                 </span>
               </NavLink>
@@ -282,8 +282,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `hidden min-w-[52px] items-center justify-center rounded-full p-2.5 transition md:flex md:flex-col md:gap-0.5 md:px-2 md:py-1 ${
                     isActive
-                      ? "bg-violet-100 text-violet-600"
-                      : "bg-slate-100 text-slate-700 hover:bg-violet-100 hover:text-violet-600"
+                      ? "bg-orange-100 text-orange-600"
+                      : "bg-slate-100 text-slate-700 hover:bg-orange-100 hover:text-orange-600"
                   }`
                 }
               >
@@ -309,7 +309,7 @@ const Navbar = () => {
               title="Home"
               className={({ isActive }) =>
                 `flex h-11 w-12 items-center justify-center rounded-xl transition ${
-                  isActive ? "bg-violet-50 text-violet-700" : "text-slate-600"
+                  isActive ? "bg-orange-50 text-orange-700" : "text-slate-600"
                 }`
               }
             >
@@ -324,7 +324,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               `flex h-11 w-12 items-center justify-center rounded-xl transition ${
                 isActive || isShopRoute
-                  ? "bg-violet-50 text-violet-700"
+                  ? "bg-orange-50 text-orange-700"
                   : "text-slate-600"
               }`
             }
@@ -341,7 +341,7 @@ const Navbar = () => {
             onClick={() => setCategoriesOpen((open) => !open)}
             className={`flex h-11 w-12 items-center justify-center rounded-xl transition ${
               categoriesOpen
-                ? "bg-violet-50 text-violet-700"
+                ? "bg-orange-50 text-orange-700"
                 : "text-slate-600"
             }`}
           >
@@ -355,7 +355,7 @@ const Navbar = () => {
               title="Admin"
               className={({ isActive }) =>
                 `flex h-11 w-12 items-center justify-center rounded-xl transition ${
-                  isActive ? "bg-violet-50 text-violet-700" : "text-slate-600"
+                  isActive ? "bg-orange-50 text-orange-700" : "text-slate-600"
                 }`
               }
             >
@@ -370,7 +370,7 @@ const Navbar = () => {
               title="Profile"
               className={({ isActive }) =>
                 `flex h-11 w-12 items-center justify-center rounded-xl transition ${
-                  isActive ? "bg-violet-50 text-violet-700" : "text-slate-600"
+                  isActive ? "bg-orange-50 text-orange-700" : "text-slate-600"
                 }`
               }
             >
@@ -429,7 +429,7 @@ const Navbar = () => {
                     key={category._id || category.name}
                     to={`/shop?category=${encodeURIComponent(category.name)}`}
                     onClick={() => setCategoriesOpen(false)}
-                    className="rounded-xl bg-violet-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-violet-100"
+                    className="rounded-xl bg-orange-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-orange-100"
                   >
                     {category.name}
                   </Link>

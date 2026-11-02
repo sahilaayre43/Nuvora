@@ -70,7 +70,7 @@ const AdminProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaff] px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffdfb] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1200px]">
 
         {/* Header */}
@@ -78,11 +78,11 @@ const AdminProducts = () => {
 
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-100">
-                <Package className="h-5 w-5 text-purple-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100">
+                <Package className="h-5 w-5 text-orange-600" />
               </div>
 
-              <span className="text-sm font-medium text-purple-600">
+              <span className="text-sm font-medium text-orange-600">
                 NUVORA ADMIN
               </span>
             </div>
@@ -99,7 +99,7 @@ const AdminProducts = () => {
           {/* Add Product */}
           <Link
             to="/admin/add-product"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-[#6d35e8] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-200 transition-all hover:bg-[#5c27d6] hover:shadow-xl"
+            className="inline-flex w-fit items-center gap-2 rounded-full bg-[#ff4f0a] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200 transition-all hover:bg-[#e94300] hover:shadow-xl"
           >
             <Plus className="h-4 w-4" />
             Add Product
@@ -108,7 +108,7 @@ const AdminProducts = () => {
         </div>
 
         {/* Product Card */}
-        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(80,50,150,0.06)]">
+        <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_8px_30px_rgba(90,45,20,0.06)]">
 
           {/* Card Header */}
           <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
@@ -119,7 +119,7 @@ const AdminProducts = () => {
                   <button
                     type="button"
                     onClick={() => setSearchParams({})}
-                    className="mb-2 inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 transition hover:text-purple-800"
+                    className="mb-2 inline-flex items-center gap-1.5 text-xs font-semibold text-orange-600 transition hover:text-orange-800"
                   >
                     <ArrowLeft size={14} />
                     All categories
@@ -137,10 +137,10 @@ const AdminProducts = () => {
               </div>
             </div>
 
-            <div className="flex w-fit items-center gap-2 rounded-full bg-purple-50 px-4 py-2">
-              <Package className="h-4 w-4 text-purple-600" />
+            <div className="flex w-fit items-center gap-2 rounded-full bg-orange-50 px-4 py-2">
+              <Package className="h-4 w-4 text-orange-600" />
 
-              <span className="text-sm font-semibold text-purple-600">
+              <span className="text-sm font-semibold text-orange-600">
                 {products.length} Products
               </span>
             </div>
@@ -150,8 +150,8 @@ const AdminProducts = () => {
           {!selectedGroup ? (
             groupedProducts.length === 0 ? (
               <div className="px-6 py-16 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
-                  <Package className="h-6 w-6 text-purple-500" />
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
+                  <Package className="h-6 w-6 text-orange-500" />
                 </div>
                 <h3 className="mt-4 text-base font-semibold text-[#171329]">
                   No products found
@@ -161,7 +161,7 @@ const AdminProducts = () => {
                 </p>
                 <Link
                   to="/admin/add-product"
-                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#5c27d6]"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#ff4f0a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#e94300]"
                 >
                   <Plus className="h-4 w-4" />
                   Add Product
@@ -178,13 +178,13 @@ const AdminProducts = () => {
                       key={group.key}
                       type="button"
                       onClick={() => setSearchParams({ category: group.name })}
-                      className="group rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-purple-200 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-purple-100"
+                      className="group rounded-2xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-orange-100"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${design.bg} ${design.color} transition group-hover:scale-105`}>
                           <Icon size={21} />
                         </div>
-                        <ChevronRight className="mt-1 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-purple-600" size={18} />
+                        <ChevronRight className="mt-1 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-orange-600" size={18} />
                       </div>
                       <h3 className="mt-5 truncate text-base font-bold text-[#171329]">
                         {group.name}
@@ -193,7 +193,7 @@ const AdminProducts = () => {
                         <span className="text-sm text-gray-500">
                           {group.products.length} {group.products.length === 1 ? 'product' : 'products'}
                         </span>
-                        <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700">
+                        <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700">
                           {group.products.reduce((total, product) => total + (Number(product.stock) || 0), 0)} in stock
                         </span>
                       </div>
@@ -243,8 +243,8 @@ const AdminProducts = () => {
                   <tr>
                     <td colSpan="5" className="px-6 py-16 text-center">
 
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
-                        <Package className="h-6 w-6 text-purple-500" />
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
+                        <Package className="h-6 w-6 text-orange-500" />
                       </div>
 
                       <h3 className="mt-4 text-base font-semibold text-[#171329]">
@@ -257,7 +257,7 @@ const AdminProducts = () => {
 
                       <Link
                         to="/admin/add-product"
-                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#6d35e8] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#5c27d6]"
+                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#ff4f0a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#e94300]"
                       >
                         <Plus className="h-4 w-4" />
                         Add Product
@@ -288,8 +288,8 @@ const AdminProducts = () => {
 
                         <div className="flex items-center gap-3">
 
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-100 to-blue-100">
-                            <Package className="h-5 w-5 text-purple-600" />
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-100 to-blue-100">
+                            <Package className="h-5 w-5 text-orange-600" />
                           </div>
 
                           <div>
@@ -310,7 +310,7 @@ const AdminProducts = () => {
                       <td className="px-6 py-5">
 
                         <div className="flex items-center gap-1 font-semibold text-[#171329]">
-                          <IndianRupee className="h-4 w-4 text-purple-600" />
+                          <IndianRupee className="h-4 w-4 text-orange-600" />
                           {Number(product.price || 0).toFixed(2)}
                         </div>
 
@@ -367,7 +367,7 @@ const AdminProducts = () => {
                           {/* Edit */}
                           <Link
                             to={`/admin/edit-product/${product._id}`}
-                            className="inline-flex items-center gap-2 rounded-xl border border-purple-100 bg-purple-50 px-3.5 py-2 text-xs font-semibold text-purple-600 transition-all hover:border-purple-200 hover:bg-purple-100"
+                            className="inline-flex items-center gap-2 rounded-xl border border-orange-100 bg-orange-50 px-3.5 py-2 text-xs font-semibold text-orange-600 transition-all hover:border-orange-200 hover:bg-orange-100"
                           >
                             <Pencil className="h-3.5 w-3.5" />
                             Edit
