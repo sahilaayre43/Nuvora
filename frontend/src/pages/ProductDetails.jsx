@@ -160,6 +160,7 @@ const ProductDetail = () => {
       product?.imageUrl,
     ].filter(Boolean)),
   ];
+  const activeImageUrl = selectedImageUrl || productImageUrls[0];
 
   const handleOpenRatingForm = () => {
     if (!user) {
@@ -248,12 +249,20 @@ const ProductDetail = () => {
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
 
           {/* ================= IMAGE ================= */}
-          <div className="relative min-h-[450px] overflow-hidden rounded-[28px] bg-[#ffe2d4] sm:min-h-[560px]">
-
-            {/* Decorative background */}
-            <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-orange-300/30 blur-3xl" />
-
-            <div className="absolute -bottom-24 -right-20 h-80 w-80 rounded-full bg-orange-300/30 blur-3xl" />
+          <div className="relative h-[450px] overflow-hidden rounded-[28px] bg-gray-100 sm:h-[560px]">
+            {/*
+            {activeImageUrl && (
+              <>
+                <img
+                  src={activeImageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+                />
+                <div className="absolute inset-0 bg-white/45" />
+              </>
+            )}
+            */}
 
             {/* Category */}
             <div className="absolute left-6 top-6 z-10">
@@ -276,15 +285,15 @@ const ProductDetail = () => {
             </button>
 
             {/* Image */}
-            <div className="relative flex h-full min-h-[450px] items-center justify-center px-8 pb-24 pt-20 sm:min-h-[560px] sm:pb-28 sm:pt-24">
-              {selectedImageUrl || productImageUrls[0] ? (
+            <div className="absolute inset-0 z-0">
+              {activeImageUrl ? (
                 <img
-                  src={selectedImageUrl || productImageUrls[0]}
+                  src={activeImageUrl}
                   alt={product.name}
-                  className="max-h-[360px] w-full scale-110 object-contain drop-shadow-2xl transition-transform duration-300 sm:max-h-[440px] sm:scale-125"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <span className="text-sm text-gray-400">
+                <span className="flex h-full items-center justify-center text-sm text-gray-400">
                   Image unavailable
                 </span>
               )}
@@ -356,9 +365,9 @@ const ProductDetail = () => {
                 type="button"
                 onClick={handleOpenRatingForm}
                 aria-expanded={showRatingForm}
-                className="ml-2 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:text-orange-900"
+                className="ml-2 inline-flex items-center  gap-1.5 text-sm font-semibold text-orange-500 hover:text-yellow-500"
               >
-                <Star className="h-4 w-4" />
+                <Star className="h-4 w-4 fill-yellow-400" />
                 {userReview ? 'Update your rating' : 'Rate this product'}
               </button>
 
@@ -410,11 +419,11 @@ const ProductDetail = () => {
             {/* Price */}
             <div className="mt-7 rounded-2xl bg-[#fff4ed] p-5">
 
-              <p className="text-xs font-medium text-gray-400">
+              <p className="text-xs font-medium text-orange-500">
                 Price
               </p>
 
-              <p className="mt-1 text-3xl font-extrabold text-[#ff4f0a]">
+              <p className="mt-1 text-3xl font-extrabold text-black">
                 ₹{Number(product.price).toLocaleString('en-IN')}
               </p>
 
@@ -483,7 +492,7 @@ const ProductDetail = () => {
                 type="button"
                 onClick={handleBuyNow}
                 disabled={product.stock <= 0}
-                className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-[#ff4f0a] px-5 text-sm font-bold text-white shadow-lg shadow-orange-200 transition-all hover:bg-[#e94300] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-[#ff4f0a] px-5 text-sm font-bold text-black shadow-lg shadow-orange-200 transition-all hover:bg-[#e94300] hover:shadow-xl disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
               >
                 {!user ? 'Login to Buy' : product.stock > 0 ? 'Buy Now' : 'Out of Stock'}
               </button>
@@ -493,7 +502,7 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
                 aria-label="Add to cart"
-                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-white px-4 text-sm font-semibold text-orange-700 transition hover:border-orange-300 hover:bg-orange-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
+                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-black px-4 text-sm font-semibold text-orange-700 transition hover:border-orange-300 hover:bg-orange-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span className="hidden sm:inline">Add to Cart</span>
@@ -502,12 +511,12 @@ const ProductDetail = () => {
             </div>
 
             {/* Benefits */}
-            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-[#fffdfb]">
+            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-black">
 
               <div className="flex flex-col items-center px-2 py-4 text-center">
                 <Truck className="h-5 w-5 text-orange-600" />
 
-                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
                   Fast Delivery
                 </p>
               </div>
@@ -515,7 +524,7 @@ const ProductDetail = () => {
               <div className="border-x border-gray-100 px-2 py-4 text-center">
                 <ShieldCheck className="mx-auto h-5 w-5 text-emerald-500" />
 
-                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
                   Secure Payment
                 </p>
               </div>
@@ -523,7 +532,7 @@ const ProductDetail = () => {
               <div className="px-2 py-4 text-center">
                 <RotateCcw className="mx-auto h-5 w-5 text-amber-500" />
 
-                <p className="mt-2 text-[10px] font-semibold text-gray-600 sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
                   Easy Returns
                 </p>
               </div>

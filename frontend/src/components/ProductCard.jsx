@@ -1,19 +1,52 @@
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Check, Heart, ShoppingCart, Star } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AuthContext } from './context/AuthContext';
 import { toggleFavorite } from '../store/favoritesSlice';
+import { addItem } from '../store/cartSlice';
 
 const ProductCard = ({ product }) => {
   const imageUrl = product.imageUrl || product.image;
   const productId = product._id || product.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useContext(AuthContext);
+  const [cartConfirmation, setCartConfirmation] = useState(false);
+
+  useEffect(() => {
+    if (!cartConfirmation) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      setCartConfirmation(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [cartConfirmation]);
 
   const isFavorite = useSelector((state) =>
     state.favorites.items.some(
       (item) => String(item._id || item.id) === String(productId)
     )
   );
+
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!product || product.stock <= 0) return;
+
+    dispatch(addItem({
+      productId,
+      name: product.name,
+      price: product.price,
+      imageUrl,
+      qty: 1,
+    }));
+    setCartConfirmation(true);
+  };
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-gray-400 hover:shadow-lg hover:shadow-gray-200/60">
@@ -37,7 +70,7 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Discount */}
-        <span className="absolute left-3 top-3 rounded-full bg-black px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
+        <span className="absolute left-3 top-3 rounded-full border-1 border-black bg-orange-500 px-2.5 py-1 text-[10px] font-bold text-black shadow-sm">
           -20%
         </span>
       </Link>
@@ -91,18 +124,22 @@ const ProductCard = ({ product }) => {
             {/* Cart / View Details */}
             <button
               type="button"
-              aria-label="View product details"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(`/product/${productId}`);
-              }}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-white transition hover:bg-gray-800"
+              aria-label={cartConfirmation ? 'Added to cart' : 'Add to cart'}
+              onClick={handleAddToCart}
+              disabled={product.stock <= 0}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-black text-orange-500 transition hover:bg-gray-800"
             >
-              <ShoppingCart
-                className="h-4 w-4"
-                strokeWidth={2}
-              />
+              {cartConfirmation ? (
+                <Check className="h-4 w-4" strokeWidth={2} />
+              ) : (
+                <ShoppingCart className="h-4 w-4" strokeWidth={2} />
+              )}
             </button>
+            {cartConfirmation && (
+              <span role="status" className="sr-only" aria-live="polite">
+                Added to cart
+              </span>
+            )}
 
             {/* Wishlist */}
             <button
@@ -114,10 +151,10 @@ const ProductCard = ({ product }) => {
               }
               aria-pressed={isFavorite}
               onClick={() => dispatch(toggleFavorite(product))}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white transition hover:bg-gray-100 ${
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white transition ${
                 isFavorite
                   ? 'text-red-500'
-                  : 'text-gray-500 hover:text-red-500'
+                  : 'text-red-500 hover:text-red-500'
               }`}
             >
               <Heart
