@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-2 flex items-center gap-1.5">
           {product.numReviews > 0 ? (
             <>
-              <Star className="h-3.5 w-3.5 fill-black text-black" />
+              <Star className="h-3.5 w-3.5 fill-yellow-400 text-black" />
               <span className="text-xs font-semibold text-gray-700">
                 {Number(product.rating).toFixed(1)}
               </span>
@@ -109,8 +109,8 @@ const ProductCard = ({ product }) => {
             onClick={() => dispatch(toggleFavorite(product))}
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white transition hover:bg-gray-100 ${
               isFavorite
-                ? 'text-black'
-                : 'text-gray-500 hover:text-black'
+                ? 'text-red-500'
+                : 'text-gray-500 hover:text-red-500'
             }`}
           >
             <Heart
