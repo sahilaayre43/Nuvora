@@ -65,60 +65,71 @@ const ProductCard = ({ product }) => {
               </span>
             </>
           ) : (
-            <span className="text-xs text-gray-400">No ratings yet</span>
+            <span className="text-xs text-gray-400">
+              No ratings yet
+            </span>
           )}
         </div>
 
-        {/* Price */}
-        <div className="mt-2 flex flex-wrap items-baseline gap-x-1.5">
-          <span className="text-sm font-bold text-black sm:text-lg">
-            ₹{Number(product.price).toLocaleString('en-IN')}
-          </span>
+        {/* PRICE + ACTIONS */}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
 
-          <span className="text-[9px] font-medium text-gray-400 line-through sm:text-xs">
-            ₹{(Number(product.price) * 1.25).toLocaleString('en-IN')}
-          </span>
-        
+          {/* Price */}
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5">
+            <span className="text-sm font-bold text-black sm:text-lg">
+              ₹{Number(product.price).toLocaleString('en-IN')}
+            </span>
 
-        {/* Bottom Actions */}
-        <div className="mt-auto hidden items-center gap-2 pt-3 sm:flex">
-
-          {/* View Details */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(`/product/${productId}`);
-            }}
-            className="flex h-9 items-center justify-center gap-1 rounded-full border border-black bg-black text-[10px] font-semibold text-white transition hover:bg-gray-800 sm:gap-1.5 sm:text-xs"
-          >
-            <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-          </button>
-
-          {/* Wishlist */}
-          <button
-            type="button"
-            aria-label={
-              isFavorite
-                ? `Remove ${product.name} from likes`
-                : `Like ${product.name}`
-            }
-            aria-pressed={isFavorite}
-            onClick={() => dispatch(toggleFavorite(product))}
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white transition hover:bg-gray-100 ${
-              isFavorite
-                ? 'text-red-500'
-                : 'text-gray-500 hover:text-red-500'
-            }`}
-          >
-            <Heart
-              className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`}
-            />
-          </button>
-
+            <span className="text-[9px] font-medium text-gray-400 line-through sm:text-xs">
+              ₹{(Number(product.price) * 1.25).toLocaleString('en-IN')}
+            </span>
           </div>
 
+          {/* Action Icons */}
+          <div className="flex shrink-0 items-center gap-2">
+
+            {/* Cart / View Details */}
+            <button
+              type="button"
+              aria-label="View product details"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/product/${productId}`);
+              }}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-white transition hover:bg-gray-800"
+            >
+              <ShoppingCart
+                className="h-4 w-4"
+                strokeWidth={2}
+              />
+            </button>
+
+            {/* Wishlist */}
+            <button
+              type="button"
+              aria-label={
+                isFavorite
+                  ? `Remove ${product.name} from likes`
+                  : `Like ${product.name}`
+              }
+              aria-pressed={isFavorite}
+              onClick={() => dispatch(toggleFavorite(product))}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white transition hover:bg-gray-100 ${
+                isFavorite
+                  ? 'text-red-500'
+                  : 'text-gray-500 hover:text-red-500'
+              }`}
+            >
+              <Heart
+                className={`h-4 w-4 ${
+                  isFavorite ? 'fill-current' : ''
+                }`}
+              />
+            </button>
+
+          </div>
         </div>
+
       </div>
     </article>
   );
