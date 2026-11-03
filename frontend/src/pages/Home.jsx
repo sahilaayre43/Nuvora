@@ -3,9 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link, useNavigate } from "react-router-dom";
 import { loadCategoryCatalog, loadProductCatalog, refreshCategoryCatalog, refreshProductCatalog,} from "../lib/api";
-import Electronic from "../assets/Electronics.jpg";
+import Electronic from "../assets/electronics1.jpg";
 import Beauty from "../assets/beauty.jpg";
 import Fashion from "../assets/fashion.jpg";
+import Kids from "../assets/kids.jpg";
+import Watch from "../assets/watch.jpg";
+
 
 const categoryImages = [
   {
@@ -30,7 +33,11 @@ const categoryImages = [
   },
   {
     matches: ["accessories", "accessory", "watch", "clock", "jewelry"],
-    src: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=700&q=85",
+    src: Watch,
+  },
+  {
+    matches: ["kids"],
+    src: Kids,
   },
 ];
 
