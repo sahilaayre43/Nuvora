@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-2 flex items-center gap-1.5">
           {product.numReviews > 0 ? (
             <>
-              <Star className="h-3.5 w-3.5 fill-yellow-400 text-black" />
+              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
               <span className="text-xs font-semibold text-gray-700">
                 {Number(product.rating).toFixed(1)}
               </span>
