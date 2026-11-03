@@ -225,7 +225,7 @@ const Home = () => {
       <section className="mx-auto max-w-[1200px] px-2 pt-3 sm:px-4 sm:pt-4 lg:px-7">
         <div className="relative aspect-[3/2] overflow-hidden rounded-[22px] bg-[#fff5ef] shadow-[0_12px_40px_rgba(105,60,35,0.06)] sm:aspect-[93/37] sm:rounded-[26px]">
           <img
-            src="/hero-orange-showcase.png"
+            src="/hero-orange-showcase.jpg"
             alt="A fashion model surrounded by orange and neutral featured products."
             fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover object-center sm:object-fill"
