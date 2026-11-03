@@ -90,11 +90,9 @@ const ProductCard = ({ product }) => {
               e.preventDefault();
               navigate(`/product/${productId}`);
             }}
-            className="flex h-9 flex-1 items-center justify-center gap-1 rounded-full border border-black bg-black text-[10px] font-semibold text-white transition hover:bg-gray-800 sm:gap-1.5 sm:text-xs"
+            className="flex h-9 items-center justify-center gap-1 rounded-full border border-black bg-black text-[10px] font-semibold text-white transition hover:bg-gray-800 sm:gap-1.5 sm:text-xs"
           >
             <ShoppingCart className="h-3.5 w-3.5 shrink-0" />
-            <span className="sm:hidden">Details</span>
-            <span className="hidden sm:inline">View Details</span>
           </button>
 
           {/* Wishlist */}
