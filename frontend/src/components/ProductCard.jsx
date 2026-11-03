@@ -78,7 +78,7 @@ const ProductCard = ({ product }) => {
           <span className="text-[9px] font-medium text-gray-400 line-through sm:text-xs">
             ₹{(Number(product.price) * 1.25).toLocaleString('en-IN')}
           </span>
-        </div>
+        
 
         {/* Bottom Actions */}
         <div className="mt-auto hidden items-center gap-2 pt-3 sm:flex">
@@ -115,6 +115,8 @@ const ProductCard = ({ product }) => {
               className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`}
             />
           </button>
+
+          </div>
 
         </div>
       </div>
