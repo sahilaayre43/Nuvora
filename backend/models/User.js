@@ -7,7 +7,10 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
     },
     password: {
         type: String,
@@ -21,6 +24,26 @@ const userSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         default: false 
+    },
+    authTokenVersion: {
+        type: Number,
+        default: 0
+    },
+    verificationTokenHash: {
+        type: String,
+        default: null
+    },
+    verificationTokenExpires: {
+        type: Date,
+        default: null
+    },
+    passwordResetTokenHash: {
+        type: String,
+        default: null
+    },
+    passwordResetTokenExpires: {
+        type: Date,
+        default: null
     }
 }, { timestamps: true });
 

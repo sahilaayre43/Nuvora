@@ -8,6 +8,9 @@ import Shop from './pages/Shop'
 import Favorites from './pages/Favorites'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
+import VerifyEmail from './pages/VerifyEmail'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import ProductDetails from './pages/ProductDetails'
 import Cart from './pages/Cart'
 import Profile from './pages/Profile'
@@ -45,6 +48,9 @@ function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart/>} />
           <Route path="/profile" element={<Profile/>} />

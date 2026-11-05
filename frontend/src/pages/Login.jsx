@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [verificationEmail, setVerificationEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext)
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Login = () => {
         navigate('/');
       } else {
         setError(data.message || "An error occurred while logging in.");
+        setVerificationEmail(data.code === "EMAIL_NOT_VERIFIED" ? email : "");
       }
     } catch {
       setError("An error occurred while logging in.");
@@ -163,12 +165,12 @@ const Login = () => {
                       Password
                     </label>
 
-                    <button
-                      type="button"
+                    <Link
+                      to="/forgot-password"
                       className="text-xs font-semibold text-orange-600 hover:text-orange-700"
                     >
                       Forgot password?
-                    </button>
+                    </Link>
                   </div>
 
                   <div className="flex h-12 items-center rounded-xl border border-[#e7e8ef] bg-[#fafafd] px-4 transition focus-within:border-orange-400 focus-within:ring-4 focus-within:ring-orange-100">
@@ -205,6 +207,14 @@ const Login = () => {
                 </label>
 
                 {error && <p role="alert" className="text-sm font-medium text-red-600">{error}</p>}
+                {verificationEmail && (
+                  <Link
+                    to={`/verify-email?email=${encodeURIComponent(verificationEmail)}`}
+                    className="block text-sm font-semibold text-orange-600 hover:text-orange-700"
+                  >
+                    Resend verification email
+                  </Link>
+                )}
 
                 {/* Login */}
                 <button
@@ -220,7 +230,7 @@ const Login = () => {
               <p className="mt-8 text-center text-sm text-[#8990a3]">
                 Don't have an account?{" "}
                 <Link
-                  to="/signup"
+                  to="/register"
                   className="font-bold text-orange-600 hover:text-orange-700"
                 >
                   Create account

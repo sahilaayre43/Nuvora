@@ -29,7 +29,7 @@ Additional Features
 - Product search
 - Pagination
 - Image uploads
-- Email/OTP verification
+- Email verification and password reset links
 - Online payments with Razorpay
 - Protected routes
 - Backend validation and error handling
@@ -59,7 +59,7 @@ Other Services
 
 - Cloudinary — Image storage
 - Razorpay — Payment processing
-- Email/OTP service — Account verification
+- Email service — Account verification and password reset
 - Vercel — Frontend deployment
 - Render/Railway — Backend deployment
 
@@ -169,6 +169,13 @@ The backend accepts `MONGODB_URI` (recommended) or the legacy `MONGODB_URL`
 variable for the MongoDB connection string.
 Email uses `GMAIL_USER` and `GMAIL_PASSWORD`; `GMAIL_PASS`, `EMAIL_USER`, and
 `EMAIL_PASSWORD` are also accepted for existing deployments.
+
+New accounts must verify their email before they can sign in. Verification and
+password-reset links expire after one hour and can only be used once. Set
+`FRONTEND_URL` to the frontend origin so those links return to the correct
+pages. Resetting a password invalidates the account's existing sign-in tokens.
+Existing unverified accounts can request a new verification email from the
+sign-in page.
 
 ---
 
