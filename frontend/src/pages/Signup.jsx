@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Mail,
   LockKeyhole,
@@ -9,6 +9,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/context/AuthContext.jsx";
 import { apiFetch } from "../lib/api";
 
 const Signup  = () => {
@@ -19,6 +20,7 @@ const Signup  = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -38,10 +40,16 @@ const Signup  = () => {
       const data = await res.json();
       if (!res.ok) {
         if (data.code === "VERIFICATION_EMAIL_FAILED" && data.email) {
-          navigate(`/verify-email?email=${encodeURIComponent(data.email)}`);
+          navigate(`/verify-email?email=${encodeURIComponent(data.email)}&sendFailed=1`);
           return;
         }
         throw new Error(data.message || "Registration failed. Please try again.");
+      }
+
+      if (data.token) {
+        login(data);
+        navigate("/");
+        return;
       }
 
       navigate(`/verify-email?email=${encodeURIComponent(data.email)}`);

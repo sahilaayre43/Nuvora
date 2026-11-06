@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const connectDB = require("./config/db");
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const app = express();
 const allowedOrigins = new Set([

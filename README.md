@@ -149,10 +149,11 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 
-GMAIL_USER=your_email
-GMAIL_PASSWORD=your_gmail_app_password
+RESEND_API_KEY=your_resend_api_key
+EMAIL_FROM=NUVORA Support <you@your-verified-domain.com>
 
 FRONTEND_URL=https://nuvora-ecom.vercel.app
+EMAIL_VERIFICATION_ENABLED=false
 NODE_ENV=development
 
 For local development, optionally create a `.env` file inside `frontend` to
@@ -167,15 +168,22 @@ Never commit your ".env" files or API keys to GitHub.
 
 The backend accepts `MONGODB_URI` (recommended) or the legacy `MONGODB_URL`
 variable for the MongoDB connection string.
-Email uses `GMAIL_USER` and `GMAIL_PASSWORD`; `GMAIL_PASS`, `EMAIL_USER`, and
-`EMAIL_PASSWORD` are also accepted for existing deployments.
+Transactional email is sent through Resend. Set `RESEND_API_KEY` and
+`EMAIL_FROM` in the backend environment. Verify the sender domain in Resend
+before using its address in production.
 
-New accounts must verify their email before they can sign in. Verification and
-password-reset links expire after one hour and can only be used once. Set
+Set `EMAIL_VERIFICATION_ENABLED=true` to require email verification at signup
+and login. It defaults to `false` so accounts can be created and signed into
+without sending verification email while email delivery is being configured.
+When enabled, verification and password-reset links expire after one hour and
+can only be used once. Set
 `FRONTEND_URL` to the frontend origin so those links return to the correct
 pages. Resetting a password invalidates the account's existing sign-in tokens.
-Existing unverified accounts can request a new verification email from the
-sign-in page.
+With verification enabled, new signups are held in a temporary
+`PendingRegistration` collection; a `User` record is created only after the
+verification link is used. Pending signups are automatically deleted after one
+hour. Existing unverified accounts can request a new verification email from
+the sign-in page.
 
 ---
 

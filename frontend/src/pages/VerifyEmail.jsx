@@ -6,6 +6,7 @@ const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const initialEmail = searchParams.get("email") || "";
+  const sendFailed = searchParams.get("sendFailed") === "1";
   const [email, setEmail] = useState(initialEmail);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -74,6 +75,8 @@ const VerifyEmail = () => {
           <p className="mt-3 text-[#66708a]">
             {verified
               ? message
+              : sendFailed
+              ? `We could not send the verification email to ${initialEmail}. Check the server email configuration, then request a new link.`
               : initialEmail
                 ? `Check ${initialEmail} for your verification link. You can request another below.`
                 : "Enter your account email and we can send a new verification link."}

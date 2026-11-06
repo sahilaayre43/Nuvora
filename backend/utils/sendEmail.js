@@ -1,28 +1,25 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const sendEmail = async ({ email, subject, message }) => {
-  const emailUser = process.env.GMAIL_USER || process.env.EMAIL_USER;
-  const emailPassword = process.env.GMAIL_PASS
-    || process.env.GMAIL_PASSWORD
-    || process.env.EMAIL_PASSWORD;
-  if (!emailUser || !emailPassword) {
-    throw new Error('Email is not configured. Set GMAIL_USER and GMAIL_PASSWORD.');
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  if (!apiKey || !from) {
+    throw new Error('Email is not configured. Set RESEND_API_KEY and EMAIL_FROM in backend/.env.');
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: emailUser,
-      pass: emailPassword,
-    },
-  });
-
-  await transporter.sendMail({
-    from: `"NUVORA Support" <${emailUser}>`,
+  const resend = new Resend(apiKey);
+  const { error } = await resend.emails.send({
+    from,
     to: email,
     subject,
     html: message,
   });
+
+  if (error) {
+    const deliveryError = new Error(`Email delivery failed (${error.name || 'RESEND_ERROR'}): ${error.message}`);
+    deliveryError.code = error.name;
+    throw deliveryError;
+  }
 };
 
 module.exports = sendEmail;

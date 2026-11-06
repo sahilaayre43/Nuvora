@@ -1,11 +1,13 @@
 const crypto = require("crypto");
 const User = require("../models/User");
+const PendingRegistration = require("../models/PendingRegistration");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 
 const TOKEN_EXPIRY_MS = 60 * 60 * 1000;
 const PASSWORD_MIN_LENGTH = 8;
+const isEmailVerificationEnabled = () => process.env.EMAIL_VERIFICATION_ENABLED === "true";
 
 const generateToken = (id, authTokenVersion) => {
     return jwt.sign({ id, authTokenVersion }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -31,7 +33,6 @@ const isValidEmail = (email) => typeof email === "string"
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
-    let createdEmail;
     try {
         if (!process.env.JWT_SECRET) {
             return res.status(500).json({ message: 'Authentication is not configured on the server.' });
@@ -46,43 +47,69 @@ const registerUser = async (req, res) => {
         const normalizedEmail = email.trim().toLowerCase();
         const existingUser = await User.findOne({ email: normalizedEmail });
         if (existingUser) {
-            return res.status(409).json({ message: 'An account with this email already exists.' });
+            return res.status(409).json({
+                message: existingUser.verified
+                    ? 'An account with this email already exists.'
+                    : 'This email already has an account awaiting verification. Request a new verification link.'
+            });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const { token, tokenHash } = createOneTimeToken();
-        const user = new User({
-            name: name.trim(),
-            email: normalizedEmail,
-            password: hashedPassword,
-            verified: false,
-            verificationTokenHash: tokenHash,
-            verificationTokenExpires: new Date(Date.now() + TOKEN_EXPIRY_MS)
-        });
-        await user.save();
-        createdEmail = user.email;
+        if (!isEmailVerificationEnabled()) {
+            const user = await User.create({
+                name: name.trim(),
+                email: normalizedEmail,
+                password: hashedPassword,
+                verified: true
+            });
+            await PendingRegistration.deleteOne({ email: normalizedEmail });
 
-        const verificationUrl = `${getFrontendUrl()}/verify-email?token=${encodeURIComponent(token)}`;
+            return res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                token: generateToken(user._id, user.authTokenVersion),
+                role: user.role
+            });
+        }
+
+        const frontendUrl = getFrontendUrl();
+        const { token, tokenHash } = createOneTimeToken();
+        const pendingRegistration = await PendingRegistration.findOneAndUpdate(
+            { email: normalizedEmail },
+            {
+                name: name.trim(),
+                email: normalizedEmail,
+                password: hashedPassword,
+                verificationTokenHash: tokenHash,
+                expiresAt: new Date(Date.now() + TOKEN_EXPIRY_MS)
+            },
+            { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+        );
+
+        const verificationUrl = `${frontendUrl}/verify-email?token=${encodeURIComponent(token)}`;
         await sendEmail({
-            email: user.email,
+            email: pendingRegistration.email,
             subject: "Verify your NUVORA email",
             message: `<p>Welcome to NUVORA!</p><p><a href="${verificationUrl}">Verify your email address</a></p><p>This link expires in one hour.</p>`
         });
 
         return res.status(201).json({
-            message: "Account created. Check your email to verify your address.",
-            email: user.email
+            message: "Check your email to verify your address. Your account will be created after verification.",
+            email: pendingRegistration.email
         });
     } catch (error) {
         console.error('User registration failed:', error.message);
         if (error.code === 11000) {
             return res.status(409).json({ message: 'An account with this email already exists.' });
         }
-        if (createdEmail) {
+        if (error.message.includes("Email is not configured")
+            || error.message.includes("FRONTEND_URL")
+            || error.message.includes("Email delivery failed")) {
             return res.status(503).json({
                 code: "VERIFICATION_EMAIL_FAILED",
-                email: createdEmail,
-                message: 'Your account was created, but the verification email could not be sent. Please request a new link.'
+                email: typeof email === "string" ? email.trim().toLowerCase() : undefined,
+                message: 'We could not send the verification email. Check the email setup and request another link.'
             });
         }
         return res.status(500).json({ message: 'Server error!' });
@@ -96,8 +123,41 @@ const verifyEmail = async (req, res) => {
     }
 
     try {
+        const tokenHash = hashToken(token);
+        const pendingRegistration = await PendingRegistration.findOne({
+            verificationTokenHash: tokenHash,
+            expiresAt: { $gt: new Date() }
+        });
+
+        if (pendingRegistration) {
+            let user = await User.findOne({ email: pendingRegistration.email });
+            if (!user) {
+                try {
+                    user = await User.create({
+                        name: pendingRegistration.name,
+                        email: pendingRegistration.email,
+                        password: pendingRegistration.password,
+                        verified: true
+                    });
+                } catch (error) {
+                    if (error.code !== 11000) throw error;
+                    user = await User.findOne({ email: pendingRegistration.email });
+                    if (!user) throw error;
+                }
+            }
+
+            if (!user.verified) {
+                user.verified = true;
+                user.verificationTokenHash = null;
+                user.verificationTokenExpires = null;
+                await user.save();
+            }
+            await PendingRegistration.deleteOne({ _id: pendingRegistration._id });
+            return res.status(200).json({ message: "Email verified. You can now sign in." });
+        }
+
         const user = await User.findOne({
-            verificationTokenHash: hashToken(token),
+            verificationTokenHash: tokenHash,
             verificationTokenExpires: { $gt: new Date() }
         });
         if (!user) {
@@ -123,19 +183,29 @@ const resendVerificationEmail = async (req, res) => {
     }
 
     const genericResponse = { message: "If the account needs verification, a new email will be sent." };
-    let user;
+    let account;
     let token;
+    let isPendingRegistration = false;
     try {
-        user = await User.findOne({ email });
-        if (!user || user.verified) {
+        account = await PendingRegistration.findOne({ email });
+        if (account) {
+            isPendingRegistration = true;
+        } else {
+            account = await User.findOne({ email });
+        }
+        if (!account || (!isPendingRegistration && account.verified)) {
             return res.status(200).json(genericResponse);
         }
         const generatedToken = createOneTimeToken();
         token = generatedToken.token;
-        const tokenHash = generatedToken.tokenHash;
-        user.verificationTokenHash = tokenHash;
-        user.verificationTokenExpires = new Date(Date.now() + TOKEN_EXPIRY_MS);
-        await user.save();
+        if (isPendingRegistration) {
+            account.verificationTokenHash = generatedToken.tokenHash;
+            account.expiresAt = new Date(Date.now() + TOKEN_EXPIRY_MS);
+        } else {
+            account.verificationTokenHash = generatedToken.tokenHash;
+            account.verificationTokenExpires = new Date(Date.now() + TOKEN_EXPIRY_MS);
+        }
+        await account.save();
     } catch (error) {
         console.error("Preparing verification email failed:", error.message);
         return res.status(500).json({ message: "Server error!" });
@@ -144,14 +214,14 @@ const resendVerificationEmail = async (req, res) => {
     try {
         const verificationUrl = `${getFrontendUrl()}/verify-email?token=${encodeURIComponent(token)}`;
         await sendEmail({
-            email: user.email,
+            email: account.email,
             subject: "Verify your NUVORA email",
             message: `<p><a href="${verificationUrl}">Verify your email address</a></p><p>This link expires in one hour.</p>`
         });
         return res.status(200).json(genericResponse);
     } catch (error) {
         console.error("Resending verification email failed:", error.message);
-        return res.status(200).json(genericResponse);
+        return res.status(503).json({ message: "We could not send the verification email. Check the email server configuration and try again." });
     }
 };
 
@@ -163,7 +233,7 @@ const loginUser = async (req, res) => {
         if (!user || typeof password !== "string" || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({ message: 'Invalid email or password!' });
         }
-        if (!user.verified) {
+        if (isEmailVerificationEnabled() && !user.verified) {
             return res.status(403).json({
                 code: "EMAIL_NOT_VERIFIED",
                 message: "Please verify your email before signing in."
