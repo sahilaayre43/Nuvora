@@ -1,23 +1,39 @@
-const { Resend } = require('resend');
+const nodemailer = require("nodemailer");
 
 const sendEmail = async ({ email, subject, message }) => {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  if (!apiKey || !from) {
-    throw new Error('Email is not configured. Set RESEND_API_KEY and EMAIL_FROM in backend/.env.');
+  const user = process.env.SMTP_USER || process.env.GMAIL_USER;
+  const pass = process.env.SMTP_PASS || process.env.GMAIL_PASSWORD;
+  const host = process.env.SMTP_HOST || (process.env.GMAIL_USER ? "smtp.gmail.com" : undefined);
+  const from = process.env.EMAIL_FROM || user;
+  const port = Number(process.env.SMTP_PORT || (process.env.GMAIL_USER ? 465 : 587));
+  const secure = process.env.SMTP_SECURE
+    ? process.env.SMTP_SECURE === "true"
+    : port === 465;
+
+  if (!host || !user || !pass) {
+    throw new Error("Email is not configured. Set SMTP credentials or GMAIL_USER and GMAIL_PASSWORD in backend/.env.");
+  }
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error("Email is not configured. SMTP_PORT must be a valid port number.");
   }
 
-  const resend = new Resend(apiKey);
-  const { error } = await resend.emails.send({
-    from,
-    to: email,
-    subject,
-    html: message,
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: { user, pass },
   });
 
-  if (error) {
-    const deliveryError = new Error(`Email delivery failed (${error.name || 'RESEND_ERROR'}): ${error.message}`);
-    deliveryError.code = error.name;
+  try {
+    await transporter.sendMail({
+      from,
+      to: email,
+      subject,
+      html: message,
+    });
+  } catch (error) {
+    const deliveryError = new Error(`Email delivery failed (${error.code || error.name || "SMTP_ERROR"}): ${error.message}`);
+    deliveryError.code = error.code || error.name;
     throw deliveryError;
   }
 };

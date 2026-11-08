@@ -149,8 +149,12 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 
-RESEND_API_KEY=your_resend_api_key
-EMAIL_FROM=NUVORA Support <you@your-verified-domain.com>
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=you@gmail.com
+SMTP_PASS=your_16_character_google_app_password
+EMAIL_FROM=NUVORA Support <you@gmail.com>
 
 FRONTEND_URL=https://nuvora-ecom.vercel.app
 EMAIL_VERIFICATION_ENABLED=false
@@ -168,9 +172,16 @@ Never commit your ".env" files or API keys to GitHub.
 
 The backend accepts `MONGODB_URI` (recommended) or the legacy `MONGODB_URL`
 variable for the MongoDB connection string.
-Transactional email is sent through Resend. Set `RESEND_API_KEY` and
-`EMAIL_FROM` in the backend environment. Verify the sender domain in Resend
-before using its address in production.
+Email is sent through SMTP using Nodemailer. For a no-cost Gmail setup, enable
+2-Step Verification on your Google account, create an App Password in your
+Google Account security settings, and use that password as `SMTP_PASS` (not
+your regular Gmail password). Set `SMTP_USER` and `EMAIL_FROM` to that Gmail
+address. The default SMTP port is 587; use port 465 with `SMTP_SECURE=true` as
+shown above. Gmail and other SMTP providers apply their own sending limits and
+policies, and some hosting providers restrict outbound SMTP connections.
+The mailer also accepts the existing `GMAIL_USER` and `GMAIL_PASSWORD`
+variables; with those set, it defaults to Gmail SMTP on port 465. If
+`EMAIL_FROM` is omitted, the authenticated email address is used as the sender.
 
 Set `EMAIL_VERIFICATION_ENABLED=true` to require email verification at signup
 and login. It defaults to `false` so accounts can be created and signed into
