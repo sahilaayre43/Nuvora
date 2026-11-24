@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Search, ShieldCheck, RotateCcw, Headset, Truck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Search, ShieldCheck, RotateCcw, Headset, Truck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Link, useNavigate } from "react-router-dom";
@@ -101,7 +101,22 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [categoriesError, setCategoriesError] = useState("");
-  const categoriesSliderRef = useRef(null);
+  const categoryInertiaFrameRef = useRef(null);
+  const categoryDragRef = useRef({
+    pointerId: null,
+    startX: 0,
+    startScrollLeft: 0,
+    lastX: 0,
+    lastTime: 0,
+    velocity: 0,
+    dragged: false,
+  });
+
+  useEffect(() => () => {
+    if (categoryInertiaFrameRef.current !== null) {
+      cancelAnimationFrame(categoryInertiaFrameRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     let isCurrent = true;
@@ -267,31 +282,96 @@ const Home = () => {
                   Shop by Category
                 </h2>
               </div>
-              {categories.length > 4 && (
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    aria-label="Scroll categories left"
-                    onClick={() => categoriesSliderRef.current?.scrollBy({ left: -categoriesSliderRef.current.clientWidth, behavior: "smooth" })}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-[#eee9e5] text-[#29334f] transition hover:border-[#ff4f0a] hover:text-[#f04a0c]"
-                  >
-                    <ArrowLeft size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Scroll categories right"
-                    onClick={() => categoriesSliderRef.current?.scrollBy({ left: categoriesSliderRef.current.clientWidth, behavior: "smooth" })}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-[#eee9e5] text-[#29334f] transition hover:border-[#ff4f0a] hover:text-[#f04a0c]"
-                  >
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
-              )}
             </div>
             <div
-              ref={categoriesSliderRef}
               aria-label="Scroll to browse categories"
-              className="-mx-3 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0 sm:pb-0"
+              onPointerDown={(event) => {
+                if (event.pointerType !== "mouse" || event.button !== 0) return;
+                if (categoryInertiaFrameRef.current !== null) {
+                  cancelAnimationFrame(categoryInertiaFrameRef.current);
+                  categoryInertiaFrameRef.current = null;
+                }
+                event.currentTarget.style.scrollSnapType = "none";
+                categoryDragRef.current.pointerId = event.pointerId;
+                categoryDragRef.current.startX = event.clientX;
+                categoryDragRef.current.startScrollLeft = event.currentTarget.scrollLeft;
+                categoryDragRef.current.lastX = event.clientX;
+                categoryDragRef.current.lastTime = event.timeStamp;
+                categoryDragRef.current.velocity = 0;
+                categoryDragRef.current.dragged = false;
+              }}
+              onPointerMove={(event) => {
+                const drag = categoryDragRef.current;
+                if (drag.pointerId !== event.pointerId) return;
+
+                const deltaX = event.clientX - drag.startX;
+                const elapsed = Math.max(event.timeStamp - drag.lastTime, 1);
+                const sampleVelocity = (event.clientX - drag.lastX) / elapsed;
+                drag.velocity = Math.max(
+                  -2.5,
+                  Math.min(2.5, drag.velocity * 0.65 + sampleVelocity * 0.35)
+                );
+                drag.lastX = event.clientX;
+                drag.lastTime = event.timeStamp;
+                if (!drag.dragged && Math.abs(deltaX) > 5) {
+                  drag.dragged = true;
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                }
+                if (drag.dragged) {
+                  event.preventDefault();
+                  event.currentTarget.scrollLeft = drag.startScrollLeft - deltaX;
+                }
+              }}
+              onPointerUp={(event) => {
+                const drag = categoryDragRef.current;
+                if (drag.pointerId !== event.pointerId) return;
+                drag.pointerId = null;
+                const slider = event.currentTarget;
+                if (!drag.dragged || Math.abs(drag.velocity) <= 0.02) {
+                  slider.style.scrollSnapType = "";
+                  return;
+                }
+                let velocity = -drag.velocity;
+                let previousTime = null;
+                const continueScroll = (time) => {
+                  if (previousTime === null) previousTime = time;
+                  const elapsed = Math.min(time - previousTime, 32);
+                  previousTime = time;
+
+                  const maxScroll = slider.scrollWidth - slider.clientWidth;
+                  slider.scrollLeft = Math.max(
+                    0,
+                    Math.min(maxScroll, slider.scrollLeft + velocity * elapsed)
+                  );
+                  velocity *= Math.pow(0.94, elapsed / 16.67);
+
+                  const atBoundary =
+                    (slider.scrollLeft === 0 && velocity < 0)
+                    || (slider.scrollLeft === maxScroll && velocity > 0);
+                  if (Math.abs(velocity) > 0.015 && !atBoundary) {
+                    categoryInertiaFrameRef.current = requestAnimationFrame(continueScroll);
+                  } else {
+                    categoryInertiaFrameRef.current = null;
+                    slider.style.scrollSnapType = "";
+                  }
+                };
+                categoryInertiaFrameRef.current = requestAnimationFrame(continueScroll);
+              }}
+              onPointerCancel={(event) => {
+                categoryDragRef.current.pointerId = null;
+                categoryDragRef.current.velocity = 0;
+                categoryDragRef.current.dragged = false;
+                event.currentTarget.style.scrollSnapType = "";
+              }}
+              onClickCapture={(event) => {
+                if (categoryDragRef.current.dragged) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  categoryDragRef.current.dragged = false;
+                }
+              }}
+              onDragStart={(event) => event.preventDefault()}
+              className="-mx-3 flex touch-pan-x cursor-grab snap-x snap-proximity select-none gap-3 overflow-x-auto overscroll-x-contain px-3 pb-2 active:cursor-grabbing [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0 sm:pb-0"
             >
               {categories.map((category) => {
                 const image = getCategoryImage(category.name, products);
