@@ -186,14 +186,16 @@ variables; with those set, it defaults to Gmail SMTP on port 465. If
 Set `EMAIL_VERIFICATION_ENABLED=true` to require email verification at signup
 and login. It defaults to `false` so accounts can be created and signed into
 without sending verification email while email delivery is being configured.
-When enabled, verification and password-reset links expire after one hour and
-can only be used once. Set
-`FRONTEND_URL` to the frontend origin so those links return to the correct
-pages. Resetting a password invalidates the account's existing sign-in tokens.
+When enabled, signup sends a one-time 6-digit verification code by email. Codes
+expire after one hour and are limited to five incorrect attempts; use the
+resend option to request a new code. Password-reset links expire after one hour
+and can only be used once. Set `FRONTEND_URL` to the frontend origin so
+password-reset links return to the correct page. Resetting a password
+invalidates the account's existing sign-in tokens.
 With verification enabled, new signups are held in a temporary
 `PendingRegistration` collection; a `User` record is created only after the
-verification link is used. Pending signups are automatically deleted after one
-hour. Existing unverified accounts can request a new verification email from
+verification code is entered. Pending signups are automatically deleted after
+one hour. Existing unverified accounts can request a new verification code from
 the sign-in page.
 
 ---

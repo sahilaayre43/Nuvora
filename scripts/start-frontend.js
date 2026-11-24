@@ -43,12 +43,21 @@ const waitForBackend = async () => {
 };
 
 const startFrontend = () => {
-  const npm = process.platform === "win32" ? "npm.cmd" : "npm";
-  const frontend = spawn(npm, ["--prefix", "frontend", "run", "dev"], {
-    env: process.env,
-    shell: process.platform === "win32",
-    stdio: "inherit",
-  });
+  const npmCli = process.env.npm_execpath;
+  if (!npmCli) {
+    throw new Error(
+      "npm executable path is unavailable. Start the frontend through an npm script."
+    );
+  }
+
+  const frontend = spawn(
+    process.execPath,
+    [npmCli, "--prefix", "frontend", "run", "dev"],
+    {
+      env: process.env,
+      stdio: "inherit",
+    }
+  );
 
   process.once("SIGINT", () => frontend.kill("SIGINT"));
   process.once("SIGTERM", () => frontend.kill("SIGTERM"));

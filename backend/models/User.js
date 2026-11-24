@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: null
     },
+    verificationAttempts: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
+    },
     passwordResetTokenHash: {
         type: String,
         default: null
