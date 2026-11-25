@@ -35,13 +35,15 @@ const ScrollToTop = () => {
   return null
 }
 
-function App() {
+function AppContent() {
+  const { pathname } = useLocation()
+  const isAuthPage = ['/login', '/register', '/verify-email'].includes(pathname)
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
-      <Navbar />
-      <div className="pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
+      <Navbar hideMobileNav={isAuthPage} />
+      <div className={isAuthPage ? '' : 'pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0'}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
@@ -64,8 +66,16 @@ function App() {
           <Route path="/admin/edit-product/:id" element={<EditProduct />} />
           <Route path="/admin/users" element={<AdminUsers />} />
         </Routes>
-        <Footer />
+        {!isAuthPage && <Footer />}
       </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   )
 }

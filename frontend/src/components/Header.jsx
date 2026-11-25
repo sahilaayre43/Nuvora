@@ -52,7 +52,7 @@ const DesktopSearch = ({ initialQuery }) => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ hideMobileNav = false }) => {
   const { user } = useContext(AuthContext);
   const { pathname, search: locationSearch } = useLocation();
   const [categoriesOpen, setCategoriesOpen] = useState(false);
@@ -297,7 +297,7 @@ const Navbar = () => {
       </div>
       </header>
 
-      <nav
+      {!hideMobileNav && <nav
         aria-label="Mobile navigation"
         className="fixed inset-x-0 bottom-0 z-[80] border-t border-slate-200 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] pt-1 shadow-[0_-8px_24px_rgba(30,30,60,0.08)] backdrop-blur-xl md:hidden"
       >
@@ -378,9 +378,9 @@ const Navbar = () => {
             </NavLink>
           )}
         </div>
-      </nav>
+      </nav>}
 
-      {categoriesOpen && (
+      {!hideMobileNav && categoriesOpen && (
         <>
           <button
             type="button"

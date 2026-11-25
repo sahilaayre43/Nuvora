@@ -246,10 +246,10 @@ const ProductDetail = () => {
         </Link>
 
         {/* Main Layout */}
-        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid items-stretch gap-6 lg:grid-cols-[1.15fr_0.85fr]">
 
           {/* ================= IMAGE ================= */}
-          <div className="relative h-[450px] overflow-hidden rounded-[28px] bg-gray-100 sm:h-[560px]">
+          <div className="relative min-h-[450px] overflow-hidden rounded-[28px] bg-[#fff3e8] sm:min-h-[560px]">
             {/*
             {activeImageUrl && (
               <>
@@ -502,7 +502,7 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
                 aria-label="Add to cart"
-                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-black px-4 text-sm font-semibold text-orange-700 transition hover:border-orange-300 hover:bg-orange-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-400"
+                className="flex h-14 shrink-0 items-center justify-center gap-2 rounded-2xl border border-orange-200 bg-[#fff1e6] px-4 text-sm font-semibold text-[#9a451c] transition hover:border-orange-300 hover:bg-[#ffe5d2] disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span className="hidden sm:inline">Add to Cart</span>
@@ -511,20 +511,20 @@ const ProductDetail = () => {
             </div>
 
             {/* Benefits */}
-            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-gray-100 bg-black">
+            <div className="mt-6 grid grid-cols-3 rounded-2xl border border-orange-100 bg-[#fff7ef]">
 
               <div className="flex flex-col items-center px-2 py-4 text-center">
                 <Truck className="h-5 w-5 text-orange-600" />
 
-                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-gray-800 sm:text-xs">
                   Fast Delivery
                 </p>
               </div>
 
-              <div className="border-x border-gray-100 px-2 py-4 text-center">
+              <div className="border-x border-orange-100 px-2 py-4 text-center">
                 <ShieldCheck className="mx-auto h-5 w-5 text-emerald-500" />
 
-                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-gray-800 sm:text-xs">
                   Secure Payment
                 </p>
               </div>
@@ -532,7 +532,7 @@ const ProductDetail = () => {
               <div className="px-2 py-4 text-center">
                 <RotateCcw className="mx-auto h-5 w-5 text-amber-500" />
 
-                <p className="mt-2 text-[10px] font-semibold text-white sm:text-xs">
+                <p className="mt-2 text-[10px] font-semibold text-gray-800 sm:text-xs">
                   Easy Returns
                 </p>
               </div>
